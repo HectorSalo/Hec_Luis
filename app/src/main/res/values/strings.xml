@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">ElMejorPrecio</string>
+
+    //content_home
+    <string name="txt_buscar">Escriba el Producto o Supermercado</string>
+    <string name="button_buscar">Buscar</string>
+    <string name="button_PLU_inicio">Productos</string>
+    <string name="button_SUP_inicio">Supermercados</string>
+
+    <string name="txt_resultado_buscar">Resultado de busqueda</string>
+    <string name="txt_lista_resultado">Lista</string>
+    <string name="button_ir_inicio">Volver a Inicio</string>
+
+    //activity_home_drawer
+    <string name="navigation_drawer_PLU">Productos</string>
+    <string name="navigation_drawer_SUP">Supermercados</string>
+    <string name="navigation_drawer_subtitle">Otros</string>
+    <string name="navigation_drawer_configuracion">Configuracion</string>
+    <string name="navigation_drawer_cerrar_sesion">Cerrar sesion</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">USUARIO</string>
+    <string name="nav_header_subtitle">Bienvenido</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Configuracion</string>
+    <string name="title_activity_plu">PLUActivity</string>
+    <string name="title_activity_productos">ProductosActivity</string>
+    <string name="title_activity_super">SuperActivity</string>
+    <string name="title_activity_supermercado">SupermercadoActivity</string>
+</resources>

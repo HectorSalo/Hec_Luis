@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/navigation_drawer_PLU" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/navigation_drawer_SUP" />
+    </group>
+
+    <item android:title="@string/navigation_drawer_subtitle">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/navigation_drawer_configuracion" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="@string/navigation_drawer_cerrar_sesion" />
+        </menu>
+    </item>
+
+</menu>
