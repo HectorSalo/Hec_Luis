@@ -14,7 +14,10 @@
     //activity_home_drawer
     <string name="navigation_drawer_PLU">Productos</string>
     <string name="navigation_drawer_SUP">Supermercados</string>
-    <string name="navigation_drawer_subtitle">Otros</string>
+    <string name="navigation_drawer_subtitle">Personal</string>
+    <string name="navigation_drawer_favoritos">Favoritos</string>
+    <string name="navigation_drawer_listacompras">Mi Lista de Compras</string>
+    <string name="navigation_drawer_subtitle2">Extras</string>
     <string name="navigation_drawer_configuracion">Configuracion</string>
     <string name="navigation_drawer_cerrar_sesion">Cerrar sesion</string>
 

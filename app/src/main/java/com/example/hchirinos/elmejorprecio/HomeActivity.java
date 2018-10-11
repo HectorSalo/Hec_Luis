@@ -73,13 +73,15 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_productos) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_supermercados) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_favorito) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_listacompras) {
+
+        } else if (id == R.id.nav_configuracion){
 
         }
 
