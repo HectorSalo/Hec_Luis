@@ -85,7 +85,12 @@ public class PLUActivity extends AppCompatActivity
 
         if (id == R.id.nav_productos) {
             // Handle the camera action
+            Intent ir_productos = new Intent (this, ProductosActivity.class);
+            startActivity(ir_productos);
+
         } else if (id == R.id.nav_supermercados) {
+            Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
+            startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
 

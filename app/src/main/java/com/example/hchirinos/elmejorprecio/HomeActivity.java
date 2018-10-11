@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -50,6 +51,8 @@ public class HomeActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
+
+
     }
 
     @Override
@@ -62,7 +65,10 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_buscar) {
             return true;
-        }
+
+            }
+
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -75,7 +81,12 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_productos) {
             // Handle the camera action
+            Intent ir_productos = new Intent (this, ProductosActivity.class);
+            startActivity(ir_productos);
+
         } else if (id == R.id.nav_supermercados) {
+            Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
+            startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
 
