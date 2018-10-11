@@ -13,9 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 public class PLUActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Spinner spinner_ordenar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,12 @@ public class PLUActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        spinner_ordenar = (Spinner)findViewById(R.id.spinner_ordenar);
+
+        String [] opciones_ordenar = {"Menor a mayor", "Mayor a menor"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
+        spinner_ordenar.setAdapter(adapter);
     }
 
     @Override
@@ -60,7 +70,7 @@ public class PLUActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.bar_buscar) {
             return true;
         }
 
