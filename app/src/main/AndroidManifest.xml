@@ -30,7 +30,8 @@
         <activity
             android:name=".SupermercadoActivity"
             android:label="@string/title_activity_supermercado"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddProducto"></activity>
     </application>
 
 </manifest>
