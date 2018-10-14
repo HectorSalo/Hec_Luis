@@ -115,4 +115,9 @@ public class HomeActivity extends AppCompatActivity
         Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
         startActivity(ir_supermercado);
     }
+
+    public void Ir_maps_encontrar (View view){
+        Intent ir_maps_encontrar = new Intent(this, Maps_buscar.class);
+        startActivity(ir_maps_encontrar);
+    }
 }

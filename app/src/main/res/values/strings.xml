@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">ElMejorPrecio</string>
 
-    //activity_content
+    //activity_content_home
     <string name="txt_buscar">Escriba el Producto o Supermercado</string>
     <string name="txt_ordenar">Ordenar</string>
     <string name="button_buscar">Buscar</string>
     <string name="button_PLU_inicio">Productos</string>
     <string name="button_SUP_inicio">Supermercados</string>
+    <string name="button_maps_encontrar">Buscar Supermercados en Maps</string>
 
     <string name="txt_resultado_buscar">Resultado de busqueda</string>
     <string name="txt_lista_resultado">Lista</string>
@@ -39,8 +40,8 @@
     //generales
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">USUARIO</string>
-    <string name="nav_header_subtitle">Bienvenido</string>
+    <string name="nav_header_title">El Mejor Precio</string>
+    <string name="nav_header_subtitle">...aqui lo encontraras!!!</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_plu">PLUActivity</string>
     <string name="title_activity_productos">ProductosActivity</string>
@@ -48,6 +49,7 @@
     <string name="title_activity_supermercado">SupermercadoActivity</string>
     <string name="label_floating_producto">Producto</string>
     <string name="label_floating_supermercado">Supermercado</string>
+    <string name="title_activity_maps_buscar">Map</string>
 
 
 </resources>
