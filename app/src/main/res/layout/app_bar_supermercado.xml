@@ -20,15 +20,84 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <include layout="@layout/content_supermercado" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_agregar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="20dp"
         app:backgroundTint="@color/colorPrimary"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:fab_size="normal"
+        />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_producto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="150dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="90dp"
+        android:padding="0dp"
+        android:visibility="invisible">
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/label_floating_producto"
+            android:textStyle="bold" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_producto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/colorPrimary"
+            app:fab_label="@string/label_floating_producto"
+            app:fab_size="mini"
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:layout_marginEnd="0dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_supermercado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="-4dp"
+        android:layout_marginBottom="160dp"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <TextView
+
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/label_floating_supermercado"
+            android:textStyle="bold" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_supermercado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/colorPrimary"
+            app:fab_label="@string/label_floating_supermercado"
+            app:fab_size="mini"
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:layout_marginEnd="0dp"
+            />
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

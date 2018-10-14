@@ -44,6 +44,8 @@
     <string name="title_activity_productos">ProductosActivity</string>
     <string name="title_activity_super">SuperActivity</string>
     <string name="title_activity_supermercado">SupermercadoActivity</string>
+    <string name="label_floating_producto">Producto</string>
+    <string name="label_floating_supermercado">Supermercado</string>
 
 
 </resources>

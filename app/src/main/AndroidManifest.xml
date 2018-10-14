@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hchirinos.elmejorprecio">
+    package="com.example.hchirinos.elmejorprecio"
+    >
 
     <application
         android:allowBackup="true"

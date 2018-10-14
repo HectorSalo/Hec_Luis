@@ -13,13 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class SupermercadoActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Spinner spinner_ordenar;
+    private FloatingActionButton fab_agregar, fab_producto, fab_supermercado;
+    private Animation fabOpen, fabClose, rotate_forward, rotate_backward;
+    private LinearLayout layout_producto, layout_supermercado;
+    boolean isOpen= false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +37,37 @@ public class SupermercadoActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab_agregar = (FloatingActionButton) findViewById(R.id.fab_agregar);
+        fab_producto = (FloatingActionButton)findViewById(R.id.fab_producto);
+        fab_supermercado = (FloatingActionButton)findViewById(R.id.fab_supermercado);
+
+        fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_closed);
+        rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
+
+        layout_producto = (LinearLayout)findViewById(R.id.linearLayout_producto);
+        layout_supermercado = (LinearLayout)findViewById(R.id.linearLayout_supermercado);
+
+
+        fab_agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                animateFab();
+            }
+        });
+
+        layout_producto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                add_producto();
+            }
+        });
+
+        layout_supermercado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(SupermercadoActivity.this, "Se agregara Supermercado", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -51,6 +85,27 @@ public class SupermercadoActivity extends AppCompatActivity
         String [] opciones_ordenar = {"A-Z (Productos)", "A-Z (Supermercados)"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
         spinner_ordenar.setAdapter(adapter);
+    }
+
+    //Metodo para floating_button
+
+    private void animateFab (){
+
+        if (isOpen){
+            fab_agregar.startAnimation(rotate_forward);
+            layout_supermercado.startAnimation(fabClose);
+            layout_producto.startAnimation(fabClose);
+            layout_supermercado.setClickable(false);
+            layout_producto.setClickable(false);
+            isOpen = false;
+        } else {
+            fab_agregar.startAnimation(rotate_backward);
+            layout_supermercado.startAnimation(fabOpen);
+            layout_producto.startAnimation(fabOpen);
+            layout_supermercado.setClickable(true);
+            layout_producto.setClickable(true);
+            isOpen = true;
+        }
     }
 
     @Override
@@ -116,5 +171,10 @@ public class SupermercadoActivity extends AppCompatActivity
     public void Ir_inicio (View view){
         Intent ir_inicio = new Intent(this, HomeActivity.class);
         startActivity(ir_inicio);
+    }
+
+    public void add_producto (){
+        Intent add_producto = new Intent(this, AddProducto.class);
+        startActivity(add_producto);
     }
 }
