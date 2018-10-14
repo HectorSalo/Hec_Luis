@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hchirinos.elmejorprecio"
-    >
+    package="com.example.hchirinos.elmejorprecio">
 
     <application
         android:allowBackup="true"
@@ -32,7 +31,8 @@
             android:name=".SupermercadoActivity"
             android:label="@string/title_activity_supermercado"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddProducto"></activity>
+        <activity android:name=".AddProducto" />
+        <activity android:name=".Add_Supermercado"></activity>
     </application>
 
 </manifest>

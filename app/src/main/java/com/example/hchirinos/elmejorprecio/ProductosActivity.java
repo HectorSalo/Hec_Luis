@@ -61,14 +61,14 @@ public class ProductosActivity extends AppCompatActivity
         layout_producto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProductosActivity.this, "Se agregara Producto", Toast.LENGTH_LONG).show();
+                add_producto();
             }
         });
 
         layout_supermercado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ProductosActivity.this, "Se agregara Supermercado", Toast.LENGTH_LONG).show();
+                add_supermercado();
             }
         });
 
@@ -176,5 +176,15 @@ public class ProductosActivity extends AppCompatActivity
     public void Regresar_inicio (View view) {
         Intent ir_inicio = new Intent(this, HomeActivity.class);
         startActivity(ir_inicio);
+    }
+
+    public void add_producto (){
+        Intent add_producto = new Intent(this, AddProducto.class);
+        startActivity(add_producto);
+    }
+
+    public void add_supermercado () {
+        Intent add_supermercado = new Intent(this, Add_Supermercado.class);
+        startActivity(add_supermercado);
     }
 }

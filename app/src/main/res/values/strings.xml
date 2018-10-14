@@ -26,12 +26,14 @@
     <string name="app_bar_buscar">Buscar</string>
 
     //add_productos
-    <string name="txtv_descripcion">Descripcion</string>
+    <string name="txtv_descripcion">Nombre</string>
     <string name="txtv_supermercado">Supermercado</string>
     <string name="txtv_sucursal">Sucursal</string>
     <string name="txtv_precio">Precio Unitario</string>
     <string name="txtv_unidad">Unidad</string>
     <string name="button_add_producto">Agregar Producto</string>
+
+    //add_supermercado
 
 
     //generales

@@ -67,7 +67,7 @@ public class SupermercadoActivity extends AppCompatActivity
         layout_supermercado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SupermercadoActivity.this, "Se agregara Supermercado", Toast.LENGTH_LONG).show();
+                add_supermercado();
             }
         });
 
@@ -177,4 +177,11 @@ public class SupermercadoActivity extends AppCompatActivity
         Intent add_producto = new Intent(this, AddProducto.class);
         startActivity(add_producto);
     }
-}
+
+    public void add_supermercado () {
+        Intent add_supermercado = new Intent(this, Add_Supermercado.class);
+        startActivity(add_supermercado);
+     }
+
+    }
+
