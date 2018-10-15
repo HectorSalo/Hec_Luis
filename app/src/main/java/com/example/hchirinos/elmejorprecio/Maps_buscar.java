@@ -43,6 +43,7 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
         mMap = googleMap;
         refresh_ubicacion();
 
+
         // Add a marker in Sydney and move the camera
         //LatLng habitacion = new LatLng(10.4854118, -66.8217642);
         //mMap.addMarker(new MarkerOptions().position(habitacion).title("Habitacion").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
