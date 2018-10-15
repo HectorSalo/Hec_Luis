@@ -98,6 +98,9 @@ public class PLUActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_configuracion){
 
+        } else if (id == R.id.nav_inicio) {
+            Intent ir_inicio = new Intent(this, HomeActivity.class);
+            startActivity(ir_inicio);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -105,8 +108,4 @@ public class PLUActivity extends AppCompatActivity
         return true;
     }
 
-    public void Regresar_inicio (View view) {
-        Intent regresar = new Intent(this, HomeActivity.class);
-        startActivity(regresar);
-    }
 }

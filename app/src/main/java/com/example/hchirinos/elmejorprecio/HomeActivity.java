@@ -101,6 +101,9 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_configuracion){
 
+        } else if (id == R.id.nav_inicio) {
+            Intent ir_inicio = new Intent(this, HomeActivity.class);
+            startActivity(ir_inicio);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -127,7 +130,7 @@ public class HomeActivity extends AppCompatActivity
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
         try {
-            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+            startActivityForResult(builder.build(HomeActivity.this), PLACE_PICKER_REQUEST);
         } catch (GooglePlayServicesRepairableException e) {
             e.printStackTrace();
         } catch (GooglePlayServicesNotAvailableException e) {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -161,6 +162,9 @@ public class SupermercadoActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_configuracion){
 
+        } else if (id == R.id.nav_inicio) {
+            Intent ir_inicio = new Intent(this, HomeActivity.class);
+            startActivity(ir_inicio);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -168,19 +172,20 @@ public class SupermercadoActivity extends AppCompatActivity
         return true;
     }
 
-    public void Ir_inicio (View view){
-        Intent ir_inicio = new Intent(this, HomeActivity.class);
-        startActivity(ir_inicio);
-    }
-
     public void add_producto (){
-        Intent add_producto = new Intent(this, AddProducto.class);
-        startActivity(add_producto);
+        AlertDialog.Builder add_producto_alert = new AlertDialog.Builder(SupermercadoActivity.this);
+        View add_producto_view = getLayoutInflater().inflate(R.layout.activity_add_producto,null);
+        add_producto_alert.setView(add_producto_view);
+        AlertDialog dialog = add_producto_alert.create();
+        dialog.show();
     }
 
     public void add_supermercado () {
-        Intent add_supermercado = new Intent(this, Add_Supermercado.class);
-        startActivity(add_supermercado);
+        AlertDialog.Builder add_supermercado_alert = new AlertDialog.Builder(SupermercadoActivity.this);
+        View add_supermercado_view = getLayoutInflater().inflate(R.layout.activity_add__supermercado,null);
+        add_supermercado_alert.setView(add_supermercado_view);
+        AlertDialog dialog = add_supermercado_alert.create();
+        dialog.show();
      }
 
     }

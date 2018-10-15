@@ -14,6 +14,7 @@
     <string name="button_ir_inicio">Volver a Inicio</string>
 
     //activity_home_drawer
+    <string name="navigation_drawer_inicio">Inicio</string>
     <string name="navigation_drawer_PLU">Productos</string>
     <string name="navigation_drawer_SUP">Supermercados</string>
     <string name="navigation_drawer_subtitle">Personal</string>
@@ -41,7 +42,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">El Mejor Precio</string>
-    <string name="nav_header_subtitle">...aqui lo encontraras!!!</string>
+    <string name="nav_header_subtitle">Alias</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_plu">PLUActivity</string>
     <string name="title_activity_productos">ProductosActivity</string>
