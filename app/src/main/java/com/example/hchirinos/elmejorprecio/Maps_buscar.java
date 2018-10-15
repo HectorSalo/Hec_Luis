@@ -32,6 +32,7 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_buscar);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_encontrar);
         mapFragment.getMapAsync(this);
@@ -41,7 +42,7 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        refresh_ubicacion();
+        //refresh_ubicacion();
 
 
         // Add a marker in Sydney and move the camera
@@ -61,7 +62,7 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
 
     }
 
-    private void marcador_tu_posicion(double latitud, double longitud) {
+    /*private void marcador_tu_posicion(double latitud, double longitud) {
         LatLng coordenadas_tu_posicion = new LatLng(latitud, longitud);
         CameraUpdate tu_posicion_camara = CameraUpdateFactory.newLatLngZoom(coordenadas_tu_posicion, 15);
         if (tu_ubicacion != null) tu_ubicacion.remove();
@@ -110,5 +111,5 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizar_ubicacion(location);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,15000,0,locationListener);
-    }
+    }*/
 }
