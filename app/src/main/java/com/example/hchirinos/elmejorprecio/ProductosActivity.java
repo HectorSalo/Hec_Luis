@@ -37,6 +37,7 @@ public class ProductosActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*Botones flotantes
         fab_agregar = (FloatingActionButton) findViewById(R.id.fab_agregar);
         fab_producto = (FloatingActionButton)findViewById(R.id.fab_producto);
         fab_supermercado = (FloatingActionButton)findViewById(R.id.fab_supermercado);
@@ -72,7 +73,7 @@ public class ProductosActivity extends AppCompatActivity
             public void onClick(View v) {
                 add_supermercado();
             }
-        });
+        }); */
 
 
 
@@ -94,7 +95,7 @@ public class ProductosActivity extends AppCompatActivity
 
     //Metodo para floating_button
 
-    private void animateFab (){
+    /*private void animateFab (){
 
         if (isOpen){
             fab_agregar.startAnimation(rotate_forward);
@@ -111,7 +112,7 @@ public class ProductosActivity extends AppCompatActivity
             layout_producto.setClickable(true);
             isOpen = true;
         }
-    }
+    } */
 
     @Override
     public void onBackPressed() {

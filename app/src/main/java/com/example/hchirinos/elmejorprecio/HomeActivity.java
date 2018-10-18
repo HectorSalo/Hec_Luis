@@ -116,16 +116,6 @@ public class HomeActivity extends AppCompatActivity
         startActivity(ir_plu);
     }
 
-    public void Ir_Productos (View view){
-        Intent ir_productos = new Intent (this, ProductosActivity.class);
-        startActivity(ir_productos);
-    }
-
-    public void Ir_Supermercado (View view){
-        Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
-        startActivity(ir_supermercado);
-    }
-
     public void Ir_maps_encontrar (View view){
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 

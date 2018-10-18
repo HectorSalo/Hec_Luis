@@ -38,6 +38,7 @@ public class SupermercadoActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         fab_agregar = (FloatingActionButton) findViewById(R.id.fab_agregar);
         fab_producto = (FloatingActionButton)findViewById(R.id.fab_producto);
         fab_supermercado = (FloatingActionButton)findViewById(R.id.fab_supermercado);
@@ -70,7 +71,7 @@ public class SupermercadoActivity extends AppCompatActivity
             public void onClick(View v) {
                 add_supermercado();
             }
-        });
+        }); */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,7 +89,7 @@ public class SupermercadoActivity extends AppCompatActivity
         spinner_ordenar.setAdapter(adapter);
     }
 
-    //Metodo para floating_button
+    /*Metodo para floating_button
 
     private void animateFab (){
 
@@ -107,7 +108,7 @@ public class SupermercadoActivity extends AppCompatActivity
             layout_producto.setClickable(true);
             isOpen = true;
         }
-    }
+    } */
 
     @Override
     public void onBackPressed() {

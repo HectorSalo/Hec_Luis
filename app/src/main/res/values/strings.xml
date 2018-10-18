@@ -2,11 +2,12 @@
     <string name="app_name">ElMejorPrecio</string>
 
     //activity_content_home
-    <string name="txt_ordenar">Ordenar</string>
+    <string name="txt_Favoritos">Favoritos</string>
+    <string name="txt_recientes">Agregados Recientemente</string>
     <string name="button_buscar">Buscar</string>
-    <string name="button_PLU_inicio">Productos</string>
+    <string name="button_PLU_inicio">Buscar Productos</string>
     <string name="button_SUP_inicio">Tiendas</string>
-    <string name="button_maps_encontrar">Buscar Tiendas cercanas</string>
+    <string name="button_maps_encontrar">Tiendas cercanas</string>
 
     //activity_home_drawer
     <string name="navigation_drawer_inicio">Inicio</string>
@@ -34,6 +35,7 @@
 
 
     //generales
+    <string name="txt_ordenar">Ordenar</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">El Mejor Precio</string>
