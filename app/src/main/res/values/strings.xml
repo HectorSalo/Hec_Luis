@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ElMejorPrecio</string>
+    <string name="app_name">El Mejor Precio</string>
 
     //activity_content_home
     <string name="txt_Favoritos">Favoritos</string>
@@ -41,10 +41,10 @@
     <string name="nav_header_title">El Mejor Precio</string>
     <string name="nav_header_subtitle">Alias</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="title_activity_plu">PLUActivity</string>
-    <string name="title_activity_productos">ProductosActivity</string>
-    <string name="title_activity_super">SuperActivity</string>
-    <string name="title_activity_supermercado">SupermercadoActivity</string>
+    <string name="title_activity_plu">Buscar</string>
+    <string name="title_activity_productos">Productos</string>
+    <string name="title_activity_super">Buscar</string>
+    <string name="title_activity_supermercado">Tiendas</string>
     <string name="label_floating_producto">Producto</string>
     <string name="label_floating_supermercado">Tienda</string>
     <string name="title_activity_maps_buscar">Map</string>
