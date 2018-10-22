@@ -8,15 +8,15 @@
 
         <item
             android:id="@+id/nav_inicio"
-            android:icon="@drawable/googleg_standard_color_18"
+            android:icon="@drawable/inicio"
             android:title="@string/navigation_drawer_inicio" />
         <item
             android:id="@+id/nav_productos"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/productos"
             android:title="@string/navigation_drawer_PLU" />
         <item
             android:id="@+id/nav_supermercados"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/tienda3"
             android:title="@string/navigation_drawer_SUP" />
     </group>
 
@@ -28,7 +28,7 @@
                 android:title="@string/navigation_drawer_favoritos" />
             <item
                 android:id="@+id/nav_listacompras"
-                android:icon="@android:drawable/ic_menu_edit"
+                android:icon="@drawable/lista_compras"
                 android:title="@string/navigation_drawer_listacompras" />
         </menu>
     </item>

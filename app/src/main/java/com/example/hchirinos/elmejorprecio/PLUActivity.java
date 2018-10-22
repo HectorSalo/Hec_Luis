@@ -37,6 +37,7 @@ public class PLUActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
         spinner_ordenar = (Spinner)findViewById(R.id.spinner_ordenar);
 
@@ -95,6 +96,8 @@ public class PLUActivity extends AppCompatActivity
         } else if (id == R.id.nav_favorito) {
 
         } else if (id == R.id.nav_listacompras) {
+            Intent ir_lista_compras = new Intent(this, lista_compras.class);
+            startActivity(ir_lista_compras);
 
         } else if (id == R.id.nav_configuracion){
 
