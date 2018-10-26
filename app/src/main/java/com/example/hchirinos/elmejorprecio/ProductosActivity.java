@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,14 +23,36 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductosActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener {
 
     private Spinner spinner_ordenar;
     private FloatingActionButton fab_agregar, fab_producto, fab_supermercado;
     private Animation fabOpen, fabClose, rotate_forward, rotate_backward;
     private LinearLayout layout_producto, layout_supermercado;
     boolean isOpen= false;
+
+
+    ArrayList<ConstructorProductos> listProductos;
+    RecyclerView recyclerProductos;
+
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +116,25 @@ public class ProductosActivity extends AppCompatActivity
         String [] opciones_ordenar = {"Menor a mayor", "Mayor a menor", "A-Z"};
         ArrayAdapter <String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
         spinner_ordenar.setAdapter(adapter);
+
+        recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+
+        listProductos = new ArrayList<>();
+        request = Volley.newRequestQueue(getApplicationContext());
+
+        cargarWebservices ();
+
+
+    }
+
+    private void cargarWebservices() {
+
+        String url = "http://192.168.3.34:8080/elmejorprecio/conectar.php";
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
     }
 
     //Metodo para floating_button
@@ -181,20 +224,38 @@ public class ProductosActivity extends AppCompatActivity
     }
 
 
-    public void add_producto (){
-        AlertDialog.Builder add_producto_alert = new AlertDialog.Builder(ProductosActivity.this);
-        View add_producto_view = getLayoutInflater().inflate(R.layout.activity_add_producto,null);
-        add_producto_alert.setView(add_producto_view);
-        AlertDialog dialog = add_producto_alert.create();
-        dialog.show();
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
+        ConstructorProductos productos = null;
+
+        JSONArray json = response.optJSONArray("producto");
+
+        try {
+            for (int i=0; i<json.length(); i++) {
+                productos = new ConstructorProductos();
+                JSONObject jsonObject = null;
+                jsonObject = json.getJSONObject(i);
+
+                productos.setNombre_producto(jsonObject.optString("nombre_plu"));
+                productos.setMarca_producto(jsonObject.optString("marca_plu"));
+                productos.setPrecio_producto(jsonObject.optDouble("precio_plu"));
+
+                listProductos.add(productos);
+            }
+
+            //Envio de ArrayList al Adaptador
+            AdapterProductos adapterProductos = new AdapterProductos(listProductos);
+            recyclerProductos.setAdapter(adapterProductos);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-
-    public void add_supermercado () {
-        AlertDialog.Builder add_supermercado_alert = new AlertDialog.Builder(ProductosActivity.this);
-        View add_supermercado_view = getLayoutInflater().inflate(R.layout.activity_add__supermercado,null);
-        add_supermercado_alert.setView(add_supermercado_view);
-        AlertDialog dialog = add_supermercado_alert.create();
-        dialog.show();
     }
 }
