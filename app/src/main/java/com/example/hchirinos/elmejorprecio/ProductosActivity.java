@@ -114,12 +114,13 @@ public class ProductosActivity extends AppCompatActivity
         spinner_ordenar = (Spinner)findViewById(R.id.spinner_ordenar);
 
         String [] opciones_ordenar = {"Menor a mayor", "Mayor a menor", "A-Z"};
+
         ArrayAdapter <String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
         spinner_ordenar.setAdapter(adapter);
 
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
 
         listProductos = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
@@ -245,6 +246,7 @@ public class ProductosActivity extends AppCompatActivity
                 productos.setNombre_producto(jsonObject.optString("nombre_plu"));
                 productos.setMarca_producto(jsonObject.optString("marca_plu"));
                 productos.setPrecio_producto(jsonObject.optDouble("precio_plu"));
+                productos.setImagen_producto(jsonObject.optString("imagen"));
 
                 listProductos.add(productos);
             }

@@ -1,11 +1,16 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 public class ConstructorProductos {
 
     private String nombre_producto;
     private String marca_producto;
     private double precio_producto;
     private String imagen_producto;
+    private Bitmap imagen_bitmap;
 
     public ConstructorProductos() {}
 
@@ -49,6 +54,17 @@ public class ConstructorProductos {
 
     public void setImagen_producto(String imagen_producto) {
         this.imagen_producto = imagen_producto;
+
+        byte [] byteCode = Base64.decode(imagen_producto, Base64.DEFAULT);
+        this.imagen_bitmap = BitmapFactory.decodeByteArray(byteCode, 0, byteCode.length);
+    }
+
+    public Bitmap getImagen_bitmap() {
+        return imagen_bitmap;
+    }
+
+    public void setImagen_bitmap(Bitmap imagen_bitmap) {
+        this.imagen_bitmap = imagen_bitmap;
     }
 }
 

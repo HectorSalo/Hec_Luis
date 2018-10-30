@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.ViewHolderProductos> {
 
     ArrayList<ConstructorProductos> listProductos;
+
 
     public AdapterProductos (ArrayList<ConstructorProductos> listProductos){
         this.listProductos = listProductos;
@@ -29,13 +33,16 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterProductos.ViewHolderProductos viewHolderProductos, int i) {
+    public void onBindViewHolder(@NonNull ViewHolderProductos viewHolderProductos, int i) {
+
+
 
         //Comunica el adaptador con la clase ViewHolderProductos
         viewHolderProductos.textView_nombre_producto.setText(listProductos.get(i).getNombre_producto());
         viewHolderProductos.textView_marca_producto.setText(listProductos.get(i).getMarca_producto());
         viewHolderProductos.textView_precio_producto.setText(String.valueOf(listProductos.get(i).getPrecio_producto()));
-        //viewHolderProductos.imageView_producto.setImageResource(listProductos.get(i).getImagen_producto());
+        viewHolderProductos.imageView_producto.setImageBitmap(listProductos.get(i).getImagen_bitmap());
+
 
     }
 
@@ -56,10 +63,10 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         public ViewHolderProductos(@NonNull View itemView) {
             super(itemView);
 
-            textView_nombre_producto = itemView.findViewById(R.id.textView_nombre_producto);
-            textView_marca_producto = itemView.findViewById(R.id.textView_marca_producto);
-            textView_precio_producto = itemView.findViewById(R.id.textView_precio_producto);
-            imageView_producto = itemView.findViewById(R.id.imageView_producto);
+            textView_nombre_producto = (TextView) itemView.findViewById(R.id.textView_nombre_producto);
+            textView_marca_producto = (TextView) itemView.findViewById(R.id.textView_marca_producto);
+            textView_precio_producto = (TextView) itemView.findViewById(R.id.textView_precio_producto);
+            imageView_producto = (ImageView) itemView.findViewById(R.id.imageView_producto);
         }
     }
 }
