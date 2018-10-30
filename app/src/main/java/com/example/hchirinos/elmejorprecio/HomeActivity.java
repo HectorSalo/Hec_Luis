@@ -34,8 +34,7 @@ public class HomeActivity extends AppCompatActivity
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -61,7 +60,6 @@ public class HomeActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
 
-
     }
 
     @Override
@@ -77,8 +75,6 @@ public class HomeActivity extends AppCompatActivity
 
             }
 
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -89,7 +85,6 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_productos) {
-            // Handle the camera action
             Intent ir_productos = new Intent (this, ProductosActivity.class);
             startActivity(ir_productos);
 
@@ -115,11 +110,13 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+    //Metodo Buscar Productos
     public void Ir_PLU (View view) {
         Intent ir_plu = new Intent(this, PLUActivity.class);
         startActivity(ir_plu);
     }
 
+    //Metodo Buscar en el Mapa
     public void Ir_maps_encontrar (View view){
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 

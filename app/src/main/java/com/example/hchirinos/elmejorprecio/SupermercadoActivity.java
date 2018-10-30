@@ -150,7 +150,6 @@ public class SupermercadoActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_productos) {
-            // Handle the camera action
             Intent ir_productos = new Intent (this, ProductosActivity.class);
             startActivity(ir_productos);
 
@@ -176,21 +175,7 @@ public class SupermercadoActivity extends AppCompatActivity
         return true;
     }
 
-    public void add_producto (){
-        AlertDialog.Builder add_producto_alert = new AlertDialog.Builder(SupermercadoActivity.this);
-        View add_producto_view = getLayoutInflater().inflate(R.layout.activity_add_producto,null);
-        add_producto_alert.setView(add_producto_view);
-        AlertDialog dialog = add_producto_alert.create();
-        dialog.show();
-    }
 
-    public void add_supermercado () {
-        AlertDialog.Builder add_supermercado_alert = new AlertDialog.Builder(SupermercadoActivity.this);
-        View add_supermercado_view = getLayoutInflater().inflate(R.layout.activity_add__supermercado,null);
-        add_supermercado_alert.setView(add_supermercado_view);
-        AlertDialog dialog = add_supermercado_alert.create();
-        dialog.show();
-     }
 
     }
 
