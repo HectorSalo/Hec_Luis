@@ -63,7 +63,7 @@ public class ProductosActivity extends AppCompatActivity
     JsonObjectRequest jsonObjectRequest;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +137,7 @@ public class ProductosActivity extends AppCompatActivity
 
         cargarWebservices ();
 
-        //ordenar_lista();
+
 
 
     }
@@ -284,19 +284,19 @@ public class ProductosActivity extends AppCompatActivity
 
         if (seleccion.equals("Menor a mayor")){
 
-            sortListProductos_menor ();
+        sortListProductos_menor ();
 
-        } else if (seleccion.equals("Mayor a menor")) {
+    } else if (seleccion.equals("Mayor a menor")) {
 
-            sortListProductos_mayor();
+        sortListProductos_mayor();
 
-        } else if (seleccion.equals("A-Z")){
-            sortlistProductos();
-
-        }
-
+    } else if (seleccion.equals("A-Z")){
+        sortlistProductos();
 
     }
+
+
+}
 
     private void sortListProductos_mayor() {
 
@@ -317,8 +317,8 @@ public class ProductosActivity extends AppCompatActivity
         Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
             @Override
             public int compare(ConstructorProductos o1, ConstructorProductos o2) {
-               return new Integer((int) o1.getPrecio_producto()).compareTo(new Integer((int) o2.getPrecio_producto()));
-           // return Double.compare(o1.getPrecio_producto(), o2.getPrecio_producto());
+           //    return new Integer((int) o1.getPrecio_producto()).compareTo(new Integer((int) o2.getPrecio_producto()));
+            return Double.compare(o1.getPrecio_producto(), o2.getPrecio_producto());
             }
         });
 
