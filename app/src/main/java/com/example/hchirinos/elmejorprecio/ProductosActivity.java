@@ -1,7 +1,9 @@
 package com.example.hchirinos.elmejorprecio;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -35,10 +38,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ProductosActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener {
 
     private Spinner spinner_ordenar;
     private FloatingActionButton fab_agregar, fab_producto, fab_supermercado;
@@ -47,13 +54,16 @@ public class ProductosActivity extends AppCompatActivity
     boolean isOpen= false;
 
 
+
     ArrayList<ConstructorProductos> listProductos;
     RecyclerView recyclerProductos;
+    AdapterProductos adapterProductos;
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,11 +122,11 @@ public class ProductosActivity extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
         spinner_ordenar = (Spinner)findViewById(R.id.spinner_ordenar);
-
-        String [] opciones_ordenar = {"Menor a mayor", "Mayor a menor", "A-Z"};
-
+        String [] opciones_ordenar = {"Ordenar", "Menor a mayor", "Mayor a menor", "A-Z"};
         ArrayAdapter <String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
         spinner_ordenar.setAdapter(adapter);
+        spinner_ordenar.setOnItemSelectedListener(this);
+
 
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
@@ -126,6 +136,8 @@ public class ProductosActivity extends AppCompatActivity
         request = Volley.newRequestQueue(getApplicationContext());
 
         cargarWebservices ();
+
+        //ordenar_lista();
 
 
     }
@@ -137,6 +149,8 @@ public class ProductosActivity extends AppCompatActivity
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);
     }
+
+
 
     //Metodo para floating_button
 
@@ -252,7 +266,7 @@ public class ProductosActivity extends AppCompatActivity
             }
 
             //Envio de ArrayList al Adaptador
-            AdapterProductos adapterProductos = new AdapterProductos(listProductos);
+            adapterProductos = new AdapterProductos(listProductos);
             recyclerProductos.setAdapter(adapterProductos);
 
         } catch (JSONException e) {
@@ -260,4 +274,73 @@ public class ProductosActivity extends AppCompatActivity
         }
 
     }
+
+    //spinner
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        String seleccion = spinner_ordenar.getSelectedItem().toString();
+
+        if (seleccion.equals("Menor a mayor")){
+
+            sortListProductos_menor ();
+
+        } else if (seleccion.equals("Mayor a menor")) {
+
+            sortListProductos_mayor();
+
+        } else if (seleccion.equals("A-Z")){
+            sortlistProductos();
+
+        }
+
+
+    }
+
+    private void sortListProductos_mayor() {
+
+        Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
+            @Override
+            public int compare(ConstructorProductos o1, ConstructorProductos o2) {
+           //    return new Integer((int) o2.getPrecio_producto()).compareTo(new Integer((int) o1.getPrecio_producto()));
+            return Double.compare(o2.getPrecio_producto(), o1.getPrecio_producto());
+            }
+        });
+
+        adapterProductos.notifyDataSetChanged();
+        recyclerProductos.setAdapter(adapterProductos);
+    }
+
+    private void sortListProductos_menor() {
+
+        Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
+            @Override
+            public int compare(ConstructorProductos o1, ConstructorProductos o2) {
+               return new Integer((int) o1.getPrecio_producto()).compareTo(new Integer((int) o2.getPrecio_producto()));
+           // return Double.compare(o1.getPrecio_producto(), o2.getPrecio_producto());
+            }
+        });
+
+        adapterProductos.notifyDataSetChanged();
+        recyclerProductos.setAdapter(adapterProductos);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void sortlistProductos() {
+        Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
+            @Override
+            public int compare(ConstructorProductos o1, ConstructorProductos o2) {
+                return o1.getNombre_producto().compareTo(o2.getNombre_producto());
+            }
+        });
+        adapterProductos.notifyDataSetChanged();
+        recyclerProductos.setAdapter(adapterProductos);
+    }
+
+
 }

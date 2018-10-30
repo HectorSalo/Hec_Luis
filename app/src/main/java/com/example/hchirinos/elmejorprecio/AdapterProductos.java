@@ -41,7 +41,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         viewHolderProductos.textView_nombre_producto.setText(listProductos.get(i).getNombre_producto());
         viewHolderProductos.textView_marca_producto.setText(listProductos.get(i).getMarca_producto());
         viewHolderProductos.textView_precio_producto.setText(String.valueOf(listProductos.get(i).getPrecio_producto()));
-        viewHolderProductos.imageView_producto.setImageBitmap(listProductos.get(i).getImagen_bitmap());
+        //viewHolderProductos.imageView_producto.setImageBitmap(listProductos.get(i).getImagen_bitmap());
 
 
     }
