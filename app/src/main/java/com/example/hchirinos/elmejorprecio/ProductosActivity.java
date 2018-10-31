@@ -23,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ProductosActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Spinner spinner_ordenar;
     private FloatingActionButton fab_agregar, fab_producto, fab_supermercado;
@@ -64,12 +65,18 @@ public class ProductosActivity extends AppCompatActivity
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
+
 
         /*Botones flotantes
         fab_agregar = (FloatingActionButton) findViewById(R.id.fab_agregar);
@@ -187,6 +194,10 @@ public class ProductosActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.productos, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.bar_buscar);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -343,4 +354,26 @@ public class ProductosActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        String userInput = newText.toLowerCase();
+        ArrayList<ConstructorProductos> newList = new ArrayList<>();
+
+        for (ConstructorProductos name : listProductos) {
+
+            if (name.getNombre_producto().toLowerCase().contains(userInput) || name.getMarca_producto().toLowerCase().contains(userInput)) {
+
+                newList.add(name);
+            }
+        }
+
+        adapterProductos.updateList(newList);
+        return true;
+    }
 }

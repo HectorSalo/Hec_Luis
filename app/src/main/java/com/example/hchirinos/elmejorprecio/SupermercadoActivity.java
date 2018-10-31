@@ -21,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -40,7 +41,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class SupermercadoActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Spinner spinner_ordenar;
     private FloatingActionButton fab_agregar, fab_producto, fab_supermercado;
@@ -109,7 +110,7 @@ public class SupermercadoActivity extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
         spinner_ordenar = (Spinner)findViewById(R.id.spinner_ordenar);
-        String [] opciones_ordenar = {"Ordenar", "A-Z (Productos)", "A-Z (Tiendas)"};
+        String [] opciones_ordenar = {"Ordenar", "A-Z (Sucursal)", "A-Z (Tiendas)"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
         spinner_ordenar.setAdapter(adapter);
         spinner_ordenar.setOnItemSelectedListener(this);
@@ -170,6 +171,9 @@ public class SupermercadoActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.supermercado, menu);
+        MenuItem menuItem = menu.findItem(R.id.bar_buscar);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -226,9 +230,9 @@ public class SupermercadoActivity extends AppCompatActivity
 
         String seleccion = spinner_ordenar.getSelectedItem().toString();
 
-        if (seleccion.equals("A-Z (Productos)")){
+        if (seleccion.equals("A-Z (Sucursal)")){
 
-            // Estara disponible al asociar productos
+            sortListPro_Tiendas();
 
         } else if (seleccion.equals("A-Z (Tiendas)")) {
 
@@ -236,6 +240,18 @@ public class SupermercadoActivity extends AppCompatActivity
 
         }
 
+    }
+
+    private void sortListPro_Tiendas() {
+
+        Collections.sort(listTiendas, new Comparator<ConstructorTiendas>() {
+            @Override
+            public int compare(ConstructorTiendas o1, ConstructorTiendas o2) {
+                return o1.getSucursal().compareTo(o2.getSucursal());
+            }
+        });
+        adapterTiendas.notifyDataSetChanged();
+        recyclerTiendas.setAdapter(adapterTiendas);
     }
 
     private void sortListTiendas() {
@@ -289,6 +305,28 @@ public class SupermercadoActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String userInput = newText.toLowerCase();
+        ArrayList<ConstructorTiendas> newList = new ArrayList<>();
+
+        for (ConstructorTiendas name : listTiendas) {
+
+            if (name.getNombre_tienda().toLowerCase().contains(userInput) || name.getSucursal().toLowerCase().contains(userInput)) {
+
+                newList.add(name);
+            }
+        }
+
+        adapterTiendas.updateList(newList);
+        return true;
     }
 }
 

@@ -69,4 +69,11 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             imageView_producto = (ImageView) itemView.findViewById(R.id.imageView_producto);
         }
     }
+
+    public void updateList (ArrayList<ConstructorProductos> newList){
+
+        listProductos = new ArrayList<>();
+        listProductos.addAll(newList);
+        notifyDataSetChanged();
+    }
 }

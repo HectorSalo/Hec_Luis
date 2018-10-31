@@ -49,4 +49,11 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
             textView_sucursal = (TextView)itemView.findViewById(R.id.textView_sucursal);
         }
     }
+
+    public void updateList (ArrayList<ConstructorTiendas> newList){
+
+        listTiendas = new ArrayList<>();
+        listTiendas.addAll(newList);
+        notifyDataSetChanged();
+    }
 }
