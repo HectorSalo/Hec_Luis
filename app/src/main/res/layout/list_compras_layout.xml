@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView_producto"
+            android:id="@+id/imageView_producto_compras"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:visibility="visible"
@@ -30,20 +30,20 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView_nombre_producto"
+                android:id="@+id/textView_nombre_producto_compras"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textStyle="italic" />
 
             <TextView
-                android:id="@+id/textView_marca_producto"
+                android:id="@+id/textView_marca_producto_compras"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
 
             <TextView
-                android:id="@+id/textView_precio_producto"
+                android:id="@+id/textView_precio_producto_compras"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
@@ -51,15 +51,15 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_producto_option"
+        <CheckBox
+            android:id="@+id/checkBox_compras"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="1dp"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:paddingStart="35dp"
-            android:paddingEnd="1dp"
-            android:text="&#8942;"
-            android:textAppearance="?android:textAppearanceLarge" />
+            android:paddingBottom="50dp"
+            android:text="@string/checkbox"
+            android:textAlignment="viewEnd"
+            android:visibility="visible" />
+
+
     </LinearLayout>
 </RelativeLayout>

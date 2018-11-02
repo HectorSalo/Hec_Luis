@@ -38,22 +38,19 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-
-    <ScrollView
-        android:layout_width="368dp"
-        android:layout_height="444dp"
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="128dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:text="Este activity realizará busquedas con filtros, de acuerdo a la Base de Datos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

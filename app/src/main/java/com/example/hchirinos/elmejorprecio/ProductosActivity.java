@@ -137,7 +137,7 @@ public class ProductosActivity extends AppCompatActivity
 
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
 
         listProductos = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
@@ -277,7 +277,7 @@ public class ProductosActivity extends AppCompatActivity
             }
 
             //Envio de ArrayList al Adaptador
-            adapterProductos = new AdapterProductos(listProductos);
+            adapterProductos = new AdapterProductos(listProductos, this);
             recyclerProductos.setAdapter(adapterProductos);
 
         } catch (JSONException e) {
@@ -295,27 +295,27 @@ public class ProductosActivity extends AppCompatActivity
 
         if (seleccion.equals("Menor a mayor")){
 
-        sortListProductos_menor ();
+            sortListProductos_menor ();
 
-    } else if (seleccion.equals("Mayor a menor")) {
+        } else if (seleccion.equals("Mayor a menor")) {
 
-        sortListProductos_mayor();
+            sortListProductos_mayor();
 
-    } else if (seleccion.equals("A-Z")){
-        sortlistProductos();
+        } else if (seleccion.equals("A-Z")){
+            sortlistProductos();
+
+        }
+
 
     }
-
-
-}
 
     private void sortListProductos_mayor() {
 
         Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
             @Override
             public int compare(ConstructorProductos o1, ConstructorProductos o2) {
-           //    return new Integer((int) o2.getPrecio_producto()).compareTo(new Integer((int) o1.getPrecio_producto()));
-            return Double.compare(o2.getPrecio_producto(), o1.getPrecio_producto());
+                //    return new Integer((int) o2.getPrecio_producto()).compareTo(new Integer((int) o1.getPrecio_producto()));
+                return Double.compare(o2.getPrecio_producto(), o1.getPrecio_producto());
             }
         });
 
@@ -328,8 +328,8 @@ public class ProductosActivity extends AppCompatActivity
         Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
             @Override
             public int compare(ConstructorProductos o1, ConstructorProductos o2) {
-           //    return new Integer((int) o1.getPrecio_producto()).compareTo(new Integer((int) o2.getPrecio_producto()));
-            return Double.compare(o1.getPrecio_producto(), o2.getPrecio_producto());
+                //    return new Integer((int) o1.getPrecio_producto()).compareTo(new Integer((int) o2.getPrecio_producto()));
+                return Double.compare(o1.getPrecio_producto(), o2.getPrecio_producto());
             }
         });
 
@@ -337,10 +337,6 @@ public class ProductosActivity extends AppCompatActivity
         recyclerProductos.setAdapter(adapterProductos);
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     private void sortlistProductos() {
         Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
@@ -352,7 +348,10 @@ public class ProductosActivity extends AppCompatActivity
         adapterProductos.notifyDataSetChanged();
         recyclerProductos.setAdapter(adapterProductos);
     }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
+    }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -376,4 +375,6 @@ public class ProductosActivity extends AppCompatActivity
         adapterProductos.updateList(newList);
         return true;
     }
+
+
 }

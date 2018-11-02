@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +15,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.SearchView;
+
+import java.util.ArrayList;
 
 public class lista_compras extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener  {
+
+
+    ArrayList<ConstructorCompras> listCompras;
+    RecyclerView recyclerCompras;
+    AdapterCompras adapterCompras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +44,16 @@ public class lista_compras extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+
+
+        recyclerCompras = (RecyclerView)findViewById(R.id.recyclerView_listcompras);
+        recyclerCompras.setHasFixedSize(true);
+        recyclerCompras.setLayoutManager(new LinearLayoutManager(this));
+
+        //listCompras = (ArrayList<ConstructorCompras>)getIntent().("nombre");
+        adapterCompras = new AdapterCompras(listCompras, this);
+        recyclerCompras.setAdapter(adapterCompras);
+
     }
 
     @Override
@@ -98,5 +119,28 @@ public class lista_compras extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

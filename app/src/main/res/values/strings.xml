@@ -21,6 +21,9 @@
 
     //app_bar
     <string name="app_bar_buscar">Buscar</string>
+    <string name="producto_menu_favorito">Agregar a Favoritos</string>
+    <string name="producto_menu_compras">Agregar a Compras</string>
+
 
     //add_productos
     <string name="txtv_descripcion">Nombre</string>
@@ -31,7 +34,10 @@
     <string name="button_add_producto">Agregar Producto</string>
     <string name="button_add_producto_cancelar">Cancelar</string>
 
-    //add_supermercado
+    //lista de compras
+    <string name="txt_total">Total gastos:</string>
+    <string name="txt_monto">0.00</string>
+    <string name="checkbox"></string>
 
 
     //generales
