@@ -36,11 +36,11 @@
         android:id="@+id/textView_total_compras"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="152dp"
+        android:layout_marginBottom="44dp"
+        android:text="@string/txt_monto"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:text="@string/txt_monto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

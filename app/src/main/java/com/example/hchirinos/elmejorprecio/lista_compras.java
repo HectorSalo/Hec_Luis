@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,9 @@ public class lista_compras extends AppCompatActivity
     ArrayList<ConstructorCompras> listCompras;
     RecyclerView recyclerCompras;
     AdapterCompras adapterCompras;
+    TextView textViewlist_compras;
+    String nombre_producto, marca_producto;
+    Bundle comprasBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +50,32 @@ public class lista_compras extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
 
+        textViewlist_compras = (TextView)findViewById(R.id.textView_total_compras);
+        comprasBundle = this.getIntent().getExtras();
+        nombre_producto = comprasBundle.getString("nombre");
+        textViewlist_compras.setText(nombre_producto);
+
+
+
+
+
         recyclerCompras = (RecyclerView)findViewById(R.id.recyclerView_listcompras);
         recyclerCompras.setHasFixedSize(true);
         recyclerCompras.setLayoutManager(new LinearLayoutManager(this));
 
-        //listCompras = (ArrayList<ConstructorCompras>)getIntent().("nombre");
-        adapterCompras = new AdapterCompras(listCompras, this);
-        recyclerCompras.setAdapter(adapterCompras);
+        listCompras = new ArrayList<>();
+
+        //llenarlist_compras ();
+
+
+    }
+
+    private void llenarlist_compras() {
+
+
+
+
+
 
     }
 

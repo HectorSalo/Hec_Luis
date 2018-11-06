@@ -23,6 +23,8 @@
     <string name="app_bar_buscar">Buscar</string>
     <string name="producto_menu_favorito">Agregar a Favoritos</string>
     <string name="producto_menu_compras">Agregar a Compras</string>
+    <string name="producto_menu_detalles">Ver Detalles</string>
+
 
 
     //add_productos
