@@ -30,7 +30,7 @@ public class lista_compras extends AppCompatActivity
     AdapterCompras adapterCompras;
     TextView textViewlist_compras;
     String nombre_producto, marca_producto;
-   
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
