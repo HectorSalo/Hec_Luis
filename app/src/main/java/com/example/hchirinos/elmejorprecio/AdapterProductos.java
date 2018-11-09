@@ -69,16 +69,8 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                                 break;
 
                             case R.id.option_compras:
-
-                                Intent compras = new Intent(mContext, lista_compras.class);
-
-                                Bundle comprasBundle = new Bundle();
-                                comprasBundle.putString("nombre", listProductos.get(i).getNombre_producto());
-                                comprasBundle.putString("marca", listProductos.get(i).getMarca_producto());
-                                comprasBundle.putDouble("precio", listProductos.get(i).getPrecio_producto());
                                 Toast.makeText(mContext, "Guardado en Lista de Compras", Toast.LENGTH_LONG).show();
-                                compras.putExtras(comprasBundle);
-                                mContext.startActivity(compras);
+
                                 break;
                             default:
                                 break;

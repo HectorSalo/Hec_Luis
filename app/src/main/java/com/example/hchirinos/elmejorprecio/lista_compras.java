@@ -30,7 +30,7 @@ public class lista_compras extends AppCompatActivity
     AdapterCompras adapterCompras;
     TextView textViewlist_compras;
     String nombre_producto, marca_producto;
-    Bundle comprasBundle;
+   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +48,6 @@ public class lista_compras extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-
-
-        textViewlist_compras = (TextView)findViewById(R.id.textView_total_compras);
-        comprasBundle = this.getIntent().getExtras();
-        nombre_producto = comprasBundle.getString("nombre");
-        textViewlist_compras.setText(nombre_producto);
-
 
 
 
