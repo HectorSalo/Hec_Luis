@@ -60,6 +60,5 @@
             android:textAlignment="viewEnd"
             android:visibility="visible" />
 
-
     </LinearLayout>
 </RelativeLayout>

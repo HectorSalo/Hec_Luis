@@ -14,14 +14,25 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.ViewHolderProductos> {
+public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.ViewHolderProductos> implements Response.Listener<JSONObject>, Response.ErrorListener {
 
     ArrayList<ConstructorProductos> listProductos;
     Context mContext;
+
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
 
     public AdapterProductos (ArrayList<ConstructorProductos> listProductos, Context mContext){
@@ -36,6 +47,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         //Enlaza el adaptador con list_producto_layout.xml
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_producto_layout,null, false);
+        request = Volley.newRequestQueue(mContext);
         return new ViewHolderProductos(view);
     }
 
@@ -69,7 +81,15 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                                 break;
 
                             case R.id.option_compras:
-                                Toast.makeText(mContext, "Guardado en Lista de Compras", Toast.LENGTH_LONG).show();
+
+                                enviar_WS(listProductos.get(i));
+
+                                //String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+listProductos.get(i).getCodigo_plu()+"&nombre_plu="+listProductos.get(i).getNombre_producto();
+                                //url = url.replace(" ", "%20");
+
+                                //jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+                                //request.add(jsonObjectRequest);
+
 
                                 break;
                             default:
@@ -86,10 +106,37 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
     }
 
+    private void enviar_WS (ConstructorProductos i) {
+
+
+
+        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto();
+        url = url.replace(" ", "%20");
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
+    }
+
     @Override
     public int getItemCount() {
         return listProductos.size();
     }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+        Toast.makeText(mContext, "Error al guardar", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
+        Toast.makeText(mContext, "Guardado en Lista de Compras", Toast.LENGTH_LONG).show();
+
+    }
+
+
 
     public class ViewHolderProductos extends RecyclerView.ViewHolder {
 
@@ -99,6 +146,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         TextView textView_precio_producto;
         TextView textView_option_item;
         ImageView imageView_producto;
+
 
 
         public ViewHolderProductos(@NonNull View itemView) {
@@ -119,4 +167,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         listProductos.addAll(newList);
         notifyDataSetChanged();
     }
+
+
 }

@@ -19,17 +19,31 @@ import android.widget.AdapterView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class lista_compras extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener  {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, Response.Listener<JSONObject>, Response.ErrorListener  {
 
+    TextView textView_total_compras;
+    //TextView textView_precio_compras;
 
     ArrayList<ConstructorCompras> listCompras;
     RecyclerView recyclerCompras;
     AdapterCompras adapterCompras;
-    TextView textViewlist_compras;
-    String nombre_producto, marca_producto;
+
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
 
     @Override
@@ -49,28 +63,32 @@ public class lista_compras extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        textView_total_compras = (TextView)findViewById(R.id.textView_total_compras);
 
 
 
         recyclerCompras = (RecyclerView)findViewById(R.id.recyclerView_listcompras);
         recyclerCompras.setHasFixedSize(true);
-        recyclerCompras.setLayoutManager(new LinearLayoutManager(this));
+        recyclerCompras.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
 
         listCompras = new ArrayList<>();
+        request = Volley.newRequestQueue(getApplicationContext());
 
-        //llenarlist_compras ();
-
-
-    }
-
-    private void llenarlist_compras() {
-
-
-
+        cargarWebServices2 ();
 
 
 
     }
+
+
+    private void cargarWebServices2() {
+
+        String url = "http://192.168.3.34:8080/elmejorprecio/conectar_compras.php";
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -158,5 +176,61 @@ public class lista_compras extends AppCompatActivity
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
+        ConstructorCompras compras = null;
+
+        JSONArray json = response.optJSONArray("compras");
+
+        try {
+            for (int i=0; i<json.length(); i++) {
+                compras = new ConstructorCompras();
+                JSONObject jsonObject = null;
+                jsonObject = json.getJSONObject(i);
+
+                compras.setCod_plu_compras((jsonObject.optInt("cod_plu")));
+                compras.setNombre_producto_compras(jsonObject.optString("nombre_plu"));
+                compras.setMarca_producto_compras(jsonObject.optString("marca_plu"));
+                compras.setPrecio_producto_compras(jsonObject.optDouble("precio_plu"));
+
+                listCompras.add(compras);
+
+
+            }
+
+            //Envio de ArrayList al Adaptador
+            adapterCompras = new AdapterCompras(listCompras, this);
+            recyclerCompras.setAdapter(adapterCompras);
+
+            pruebasuma();
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void pruebasuma() {
+
+        double suma = 0;
+
+
+        for (int i = 0; i<listCompras.size(); i++) {
+
+            double numero = listCompras.get(i).getPrecio_producto_compras();
+            suma = suma + numero;
+        }
+
+        String total = "" + suma;
+        textView_total_compras.setText(total);
     }
 }

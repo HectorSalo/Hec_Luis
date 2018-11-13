@@ -16,7 +16,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
     ArrayList<ConstructorCompras> listCompras;
     Context mContext;
 
-    public AdapterCompras (ArrayList<ConstructorCompras> listCompras, Context mContext){
+    public AdapterCompras(ArrayList<ConstructorCompras> listCompras, Context mContext) {
         this.listCompras = listCompras;
         this.mContext = mContext;
     }
@@ -36,7 +36,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
         viewHolderCompras.textView_nombre_producto_compras.setText(listCompras.get(i).getNombre_producto_compras());
         viewHolderCompras.textView_marca_producto_compras.setText(listCompras.get(i).getMarca_producto_compras());
         viewHolderCompras.textView_precio_producto_compras.setText(String.valueOf(listCompras.get(i).getPrecio_producto_compras()));
-        //viewHolderCompras.checkBox_compras.isChecked();
+
+
 
     }
 
@@ -55,10 +56,13 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
         public ViewHolderCompras(@NonNull View itemView) {
             super(itemView);
 
-            textView_marca_producto_compras = itemView.findViewById(R.id.textView_nombre_producto_compras);
+            textView_nombre_producto_compras = itemView.findViewById(R.id.textView_nombre_producto_compras);
             textView_marca_producto_compras = itemView.findViewById(R.id.textView_marca_producto_compras);
             textView_precio_producto_compras = itemView.findViewById(R.id.textView_precio_producto_compras);
             checkBox_compras = itemView.findViewById(R.id.checkBox_compras);
         }
     }
+
 }
+
+

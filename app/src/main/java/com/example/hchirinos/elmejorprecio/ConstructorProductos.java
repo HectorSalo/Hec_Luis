@@ -6,6 +6,7 @@ import android.util.Base64;
 
 public class ConstructorProductos {
 
+    private int codigo_plu;
     private String nombre_producto;
     private String marca_producto;
     private double precio_producto;
@@ -15,8 +16,9 @@ public class ConstructorProductos {
     public ConstructorProductos() {}
 
 
-    public ConstructorProductos(String nombre_producto, String marca_producto, double precio_producto, String imagen_producto) {
+    public ConstructorProductos(int codigo_plu, String nombre_producto, String marca_producto, double precio_producto, String imagen_producto) {
         this.nombre_producto = nombre_producto;
+        this.codigo_plu = codigo_plu;
         this.marca_producto = marca_producto;
         this.precio_producto = precio_producto;
         this.imagen_producto = imagen_producto;
@@ -25,6 +27,10 @@ public class ConstructorProductos {
 
     public String getNombre_producto() {
         return nombre_producto;
+    }
+
+    public int getCodigo_plu() {
+        return codigo_plu;
     }
 
     public String getMarca_producto() {
@@ -57,6 +63,10 @@ public class ConstructorProductos {
 
         byte [] byteCode = Base64.decode(imagen_producto, Base64.DEFAULT);
         this.imagen_bitmap = BitmapFactory.decodeByteArray(byteCode, 0, byteCode.length);
+    }
+
+    public void setCodigo_plu(int codigo_plu) {
+        this.codigo_plu = codigo_plu;
     }
 
     public Bitmap getImagen_bitmap() {
