@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -36,7 +37,7 @@ public class lista_compras extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, Response.Listener<JSONObject>, Response.ErrorListener  {
 
     TextView textView_total_compras;
-    //TextView textView_precio_compras;
+    //CheckBox checkBox_compras;
 
     ArrayList<ConstructorCompras> listCompras;
     RecyclerView recyclerCompras;
@@ -64,6 +65,7 @@ public class lista_compras extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
         textView_total_compras = (TextView)findViewById(R.id.textView_total_compras);
+        //checkBox_compras = (CheckBox)findViewById(R.id.checkBox_compras);
 
 
 
@@ -78,12 +80,14 @@ public class lista_compras extends AppCompatActivity
 
 
 
+
+
     }
 
 
-    private void cargarWebServices2() {
+    public void cargarWebServices2() {
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/conectar_compras.php";
+        String url = "http://chirinoshl.000webhostapp.com/elmejorprecio/conectar_compras.php";
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);
@@ -209,9 +213,7 @@ public class lista_compras extends AppCompatActivity
             //Envio de ArrayList al Adaptador
             adapterCompras = new AdapterCompras(listCompras, this);
             recyclerCompras.setAdapter(adapterCompras);
-
-            pruebasuma();
-
+            totalsuma();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -219,7 +221,7 @@ public class lista_compras extends AppCompatActivity
 
     }
 
-    private void pruebasuma() {
+    public void totalsuma() {
 
         double suma = 0;
 
@@ -232,5 +234,13 @@ public class lista_compras extends AppCompatActivity
 
         String total = "" + suma;
         textView_total_compras.setText(total);
+
     }
+
+    public void acttualizar_lista (View view) {
+        this.recreate();
+
+    }
+
+
 }

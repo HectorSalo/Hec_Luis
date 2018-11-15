@@ -84,13 +84,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
                                 enviar_WS(listProductos.get(i));
 
-                                //String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+listProductos.get(i).getCodigo_plu()+"&nombre_plu="+listProductos.get(i).getNombre_producto();
-                                //url = url.replace(" ", "%20");
-
-                                //jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-                                //request.add(jsonObjectRequest);
-
-
                                 break;
                             default:
                                 break;
@@ -110,7 +103,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
 
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto();
+        String url = "http://chirinoshl.000webhostapp.com/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto();
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);

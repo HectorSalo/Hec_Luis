@@ -128,7 +128,7 @@ public class SupermercadoActivity extends AppCompatActivity
 
     private void cargarWebservices() {
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/conectar_tienda.php";
+        String url = "http://chirinoshl.000webhostapp.com/elmejorprecio/conectar_tienda.php";
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);

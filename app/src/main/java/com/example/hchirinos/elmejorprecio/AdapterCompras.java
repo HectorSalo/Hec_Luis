@@ -7,14 +7,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.text.BreakIterator;
 import java.util.ArrayList;
 
-public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHolderCompras> {
+public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHolderCompras> implements Response.Listener<JSONObject>, Response.ErrorListener {
 
     ArrayList<ConstructorCompras> listCompras;
     Context mContext;
+    lista_compras lista_compras;
+
+
+    RequestQueue request, request2;
+    JsonObjectRequest jsonObjectRequest, jsonObjectRequest2;
+
 
     public AdapterCompras(ArrayList<ConstructorCompras> listCompras, Context mContext) {
         this.listCompras = listCompras;
@@ -26,24 +44,84 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
     public ViewHolderCompras onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_compras_layout, null, false);
+        request = Volley.newRequestQueue(mContext);
+
         return new ViewHolderCompras(view);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolderCompras viewHolderCompras, int i) {
+    public void onBindViewHolder(@NonNull ViewHolderCompras viewHolderCompras, final int i) {
 
         viewHolderCompras.textView_nombre_producto_compras.setText(listCompras.get(i).getNombre_producto_compras());
         viewHolderCompras.textView_marca_producto_compras.setText(listCompras.get(i).getMarca_producto_compras());
         viewHolderCompras.textView_precio_producto_compras.setText(String.valueOf(listCompras.get(i).getPrecio_producto_compras()));
+        viewHolderCompras.checkBox_compras.setChecked(false);
 
 
 
+        viewHolderCompras.checkBox_compras.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                int cod = listCompras.get(i).getCod_plu_compras();
+                String nombre = listCompras.get(i).getNombre_producto_compras();
+                double precio = listCompras.get(i).getPrecio_producto_compras();
+                String marca = listCompras.get(i).getMarca_producto_compras();
+
+
+                if (isChecked) {
+                    delete_compras(listCompras.get(i));
+                    Toast.makeText(mContext, "Producto comprado", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    enviar_WS(cod, nombre, precio, marca);
+                    Toast.makeText(mContext, "Producto por comprar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+     }
+
+
+
+    public void delete_compras (ConstructorCompras i) {
+
+        String url = "http://chirinoshl.000webhostapp.com/elmejorprecio/delete_compras.php?cod_plu="+ i.getCod_plu_compras();
+        url = url.replace(" ", "%20");
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
+
+    }
+
+    private void enviar_WS (int cod, String nombre, double precio, String marca) {
+
+
+
+        String url = "http://chirinoshl.000webhostapp.com/elmejorprecio/enviar_compras.php?cod_plu="+ cod +"&nombre_plu="+ nombre +"&precio_plu="+ precio +"&marca_plu="+marca;
+        url = url.replace(" ", "%20");
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
     }
 
     @Override
     public int getItemCount() {
         return listCompras.size();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+
+
+
+
     }
 
     public class ViewHolderCompras extends RecyclerView.ViewHolder {
@@ -60,8 +138,13 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
             textView_marca_producto_compras = itemView.findViewById(R.id.textView_marca_producto_compras);
             textView_precio_producto_compras = itemView.findViewById(R.id.textView_precio_producto_compras);
             checkBox_compras = itemView.findViewById(R.id.checkBox_compras);
+
+
         }
+
+
     }
+
 
 }
 
