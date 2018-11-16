@@ -2,6 +2,7 @@ package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -38,6 +40,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     public AdapterProductos (ArrayList<ConstructorProductos> listProductos, Context mContext){
         this.listProductos = listProductos;
         this.mContext = mContext;
+        request = Volley.newRequestQueue(mContext);
     }
 
 
@@ -47,7 +50,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         //Enlaza el adaptador con list_producto_layout.xml
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_producto_layout,null, false);
-        request = Volley.newRequestQueue(mContext);
+
         return new ViewHolderProductos(view);
     }
 
@@ -60,7 +63,15 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         viewHolderProductos.textView_nombre_producto.setText(listProductos.get(i).getNombre_producto());
         viewHolderProductos.textView_marca_producto.setText(listProductos.get(i).getMarca_producto());
         viewHolderProductos.textView_precio_producto.setText(String.valueOf(listProductos.get(i).getPrecio_producto()));
-        //viewHolderProductos.imageView_producto.setImageBitmap(listProductos.get(i).getImagen_bitmap());
+
+        if (listProductos.get(i).getImagen_producto()!=null) {
+
+           cargarimagen(listProductos.get(i).getImagen_producto(), viewHolderProductos);
+
+        } else {
+            viewHolderProductos.imageView_producto.setImageResource(R.drawable.common_google_signin_btn_icon_dark_focused);
+        }
+
         viewHolderProductos.textView_option_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,11 +110,32 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
     }
 
+    private void cargarimagen(String imagen_producto, final ViewHolderProductos viewHolderProductos) {
+
+        String urlImagen = "http://192.168.3.34:8080/elmejorprecio/" + imagen_producto;
+        urlImagen = urlImagen.replace(" ", "%20");
+
+        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+
+                viewHolderProductos.imageView_producto.setImageBitmap(response);
+
+            }
+        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(mContext, "Error al cargar imagen", Toast.LENGTH_SHORT).show();
+            }
+        });
+        request.add(imageRequest);
+    }
+
     private void enviar_WS (ConstructorProductos i) {
 
 
 
-        String url = "http://chirinoshl.000webhostapp.com/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto();
+        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto()+"&imagen="+i.getImagen_producto();
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);

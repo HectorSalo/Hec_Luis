@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".SupermercadoActivity"
-    tools:showIn="@layout/app_bar_supermercado">
+    tools:showIn="@layout/app_bar_supermercado"
+    android:background="#f4f0d1">
 
     <LinearLayout
         android:id="@+id/linearLayout5"

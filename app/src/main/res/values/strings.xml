@@ -2,7 +2,7 @@
     <string name="app_name">El Mejor Precio</string>
 
     //activity_content_home
-    <string name="txt_Favoritos">Favoritos</string>
+    <string name="txt_Favoritos">Tiendas favoritas</string>
     <string name="txt_recientes">Agregados Recientemente</string>
     <string name="button_buscar">Buscar</string>
     <string name="button_PLU_inicio">Buscar Productos</string>
@@ -21,10 +21,11 @@
 
     //app_bar
     <string name="app_bar_buscar">Buscar</string>
-    <string name="producto_menu_favorito">Agregar a Favoritos</string>
+    <string name="tienda_menu_favorito">Agregar a Favoritos</string>
+    <string name="tienda_menu_ver_productos">Ver sus Productos</string>
+    <string name="tienda_menu_mapa">Ir a Mapa</string>
     <string name="producto_menu_compras">Agregar a Compras</string>
     <string name="producto_menu_detalles">Ver Detalles</string>
-
 
 
     //add_productos

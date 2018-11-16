@@ -128,7 +128,7 @@ public class SupermercadoActivity extends AppCompatActivity
 
     private void cargarWebservices() {
 
-        String url = "http://chirinoshl.000webhostapp.com/elmejorprecio/conectar_tienda.php";
+        String url = "http://192.168.3.34:8080/elmejorprecio/conectar_tienda.php";
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);
@@ -290,15 +290,17 @@ public class SupermercadoActivity extends AppCompatActivity
                 JSONObject jsonObject = null;
                 jsonObject = json.getJSONObject(i);
 
+                tiendas.setCod_tienda(jsonObject.optInt("cod_sup"));
                 tiendas.setNombre_tienda(jsonObject.optString("nombre_sup"));
                 tiendas.setSucursal(jsonObject.optString("sucursal"));
+                tiendas.setImagen(jsonObject.optString("imagen"));
 
 
                 listTiendas.add(tiendas);
             }
 
             //Envio de ArrayList al Adaptador
-            adapterTiendas = new AdapterTiendas(listTiendas);
+            adapterTiendas = new AdapterTiendas(listTiendas, this);
             recyclerTiendas.setAdapter(adapterTiendas);
 
         } catch (JSONException e) {
