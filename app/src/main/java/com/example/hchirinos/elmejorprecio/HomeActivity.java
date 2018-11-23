@@ -117,7 +117,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     //Metodo Buscar en el Mapa
-    public void Ir_maps_encontrar (View view){
+    /*public void Ir_maps_encontrar (View view){
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
         try {
@@ -136,5 +136,5 @@ public class HomeActivity extends AppCompatActivity
                 Place place = PlacePicker.getPlace(HomeActivity.this, data);
             }
         }
-    }
+    }*/
 }

@@ -294,6 +294,8 @@ public class SupermercadoActivity extends AppCompatActivity
                 tiendas.setNombre_tienda(jsonObject.optString("nombre_sup"));
                 tiendas.setSucursal(jsonObject.optString("sucursal"));
                 tiendas.setImagen(jsonObject.optString("imagen"));
+                tiendas.setLatitud(jsonObject.optDouble("latitud"));
+                tiendas.setLongitud(jsonObject.optDouble("longitud"));
 
 
                 listTiendas.add(tiendas);

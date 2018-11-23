@@ -51,8 +51,7 @@
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_gravity="center"
-                android:src="@drawable/gps_tracking"
-                android:onClick="Ir_maps_encontrar"/>
+                android:src="@drawable/gps_tracking" />
 
             <TextView
                 android:layout_width="wrap_content"
