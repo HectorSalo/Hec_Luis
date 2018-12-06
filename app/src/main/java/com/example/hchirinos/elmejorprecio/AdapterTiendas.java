@@ -101,11 +101,13 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
                             case R.id.option_mapa:
 
-                                webServicesObtenerRuta ();
-                                //String.valueOf(listTiendas.get(i).getLatitud()), String.valueOf(listTiendas.get(i).getLongitud())
 
-                                Intent miIntent = new Intent(mContext, HomeActivity.class);
-                                mContext.startActivity(miIntent);
+
+                                webServicesObtenerRuta (String.valueOf(listTiendas.get(i).getLatitud()), String.valueOf(listTiendas.get(i).getLongitud()));
+
+
+                                //Intent miIntent = new Intent(mContext, Maps_buscar.class);
+                                //mContext.startActivity(miIntent);
 
                                 Toast.makeText(mContext, "Mapa" + listTiendas.get(i).getLatitud(), Toast.LENGTH_LONG).show();
                                 break;
@@ -123,25 +125,23 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
     }
 
 
-    private void webServicesObtenerRuta() {
+    private void webServicesObtenerRuta(String latitudFinal, String longitudFinal) {
 
         latitud_origen = 10.4965479009811;
         longitud_origen = -66.83570075677173;
-        latitud_final = 10.493929202111417;
-        longitud_final = -66.81519098602028;
+
 
         String latitudInicial = String.valueOf(latitud_origen);
         String longitudInicial = String.valueOf(longitud_origen);
-        String latitudFinal = String.valueOf(latitud_final);
-        String longitudFinal = String.valueOf(longitud_final);
+
 
         String url="https://maps.googleapis.com/maps/api/directions/json?origin="+latitudInicial+","+longitudInicial
-                +"&destination="+latitudFinal+","+longitudFinal;
+                +"&destination="+latitudFinal+","+longitudFinal+"&key=AIzaSyD4jiyYQBxA6zNECOpitloM1uOLcs0jCfo";
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.i("jsonRoute", ""+response);
                 JSONArray jRoutes = null;
                 JSONArray jLegs = null;
                 JSONArray jSteps = null;

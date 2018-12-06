@@ -59,8 +59,8 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
         //mMap.addMarker(new MarkerOptions().position(habitacion).title("Habitacion").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(habitacion, 15));
 
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
+        //mMap.getUiSettings().setZoomControlsEnabled(true);
+        //mMap.getUiSettings().setZoomGesturesEnabled(true);
 
         LatLng center = null;
         ArrayList<LatLng> points = null;
@@ -91,7 +91,7 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
             // Agregamos todos los puntos en la ruta al objeto LineOptions
             lineOptions.addAll(points);
             //Definimos el grosor de las Polilíneas
-            lineOptions.width(2);
+            lineOptions.width(8);
             //Definimos el color de la Polilíneas
             lineOptions.color(Color.BLUE);
         }
@@ -104,38 +104,7 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
         LatLng destino = new LatLng(10.493929202111417, -66.81519098602028);
         mMap.addMarker(new MarkerOptions().position(destino));
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 15));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origen, 15));
 
     }
-
-    /*private void marcador_tu_posicion(double latitud, double longitud) {
-        LatLng coordenadas_tu_posicion = new LatLng(latitud, longitud);
-        CameraUpdate tu_posicion_camara = CameraUpdateFactory.newLatLngZoom(coordenadas_tu_posicion, 15);
-        if (tu_ubicacion != null) tu_ubicacion.remove();
-        tu_ubicacion = mMap.addMarker(new MarkerOptions().position(coordenadas_tu_posicion).title("Mi ubicacion").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-        mMap.animateCamera(tu_posicion_camara);
-    }
-
-    private void actualizar_ubicacion(Location location) {
-        if (location != null) {
-            latitud = location.getLatitude();
-            longitud = location.getLongitude();
-            marcador_tu_posicion(latitud, longitud);
-        }
-    }
-
-
-
-    private void refresh_ubicacion() {
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        actualizar_ubicacion(location);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,15000,0,locationListener);
-    }*/
 }
