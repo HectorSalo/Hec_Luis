@@ -10,7 +10,15 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,6 +29,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,10 +43,11 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
 
     private GoogleMap mMap;
 
-    private Marker tu_ubicacion;
-
-    Double latInicial, longInicial, latFinal, longFinal;
-
+    private Boolean actualPosition = true;
+    private Double latUbicacion, lngUbicacion, latDestino, lngDestino;
+    private String latUbicacionS, lngUbicacionS, latDestinoS, lngDestinoS;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,59 +66,175 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
+
+            } else {
+
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+
+
+            }
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+
+            } else {
+
+               ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+
+            }
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+
+        request = Volley.newRequestQueue(this);
+
+
+        Bundle miBundle = this.getIntent().getExtras();
+        latDestino = miBundle.getDouble("lat");
+        lngDestino = miBundle.getDouble("lng");
+
+        if (miBundle.getDouble("lat")!=0) {
+
+            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+
+                    latUbicacion = location.getLatitude();
+                    lngUbicacion = location.getLongitude();
+
+                    latDestinoS = String.valueOf(latDestino);
+                    lngDestinoS = String.valueOf(lngDestino);
+                    latUbicacionS = String.valueOf(latUbicacion);
+                    lngUbicacionS = String.valueOf(lngUbicacion);
+
+                    Rutas(latUbicacionS, lngUbicacionS, latDestinoS, lngDestinoS);
+
+                    //LatLng prueba = new LatLng(latDestino, lngDestino);
+                    //mMap.addMarker(new MarkerOptions().position(prueba));
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prueba, 15));
+
+                }
+            });
+
+
+        } else if (miBundle.getString("inicio")!=null) {
+            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    if (actualPosition) {
+                        latUbicacion = location.getLatitude();
+                        lngUbicacion = location.getLongitude();
+                        actualPosition = false;
+
+                        LatLng miPosicion = new LatLng(latUbicacion, lngUbicacion);
+                        mMap.addMarker(new MarkerOptions().position(miPosicion).title("Mi Ubicacion"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+
+                    }
+                }
+            });
+        }
 
         // Add a marker in Sydney and move the camera
         //LatLng habitacion = new LatLng(10.4854118, -66.8217642);
         //mMap.addMarker(new MarkerOptions().position(habitacion).title("Habitacion").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(habitacion, 15));
 
-        //mMap.getUiSettings().setZoomControlsEnabled(true);
-        //mMap.getUiSettings().setZoomGesturesEnabled(true);
 
-        LatLng center = null;
-        ArrayList<LatLng> points = null;
-        PolylineOptions lineOptions = null;
 
-        for (int i=0; i<UtilidadesMaps.routes.size(); i++) {
-            points = new ArrayList<LatLng>();
-            lineOptions = new PolylineOptions();
+    }
 
-            // Obteniendo el detalle de la ruta
-            List<HashMap<String, String>> path = UtilidadesMaps.routes.get(i);
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            // Obteniendo todos los puntos y/o coordenadas de la ruta
-            for(int j=0;j<path.size();j++){
-                HashMap<String,String> point = path.get(j);
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
 
-                double lat = Double.parseDouble(point.get("lat"));
-                double lng = Double.parseDouble(point.get("lng"));
-                LatLng position = new LatLng(lat, lng);
+                } else {
 
-                if (center == null) {
-                    //Obtengo la 1ra coordenada para centrar el mapa en la misma.
-                    center = new LatLng(lat, lng);
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
                 }
-                points.add(position);
+                return;
             }
 
-            // Agregamos todos los puntos en la ruta al objeto LineOptions
-            lineOptions.addAll(points);
-            //Definimos el grosor de las Polilíneas
-            lineOptions.width(8);
-            //Definimos el color de la Polilíneas
-            lineOptions.color(Color.BLUE);
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
+    }
 
-        mMap.addPolyline(lineOptions);
+    public void Rutas (String latitudInicial, String longitudInicial, String latitudFinal, String longitudFinal) {
 
-        LatLng origen = new LatLng(10.4965479009811, -66.83570075677173);
-        mMap.addMarker(new MarkerOptions().position(origen));
 
-        LatLng destino = new LatLng(10.493929202111417, -66.81519098602028);
-        mMap.addMarker(new MarkerOptions().position(destino));
+        String url="https://maps.googleapis.com/maps/api/directions/json?origin="+latitudInicial+","+longitudInicial
+                +"&destination="+latitudFinal+","+longitudFinal+"&key=AIzaSyApXaL18Ejg4MIBK1jiyeGutrRckhLt-tQ";
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(origen, 15));
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("jsonRoute", ""+response);
+                JSONArray jRoutes = null;
+                JSONArray jLegs = null;
+                JSONArray jSteps = null;
 
+                try {
+                    jRoutes = response.getJSONArray("routes");
+
+                    for (int i = 0; i < jRoutes.length(); i++) {
+                        jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+
+
+                        for (int j = 0; j < jLegs.length(); j++) {
+                            jSteps = ((JSONObject) jLegs.get(j)).getJSONArray("steps");
+
+                            for (int k = 0; k < jSteps.length(); k++) {
+                                String polyline = "";
+                                polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k)).get("polyline")).get("points");
+                                List<LatLng> list = PolyUtil.decode(polyline);
+
+                                mMap.addPolyline(new PolylineOptions().addAll(list).color(Color.BLUE).width(8));
+
+                            }
+
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+            }
+        });
+
+        request.add(jsonObjectRequest);
+
+        LatLng ubicacion = new LatLng(latUbicacion, lngUbicacion);
+        mMap.addMarker(new MarkerOptions().position(ubicacion).title("Ubicación Actual"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 13));
+
+        LatLng destino = new LatLng(latDestino, lngDestino);
+        mMap.addMarker(new MarkerOptions().position(destino).title("Destino"));
     }
 }

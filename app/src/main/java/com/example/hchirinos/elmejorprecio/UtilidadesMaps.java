@@ -7,5 +7,5 @@ import java.util.List;
 public class UtilidadesMaps {
 
     public static List <List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String,String>>>();
-    public static ConstructorTiendas coordenadas = new ConstructorTiendas();
+    public static Punto coordenadas = new Punto();
 }

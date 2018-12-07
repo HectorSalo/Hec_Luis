@@ -117,24 +117,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
     //Metodo Buscar en el Mapa
-    /*public void Ir_maps_encontrar (View view){
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+    public void Ir_maps_encontrar (View view){
+        Intent myIntent = new Intent(this, Maps_buscar.class);
+        Bundle miBundle = new Bundle();
+        miBundle.putString("inicio", "1");
+        myIntent.putExtras(miBundle);
+        startActivity(myIntent);
+}
 
-        try {
-            startActivityForResult(builder.build(HomeActivity.this), PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
-    }
 
-    @Override
-    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(HomeActivity.this, data);
-            }
-        }
-    }*/
 }
