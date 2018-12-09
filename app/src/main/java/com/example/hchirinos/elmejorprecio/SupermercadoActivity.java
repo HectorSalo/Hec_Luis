@@ -207,6 +207,8 @@ public class SupermercadoActivity extends AppCompatActivity
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
+            Intent irFavoritos = new Intent(this, TiendasFavoritasActivity.class);
+            startActivity(irFavoritos);
 
         } else if (id == R.id.nav_listacompras) {
             Intent ir_lista_compras = new Intent(this, lista_compras.class);

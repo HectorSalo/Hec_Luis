@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -119,7 +120,9 @@ public class lista_compras extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.bar_buscar) {
+        if (id == R.id.bar_refresh) {
+            Toast.makeText(this, "Lista actualizada", Toast.LENGTH_SHORT).show();
+            this.recreate();
             return true;
         }
 
@@ -142,6 +145,8 @@ public class lista_compras extends AppCompatActivity
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
+            Intent irFavoritos = new Intent(this, TiendasFavoritasActivity.class);
+            startActivity(irFavoritos);
 
         } else if (id == R.id.nav_listacompras) {
             Intent ir_lista_compras = new Intent(this, lista_compras.class);

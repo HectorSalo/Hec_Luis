@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,33 +14,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
-
-public class HomeActivity extends AppCompatActivity
+public class TiendasFavoritasActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    int PLACE_PICKER_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_tiendas_favoritas);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-
     }
 
     @Override
@@ -57,9 +50,8 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.tiendas_favoritas, menu);
         return true;
-
     }
 
     @Override
@@ -72,8 +64,7 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_buscar) {
             return true;
-
-            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -85,6 +76,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_productos) {
+            // Handle the camera action
             Intent ir_productos = new Intent (this, ProductosActivity.class);
             startActivity(ir_productos);
 
@@ -111,21 +103,4 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    //Metodo Buscar Productos
-    public void Ir_PLU (View view) {
-        Intent ir_plu = new Intent(this, PLUActivity.class);
-        startActivity(ir_plu);
-    }
-
-    //Metodo Buscar en el Mapa
-    public void Ir_maps_encontrar (View view){
-        Intent myIntent = new Intent(this, Maps_buscar.class);
-        Bundle miBundle = new Bundle();
-        miBundle.putString("inicio", "1");
-        myIntent.putExtras(miBundle);
-        startActivity(myIntent);
-}
-
-
 }
