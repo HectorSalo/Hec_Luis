@@ -86,6 +86,8 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
                         switch (item.getItemId()){
                             case R.id.option_favoritos:
 
+                                enviar_WS(listTiendas.get(i));
+
                                 Toast.makeText(mContext, "Agregado a Favoritos", Toast.LENGTH_LONG).show();
 
                                 break;
@@ -153,6 +155,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
     @Override
     public void onResponse(JSONObject response) {
 
+
     }
 
     public class ViewHolderTiendas extends RecyclerView.ViewHolder {
@@ -177,5 +180,16 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
         listTiendas = new ArrayList<>();
         listTiendas.addAll(newList);
         notifyDataSetChanged();
+    }
+
+    private void enviar_WS (ConstructorTiendas i) {
+
+
+
+        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_favoritos.php?cod_sup="+ i.getCod_tienda() +"&nombre_sup="+i.getNombre_tienda()+"&sucursal="+i.getSucursal()+"&imagen="+i.getImagen()+"&latitud="+i.getLatitud()+"&longitud="+i.getLongitud();
+        url = url.replace(" ", "%20");
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        request.add(jsonObjectRequest);
     }
 }
