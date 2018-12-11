@@ -15,12 +15,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -48,7 +51,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AdapterFavoritos.ViewHolderFavoritos viewHolderFavoritos, int i) {
+    public void onBindViewHolder(@NonNull final AdapterFavoritos.ViewHolderFavoritos viewHolderFavoritos, final int i) {
 
         viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
 
@@ -74,9 +77,11 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
 
                         switch (item.getItemId()){
                             case R.id.option_delete_favoritos:
-
-
+                                delete_Favoritos(listFavoritos.get(i));
+                                listFavoritos.remove(i);
+                                notifyDataSetChanged();
                                 Toast.makeText(mContext, "Eliminado de Favoritos", Toast.LENGTH_LONG).show();
+
 
                                 break;
 
@@ -137,5 +142,25 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
             }
         });
         request.add(imageRequest);
+    }
+
+    public void delete_Favoritos (ConstructorFavoritos i) {
+
+        String url = "http://192.168.3.34:8080/elmejorprecio/delete_favoritos.php?cod_sup="+ i.getCod_tienda();
+        url = url.replace(" ", "%20");
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //Toast.makeText(mContext, "Eliminado de Favoritos", Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(mContext, "Error al eliminar", Toast.LENGTH_LONG).show();
+            }
+        });
+        request.add(jsonObjectRequest);
+
     }
 }

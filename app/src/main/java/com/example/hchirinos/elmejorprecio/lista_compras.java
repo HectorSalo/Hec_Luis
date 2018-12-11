@@ -243,10 +243,5 @@ public class lista_compras extends AppCompatActivity
 
     }
 
-    public void acttualizar_lista (View view) {
-        this.recreate();
-
-    }
-
 
 }
