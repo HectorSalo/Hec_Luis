@@ -26,6 +26,7 @@
     <string name="tienda_menu_mapa">Ir a Mapa</string>
     <string name="producto_menu_compras">Agregar a Compras</string>
     <string name="producto_menu_detalles">Ver Detalles</string>
+    <string name="delete_menu_favorito">Quitar de Favoritos</string>
 
 
     //add_productos

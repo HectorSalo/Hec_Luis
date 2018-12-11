@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="@string/delete_menu_favorito"
+        android:id="@+id/option_delete_favoritos"/>
+    <item
+        android:title="@string/tienda_menu_ver_productos"
+        android:id="@+id/option_ver_productos_favoritos"
+        />
+
+
+</menu>

@@ -8,6 +8,8 @@ public class ConstructorFavoritos {
     private String imagen;
     private double latitud_origen;
     private double longitud_origen;
+    private double latitud;
+    private double longitud;
 
     public ConstructorFavoritos() {}
 
@@ -35,6 +37,14 @@ public class ConstructorFavoritos {
         return longitud_origen;
     }
 
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
     public void setCod_tienda(int cod_tienda) {
         this.cod_tienda = cod_tienda;
     }
@@ -57,5 +67,13 @@ public class ConstructorFavoritos {
 
     public void setLongitud_origen(double longitud_origen) {
         this.longitud_origen = longitud_origen;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
 }
