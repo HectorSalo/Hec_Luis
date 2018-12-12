@@ -163,4 +163,5 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
         request.add(jsonObjectRequest);
 
     }
+
 }

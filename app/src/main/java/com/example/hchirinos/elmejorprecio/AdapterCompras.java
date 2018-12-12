@@ -80,6 +80,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
                 String nombre = listCompras.get(i).getNombre_producto_compras();
                 double precio = listCompras.get(i).getPrecio_producto_compras();
                 String marca = listCompras.get(i).getMarca_producto_compras();
+                String imagen = listCompras.get(i).getImagen_compras();
 
 
                 if (isChecked) {
@@ -87,7 +88,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
                     Toast.makeText(mContext, "Producto comprado", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    enviar_WS(cod, nombre, precio, marca);
+                    enviar_WS(cod, nombre, precio, marca, imagen);
                     Toast.makeText(mContext, "Producto por comprar", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -126,11 +127,11 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
     }
 
-    private void enviar_WS (int cod, String nombre, double precio, String marca) {
+    private void enviar_WS (int cod, String nombre, double precio, String marca, String imagen) {
 
 
 
-        String url = "http://192.168.3.34/elmejorprecio/enviar_compras.php?cod_plu="+ cod +"&nombre_plu="+ nombre +"&precio_plu="+ precio +"&marca_plu="+marca;
+        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+ cod +"&nombre_plu="+ nombre +"&precio_plu="+ precio +"&marca_plu="+marca+"&imagen="+imagen;
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);

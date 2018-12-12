@@ -16,6 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,7 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class TiendasFavoritasActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener{
 
     ArrayList<ConstructorFavoritos> listFavoritos;
     RecyclerView recyclerFavoritos;
@@ -61,7 +64,6 @@ public class TiendasFavoritasActivity extends AppCompatActivity
 
         recyclerFavoritos = (RecyclerView)findViewById(R.id.recyclerView_TiendasFavoritas);
         recyclerFavoritos.setHasFixedSize(true);
-        //recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
         recyclerFavoritos.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 3));
 
         listFavoritos = new ArrayList<>();
@@ -95,7 +97,13 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.bar_buscar) {
+        if (id == R.id.bar_viewlist) {
+            recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+            Toast.makeText(this, "Lista", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.bar_viewgrid){
+            recyclerFavoritos.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 3));
+            Toast.makeText(this, "Cuadricula", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -183,4 +191,7 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         }
 
     }
+
+
+
 }
