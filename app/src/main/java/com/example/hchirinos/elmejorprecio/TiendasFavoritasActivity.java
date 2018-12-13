@@ -39,6 +39,7 @@ public class TiendasFavoritasActivity extends AppCompatActivity
     ArrayList<ConstructorFavoritos> listFavoritos;
     RecyclerView recyclerFavoritos;
     AdapterFavoritos adapterFavoritos;
+    VistaGridList vistaGridList;
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
@@ -99,10 +100,12 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_viewlist) {
             recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+            vistaGridList.setLista(1);
             Toast.makeText(this, "Lista", Toast.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.bar_viewgrid){
             recyclerFavoritos.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 3));
+            vistaGridList.setGrid(0);
             Toast.makeText(this, "Cuadricula", Toast.LENGTH_SHORT).show();
             return true;
         }

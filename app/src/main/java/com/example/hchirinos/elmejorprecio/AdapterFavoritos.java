@@ -31,6 +31,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
 
     ArrayList<ConstructorFavoritos> listFavoritos;
     Context mContext;
+    VistaGridList vistaGridList;
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
@@ -46,7 +47,16 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
     @NonNull
     @Override
     public ViewHolderFavoritos onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
+
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favoritos_grid, null, false);
+        /*if (vistaGridList.getLista()==1) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favoritos_list, null, false);
+
+        } else if (vistaGridList.getGrid()==0) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favoritos_grid, null, false);
+
+        }*/
         return new ViewHolderFavoritos(view);
     }
 
@@ -54,6 +64,15 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
     public void onBindViewHolder(@NonNull final AdapterFavoritos.ViewHolderFavoritos viewHolderFavoritos, final int i) {
 
         viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
+
+        /*if (vistaGridList.getLista()==1){
+            viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
+            viewHolderFavoritos.textView_nombreFavoritos.setText(listFavoritos.get(i).getNombre_tienda());
+        } else if (vistaGridList.getGrid()==0) {
+            viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
+        }*/
+
+
 
         if (listFavoritos.get(i).getImagen()!=null) {
 
@@ -115,6 +134,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
         ImageView imagenFavoritos;
         TextView textView_sucursalFavoritos;
         TextView textView_menuFavoritos;
+        TextView textView_nombreFavoritos;
 
         public ViewHolderFavoritos(@NonNull View itemView) {
             super(itemView);
@@ -122,6 +142,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
             imagenFavoritos = itemView.findViewById(R.id.imagenFavoritos);
             textView_sucursalFavoritos = itemView.findViewById(R.id.textViewSucursalFavoritos);
             textView_menuFavoritos = itemView.findViewById(R.id.menuFavoritos);
+            textView_nombreFavoritos = itemView.findViewById(R.id.textViewtienda_favoritos);
         }
     }
 
