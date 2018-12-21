@@ -49,28 +49,28 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
     public ViewHolderFavoritos onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favoritos_grid, null, false);
-        /*if (vistaGridList.getLista()==1) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favoritos_list, null, false);
+        int layout = 0;
+        if (VistaGridList.visualizacion==VistaGridList.List) {
+            layout = R.layout.favoritos_list;
 
-        } else if (vistaGridList.getGrid()==0) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favoritos_grid, null, false);
+        } else if (VistaGridList.visualizacion == VistaGridList.Grid) {
+            layout = R.layout.favoritos_grid;
 
-        }*/
+        }
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(layout, null, false);
         return new ViewHolderFavoritos(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final AdapterFavoritos.ViewHolderFavoritos viewHolderFavoritos, final int i) {
 
-        viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
 
-        /*if (vistaGridList.getLista()==1){
+        if (VistaGridList.visualizacion == VistaGridList.List) {
             viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
             viewHolderFavoritos.textView_nombreFavoritos.setText(listFavoritos.get(i).getNombre_tienda());
-        } else if (vistaGridList.getGrid()==0) {
-            viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
-        }*/
+        } else if (VistaGridList.visualizacion == VistaGridList.Grid) {
+        viewHolderFavoritos.textView_sucursalFavoritos.setText(listFavoritos.get(i).getSucursal());
+    }
 
 
 
@@ -139,10 +139,20 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
         public ViewHolderFavoritos(@NonNull View itemView) {
             super(itemView);
 
-            imagenFavoritos = itemView.findViewById(R.id.imagenFavoritos);
-            textView_sucursalFavoritos = itemView.findViewById(R.id.textViewSucursalFavoritos);
-            textView_menuFavoritos = itemView.findViewById(R.id.menuFavoritos);
-            textView_nombreFavoritos = itemView.findViewById(R.id.textViewtienda_favoritos);
+            if (VistaGridList.visualizacion == VistaGridList.List) {
+                imagenFavoritos = itemView.findViewById(R.id.imagenFavoritos);
+                textView_sucursalFavoritos = itemView.findViewById(R.id.textViewSucursalFavoritos);
+                textView_menuFavoritos = itemView.findViewById(R.id.menuFavoritos);
+                textView_nombreFavoritos = itemView.findViewById(R.id.textViewtienda_favoritos);
+
+            } else if (VistaGridList.visualizacion == VistaGridList.Grid) {
+                imagenFavoritos = itemView.findViewById(R.id.imagenFavoritos);
+                textView_sucursalFavoritos = itemView.findViewById(R.id.textViewSucursalFavoritos);
+                textView_menuFavoritos = itemView.findViewById(R.id.menuFavoritos);
+
+
+            }
+
         }
     }
 

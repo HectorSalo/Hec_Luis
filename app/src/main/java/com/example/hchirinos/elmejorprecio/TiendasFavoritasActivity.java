@@ -99,13 +99,17 @@ public class TiendasFavoritasActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_viewlist) {
+            VistaGridList.visualizacion = VistaGridList.List;
             recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
-            vistaGridList.setLista(1);
+            adapterFavoritos = new AdapterFavoritos(listFavoritos, this);
+            recyclerFavoritos.setAdapter(adapterFavoritos);
             Toast.makeText(this, "Lista", Toast.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.bar_viewgrid){
             recyclerFavoritos.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 3));
-            vistaGridList.setGrid(0);
+            adapterFavoritos = new AdapterFavoritos(listFavoritos, this);
+            recyclerFavoritos.setAdapter(adapterFavoritos);
+            VistaGridList.visualizacion=VistaGridList.Grid;
             Toast.makeText(this, "Cuadricula", Toast.LENGTH_SHORT).show();
             return true;
         }
