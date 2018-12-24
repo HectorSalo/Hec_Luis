@@ -11,7 +11,7 @@ public class ConstructorProductos {
     private String marca_producto;
     private double precio_producto;
     private String imagen_producto;
-    private Bitmap imagen_bitmap;
+
 
     public ConstructorProductos() {}
 
@@ -61,21 +61,14 @@ public class ConstructorProductos {
     public void setImagen_producto(String imagen_producto) {
         this.imagen_producto = imagen_producto;
 
-        byte [] byteCode = Base64.decode(imagen_producto, Base64.DEFAULT);
-        this.imagen_bitmap = BitmapFactory.decodeByteArray(byteCode, 0, byteCode.length);
+
     }
 
     public void setCodigo_plu(int codigo_plu) {
         this.codigo_plu = codigo_plu;
     }
 
-    public Bitmap getImagen_bitmap() {
-        return imagen_bitmap;
-    }
 
-    public void setImagen_bitmap(Bitmap imagen_bitmap) {
-        this.imagen_bitmap = imagen_bitmap;
-    }
 }
 
 

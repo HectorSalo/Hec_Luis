@@ -119,9 +119,6 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
 
                     Rutas(latUbicacionS, lngUbicacionS, latDestinoS, lngDestinoS);
 
-                    //LatLng prueba = new LatLng(latDestino, lngDestino);
-                    //mMap.addMarker(new MarkerOptions().position(prueba));
-                    //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(prueba, 15));
 
                 }
             });
@@ -144,12 +141,6 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
                 }
             });
         }
-
-        // Add a marker in Sydney and move the camera
-        //LatLng habitacion = new LatLng(10.4854118, -66.8217642);
-        //mMap.addMarker(new MarkerOptions().position(habitacion).title("Habitacion").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(habitacion, 15));
-
 
 
     }

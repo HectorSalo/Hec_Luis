@@ -49,12 +49,6 @@ public class ProductosActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Spinner spinner_ordenar;
-    private FloatingActionButton fab_agregar, fab_producto, fab_supermercado;
-    private Animation fabOpen, fabClose, rotate_forward, rotate_backward;
-    private LinearLayout layout_producto, layout_supermercado;
-    boolean isOpen= false;
-
-
 
     ArrayList<ConstructorProductos> listProductos;
     RecyclerView recyclerProductos;
@@ -62,7 +56,6 @@ public class ProductosActivity extends AppCompatActivity
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
-
 
 
 
@@ -75,52 +68,8 @@ public class ProductosActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-
-
-
-        /*Botones flotantes
-        fab_agregar = (FloatingActionButton) findViewById(R.id.fab_agregar);
-        fab_producto = (FloatingActionButton)findViewById(R.id.fab_producto);
-        fab_supermercado = (FloatingActionButton)findViewById(R.id.fab_supermercado);
-
-        fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
-        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_closed);
-        rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
-
-        layout_producto = (LinearLayout)findViewById(R.id.linearLayout_producto);
-        layout_supermercado = (LinearLayout)findViewById(R.id.linearLayout_supermercado);
-
-
-
-
-        fab_agregar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animateFab();
-            }
-        });
-
-        layout_producto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                add_producto();
-            }
-        });
-
-
-        layout_supermercado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                add_supermercado();
-            }
-        }); */
-
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -144,9 +93,6 @@ public class ProductosActivity extends AppCompatActivity
 
         cargarWebservices ();
 
-
-
-
     }
 
     private void cargarWebservices() {
@@ -159,26 +105,6 @@ public class ProductosActivity extends AppCompatActivity
 
 
 
-    //Metodo para floating_button
-
-    /*private void animateFab (){
-
-        if (isOpen){
-            fab_agregar.startAnimation(rotate_forward);
-            layout_supermercado.startAnimation(fabClose);
-            layout_producto.startAnimation(fabClose);
-            layout_supermercado.setClickable(false);
-            layout_producto.setClickable(false);
-            isOpen = false;
-        } else {
-            fab_agregar.startAnimation(rotate_backward);
-            layout_supermercado.startAnimation(fabOpen);
-            layout_producto.startAnimation(fabOpen);
-            layout_supermercado.setClickable(true);
-            layout_producto.setClickable(true);
-            isOpen = true;
-        }
-    } */
 
     @Override
     public void onBackPressed() {
@@ -223,7 +149,6 @@ public class ProductosActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_productos) {
-            // Handle the camera action
             Intent ir_productos = new Intent (this, ProductosActivity.class);
             startActivity(ir_productos);
 
@@ -298,26 +223,42 @@ public class ProductosActivity extends AppCompatActivity
 
         if (seleccion.equals("Menor a mayor")){
 
-            sortListProductos_menor ();
+            if (listProductos.isEmpty()) {
+                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+
+            } else {
+                sortListProductos_menor();
+            }
 
         } else if (seleccion.equals("Mayor a menor")) {
 
-            sortListProductos_mayor();
+            if (listProductos.isEmpty()) {
+                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+
+            } else {
+                sortListProductos_mayor();
+            }
 
         } else if (seleccion.equals("A-Z")){
-            sortlistProductos();
+            if (listProductos.isEmpty()) {
+                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+
+            } else {
+                sortlistProductos();
+            }
 
         }
 
 
     }
 
+    // Ordenar lista
     private void sortListProductos_mayor() {
 
         Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
             @Override
             public int compare(ConstructorProductos o1, ConstructorProductos o2) {
-                //    return new Integer((int) o2.getPrecio_producto()).compareTo(new Integer((int) o1.getPrecio_producto()));
+
                 return Double.compare(o2.getPrecio_producto(), o1.getPrecio_producto());
             }
         });
@@ -331,7 +272,7 @@ public class ProductosActivity extends AppCompatActivity
         Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
             @Override
             public int compare(ConstructorProductos o1, ConstructorProductos o2) {
-                //    return new Integer((int) o1.getPrecio_producto()).compareTo(new Integer((int) o2.getPrecio_producto()));
+
                 return Double.compare(o1.getPrecio_producto(), o2.getPrecio_producto());
             }
         });

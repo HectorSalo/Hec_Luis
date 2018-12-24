@@ -39,7 +39,6 @@ public class TiendasFavoritasActivity extends AppCompatActivity
     ArrayList<ConstructorFavoritos> listFavoritos;
     RecyclerView recyclerFavoritos;
     AdapterFavoritos adapterFavoritos;
-    VistaGridList vistaGridList;
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;

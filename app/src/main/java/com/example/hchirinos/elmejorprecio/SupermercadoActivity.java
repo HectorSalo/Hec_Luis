@@ -44,10 +44,6 @@ public class SupermercadoActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Spinner spinner_ordenar;
-    private FloatingActionButton fab_agregar, fab_producto, fab_supermercado;
-    private Animation fabOpen, fabClose, rotate_forward, rotate_backward;
-    private LinearLayout layout_producto, layout_supermercado;
-    boolean isOpen= false;
 
     ArrayList<ConstructorTiendas> listTiendas;
     RecyclerView recyclerTiendas;
@@ -64,40 +60,6 @@ public class SupermercadoActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        fab_agregar = (FloatingActionButton) findViewById(R.id.fab_agregar);
-        fab_producto = (FloatingActionButton)findViewById(R.id.fab_producto);
-        fab_supermercado = (FloatingActionButton)findViewById(R.id.fab_supermercado);
-
-        fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open);
-        fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_closed);
-        rotate_forward = AnimationUtils.loadAnimation(this, R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(this, R.anim.rotate_backward);
-
-        layout_producto = (LinearLayout)findViewById(R.id.linearLayout_producto);
-        layout_supermercado = (LinearLayout)findViewById(R.id.linearLayout_supermercado);
-
-
-        fab_agregar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animateFab();
-            }
-        });
-
-        layout_producto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                add_producto();
-            }
-        });
-
-        layout_supermercado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                add_supermercado();
-            }
-        }); */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -136,26 +98,6 @@ public class SupermercadoActivity extends AppCompatActivity
 
     }
 
-    /*Metodo para floating_button
-
-    private void animateFab (){
-
-        if (isOpen){
-            fab_agregar.startAnimation(rotate_forward);
-            layout_supermercado.startAnimation(fabClose);
-            layout_producto.startAnimation(fabClose);
-            layout_supermercado.setClickable(false);
-            layout_producto.setClickable(false);
-            isOpen = false;
-        } else {
-            fab_agregar.startAnimation(rotate_backward);
-            layout_supermercado.startAnimation(fabOpen);
-            layout_producto.startAnimation(fabOpen);
-            layout_supermercado.setClickable(true);
-            layout_producto.setClickable(true);
-            isOpen = true;
-        }
-    } */
 
     @Override
     public void onBackPressed() {
@@ -234,17 +176,28 @@ public class SupermercadoActivity extends AppCompatActivity
 
         if (seleccion.equals("A-Z (Sucursal)")){
 
-            sortListPro_Tiendas();
+            if (listTiendas.isEmpty()) {
+                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+
+            } else {
+                sortListSucursal();
+            }
+
 
         } else if (seleccion.equals("A-Z (Tiendas)")) {
 
-            sortListTiendas();
+            if (listTiendas.isEmpty()) {
+                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
 
-        }
+            } else {
+                sortListTiendas();
+            }
+
+         }
 
     }
 
-    private void sortListPro_Tiendas() {
+    private void sortListSucursal() {
 
         Collections.sort(listTiendas, new Comparator<ConstructorTiendas>() {
             @Override

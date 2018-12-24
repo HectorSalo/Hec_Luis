@@ -38,7 +38,6 @@ public class lista_compras extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, Response.Listener<JSONObject>, Response.ErrorListener  {
 
     TextView textView_total_compras;
-    //CheckBox checkBox_compras;
 
     ArrayList<ConstructorCompras> listCompras;
     RecyclerView recyclerCompras;
@@ -66,9 +65,6 @@ public class lista_compras extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
         textView_total_compras = (TextView)findViewById(R.id.textView_total_compras);
-        //checkBox_compras = (CheckBox)findViewById(R.id.checkBox_compras);
-
-
 
         recyclerCompras = (RecyclerView)findViewById(R.id.recyclerView_listcompras);
         recyclerCompras.setHasFixedSize(true);
@@ -78,9 +74,6 @@ public class lista_compras extends AppCompatActivity
         request = Volley.newRequestQueue(getApplicationContext());
 
         cargarWebServices2 ();
-
-
-
 
 
     }

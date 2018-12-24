@@ -33,8 +33,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
     lista_compras lista_compras;
 
 
-    RequestQueue request, request2;
-    JsonObjectRequest jsonObjectRequest, jsonObjectRequest2;
+    RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
 
     public AdapterCompras(ArrayList<ConstructorCompras> listCompras, Context mContext) {
