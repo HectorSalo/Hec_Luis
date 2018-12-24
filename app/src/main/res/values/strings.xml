@@ -47,6 +47,8 @@
     <string name="title_activity_lista_compras">Mi Lista de Compras</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_tiendas_favoritas">Tiendas Favoritas</string>
+    <string name="button_retry">Reintentar</string>
+    <string name="txt_sinConexion">Sin conexion a Internet</string>
 
 
 </resources>

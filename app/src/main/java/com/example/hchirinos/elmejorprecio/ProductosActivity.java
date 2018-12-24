@@ -1,6 +1,9 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -22,9 +25,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -49,6 +55,12 @@ public class ProductosActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Spinner spinner_ordenar;
+    TextView textSinConexion;
+    Button buttonRetry;
+    ImageView imageSinConexion;
+    ConnectivityManager conexion;
+    NetworkInfo networkInfo;
+
 
     ArrayList<ConstructorProductos> listProductos;
     RecyclerView recyclerProductos;
@@ -83,6 +95,22 @@ public class ProductosActivity extends AppCompatActivity
         spinner_ordenar.setAdapter(adapter);
         spinner_ordenar.setOnItemSelectedListener(this);
 
+        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
+        buttonRetry = (Button)findViewById(R.id.buttonRetry);
+        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
+        conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = conexion.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            textSinConexion.setVisibility(View.INVISIBLE);
+            buttonRetry.setVisibility(View.INVISIBLE);
+            imageSinConexion.setVisibility(View.INVISIBLE);
+        } else {
+            textSinConexion.setVisibility(View.VISIBLE);
+            buttonRetry.setVisibility(View.VISIBLE);
+            imageSinConexion.setVisibility(View.VISIBLE);
+        }
+
 
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
@@ -91,7 +119,7 @@ public class ProductosActivity extends AppCompatActivity
         listProductos = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
-        cargarWebservices ();
+        cargarWebservices();
 
     }
 
@@ -327,5 +355,7 @@ public class ProductosActivity extends AppCompatActivity
         return true;
     }
 
-
+    public void setButtonRetry (View view){
+        this.recreate();
+    }
 }

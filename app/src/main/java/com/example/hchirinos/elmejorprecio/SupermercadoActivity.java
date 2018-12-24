@@ -1,6 +1,9 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,9 +23,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -44,6 +50,11 @@ public class SupermercadoActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Spinner spinner_ordenar;
+    TextView textSinConexion;
+    Button buttonRetry;
+    ImageView imageSinConexion;
+    ConnectivityManager conexion;
+    NetworkInfo networkInfo;
 
     ArrayList<ConstructorTiendas> listTiendas;
     RecyclerView recyclerTiendas;
@@ -76,6 +87,22 @@ public class SupermercadoActivity extends AppCompatActivity
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
         spinner_ordenar.setAdapter(adapter);
         spinner_ordenar.setOnItemSelectedListener(this);
+
+        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
+        buttonRetry = (Button)findViewById(R.id.buttonRetry);
+        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
+        conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = conexion.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            textSinConexion.setVisibility(View.INVISIBLE);
+            buttonRetry.setVisibility(View.INVISIBLE);
+            imageSinConexion.setVisibility(View.INVISIBLE);
+        } else {
+            textSinConexion.setVisibility(View.VISIBLE);
+            buttonRetry.setVisibility(View.VISIBLE);
+            imageSinConexion.setVisibility(View.VISIBLE);
+        }
 
         recyclerTiendas = (RecyclerView)findViewById(R.id.recyclerView_tiendas);
         recyclerTiendas.setHasFixedSize(true);
@@ -292,6 +319,10 @@ public class SupermercadoActivity extends AppCompatActivity
 
         }
         return true;
+    }
+
+    public void setButtonRetry (View view){
+        this.recreate();
     }
 }
 

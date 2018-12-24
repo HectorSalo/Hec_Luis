@@ -1,6 +1,9 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,7 +19,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +43,11 @@ public class lista_compras extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, Response.Listener<JSONObject>, Response.ErrorListener  {
 
     TextView textView_total_compras;
+    TextView textSinConexion;
+    Button buttonRetry;
+    ImageView imageSinConexion;
+    ConnectivityManager conexion;
+    NetworkInfo networkInfo;
 
     ArrayList<ConstructorCompras> listCompras;
     RecyclerView recyclerCompras;
@@ -65,6 +75,22 @@ public class lista_compras extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
         textView_total_compras = (TextView)findViewById(R.id.textView_total_compras);
+
+        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
+        buttonRetry = (Button)findViewById(R.id.buttonRetry);
+        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
+        conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = conexion.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            textSinConexion.setVisibility(View.INVISIBLE);
+            buttonRetry.setVisibility(View.INVISIBLE);
+            imageSinConexion.setVisibility(View.INVISIBLE);
+        } else {
+            textSinConexion.setVisibility(View.VISIBLE);
+            buttonRetry.setVisibility(View.VISIBLE);
+            imageSinConexion.setVisibility(View.VISIBLE);
+        }
 
         recyclerCompras = (RecyclerView)findViewById(R.id.recyclerView_listcompras);
         recyclerCompras.setHasFixedSize(true);
@@ -234,6 +260,10 @@ public class lista_compras extends AppCompatActivity
         String total = "" + suma;
         textView_total_compras.setText(total);
 
+    }
+
+    public void setButtonRetry (View view){
+        this.recreate();
     }
 
 

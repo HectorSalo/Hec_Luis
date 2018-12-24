@@ -1,6 +1,9 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -22,7 +28,11 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    TextView textSinConexion;
+    Button buttonRetry;
+    ImageView imageSinConexion;
+    ConnectivityManager conexion;
+    NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+
+        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
+        buttonRetry = (Button)findViewById(R.id.buttonRetry);
+        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
+        conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = conexion.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            textSinConexion.setVisibility(View.INVISIBLE);
+            buttonRetry.setVisibility(View.INVISIBLE);
+            imageSinConexion.setVisibility(View.INVISIBLE);
+        } else {
+            textSinConexion.setVisibility(View.VISIBLE);
+            buttonRetry.setVisibility(View.VISIBLE);
+            imageSinConexion.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -125,6 +151,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         myIntent.putExtras(miBundle);
         startActivity(myIntent);
 }
+
+    public void setButtonRetry (View view){
+        this.recreate();
+    }
 
 
 }
