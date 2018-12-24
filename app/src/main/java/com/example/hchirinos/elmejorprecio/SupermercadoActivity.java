@@ -177,7 +177,7 @@ public class SupermercadoActivity extends AppCompatActivity
         if (seleccion.equals("A-Z (Sucursal)")){
 
             if (listTiendas.isEmpty()) {
-                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
                 sortListSucursal();
@@ -187,7 +187,7 @@ public class SupermercadoActivity extends AppCompatActivity
         } else if (seleccion.equals("A-Z (Tiendas)")) {
 
             if (listTiendas.isEmpty()) {
-                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
                 sortListTiendas();
@@ -273,18 +273,24 @@ public class SupermercadoActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String userInput = newText.toLowerCase();
-        ArrayList<ConstructorTiendas> newList = new ArrayList<>();
 
-        for (ConstructorTiendas name : listTiendas) {
+        if (listTiendas.isEmpty()) {
+            Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
+        } else {
+            String userInput = newText.toLowerCase();
+            ArrayList<ConstructorTiendas> newList = new ArrayList<>();
 
-            if (name.getNombre_tienda().toLowerCase().contains(userInput) || name.getSucursal().toLowerCase().contains(userInput)) {
+            for (ConstructorTiendas name : listTiendas) {
 
-                newList.add(name);
+                if (name.getNombre_tienda().toLowerCase().contains(userInput) || name.getSucursal().toLowerCase().contains(userInput)) {
+
+                    newList.add(name);
+                }
             }
-        }
 
-        adapterTiendas.updateList(newList);
+            adapterTiendas.updateList(newList);
+
+        }
         return true;
     }
 }

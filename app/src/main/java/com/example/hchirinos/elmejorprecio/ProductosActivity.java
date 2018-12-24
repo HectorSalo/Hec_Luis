@@ -224,7 +224,7 @@ public class ProductosActivity extends AppCompatActivity
         if (seleccion.equals("Menor a mayor")){
 
             if (listProductos.isEmpty()) {
-                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
                 sortListProductos_menor();
@@ -233,7 +233,7 @@ public class ProductosActivity extends AppCompatActivity
         } else if (seleccion.equals("Mayor a menor")) {
 
             if (listProductos.isEmpty()) {
-                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
                 sortListProductos_mayor();
@@ -241,7 +241,7 @@ public class ProductosActivity extends AppCompatActivity
 
         } else if (seleccion.equals("A-Z")){
             if (listProductos.isEmpty()) {
-                Toast.makeText(this, "Lista vacia", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
                 sortlistProductos();
@@ -305,18 +305,25 @@ public class ProductosActivity extends AppCompatActivity
     @Override
     public boolean onQueryTextChange(String newText) {
 
-        String userInput = newText.toLowerCase();
-        ArrayList<ConstructorProductos> newList = new ArrayList<>();
+        if (listProductos.isEmpty()) {
+            Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
-        for (ConstructorProductos name : listProductos) {
+        } else {
 
-            if (name.getNombre_producto().toLowerCase().contains(userInput) || name.getMarca_producto().toLowerCase().contains(userInput)) {
+            String userInput = newText.toLowerCase();
+            ArrayList<ConstructorProductos> newList = new ArrayList<>();
 
-                newList.add(name);
+            for (ConstructorProductos name : listProductos) {
+
+                if (name.getNombre_producto().toLowerCase().contains(userInput) || name.getMarca_producto().toLowerCase().contains(userInput)) {
+
+                    newList.add(name);
+                }
             }
-        }
 
-        adapterProductos.updateList(newList);
+            adapterProductos.updateList(newList);
+
+        }
         return true;
     }
 
