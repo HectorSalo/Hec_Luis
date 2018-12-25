@@ -4,9 +4,10 @@
     <item
         android:title="@string/producto_menu_compras"
         android:id="@+id/option_compras"/>
+
     <item
-        android:title="@string/producto_menu_detalles"
-        android:id="@+id/option_detalles"
+        android:title="@string/share"
+        android:id="@+id/option_compartir"
         />
 
 

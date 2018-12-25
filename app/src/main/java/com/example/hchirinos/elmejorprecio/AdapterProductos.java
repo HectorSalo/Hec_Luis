@@ -85,9 +85,12 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                     public boolean onMenuItemClick(MenuItem item) {
 
                         switch (item.getItemId()){
-                            case R.id.option_detalles:
+                            case R.id.option_compartir:
 
-                                Toast.makeText(mContext, "Detalles", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setType("text/plain");
+                                intent.putExtra(Intent.EXTRA_TEXT, "Mira este producto: "+listProductos.get(i).getNombre_producto()+" a " +listProductos.get(i).getPrecio_producto());
+                                mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
 
                                 break;
 

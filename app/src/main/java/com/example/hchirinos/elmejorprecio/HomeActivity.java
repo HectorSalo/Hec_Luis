@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ImageView imageSinConexion;
     ConnectivityManager conexion;
     NetworkInfo networkInfo;
+    ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
         conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
-
+        imageButton = (ImageButton) findViewById(R.id.imageButtonPrueba);
         if (networkInfo != null && networkInfo.isConnected()) {
             textSinConexion.setVisibility(View.INVISIBLE);
             buttonRetry.setVisibility(View.INVISIBLE);
@@ -156,5 +158,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         this.recreate();
     }
 
-
+    public void compartir (View view) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "Prueba de envio");
+        startActivity(Intent.createChooser(intent, "Compartir con"));
+    }
 }

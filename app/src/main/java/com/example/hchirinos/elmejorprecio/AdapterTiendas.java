@@ -92,10 +92,12 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
                                 break;
 
-                            case R.id.option_ver_productos:
+                            case R.id.option_compartir:
 
-                                Toast.makeText(mContext, "Productos", Toast.LENGTH_LONG).show();
-
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setType("text/plain");
+                                intent.putExtra(Intent.EXTRA_TEXT, "Mira esta tienda: "+listTiendas.get(i).getNombre_tienda()+" en " +listTiendas.get(i).getSucursal());
+                                mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
 
                                 break;
 

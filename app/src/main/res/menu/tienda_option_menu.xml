@@ -4,9 +4,10 @@
     <item
         android:title="@string/tienda_menu_favorito"
         android:id="@+id/option_favoritos"/>
+
     <item
-        android:title="@string/tienda_menu_ver_productos"
-        android:id="@+id/option_ver_productos"
+        android:title="@string/share"
+        android:id="@+id/option_compartir"
         />
     <item
         android:title="@string/tienda_menu_mapa"
