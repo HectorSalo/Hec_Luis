@@ -85,7 +85,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="164" />
+                                                <entry key="scalingPercent" value="155" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -96,7 +96,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Users\Chirinos\Downloads\Logopit_1545714633222.jpg" />
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="393939" />
+                                      <entry key="foregroundImage" value="C:\Users\Chirinos\Downloads\1313.png" />
                                       <entry key="legacyIconShape" value="NONE" />
                                       <entry key="webIconShape" value="CIRCLE" />
                                     </map>
