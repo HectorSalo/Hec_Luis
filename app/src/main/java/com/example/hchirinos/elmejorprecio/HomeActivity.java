@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -35,6 +36,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ConnectivityManager conexion;
     NetworkInfo networkInfo;
     ImageButton imageButton;
+    LinearLayout layoutButton, layoutFavoritos, layoutRecientes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        layoutButton = (LinearLayout)findViewById(R.id.linearLayoutButton);
+        layoutFavoritos = (LinearLayout)findViewById(R.id.linearLayoutFavoritos);
+        layoutRecientes = (LinearLayout)findViewById(R.id.linearLayoutRecientes);
+
         textSinConexion = (TextView)findViewById(R.id.textSinConexion);
         buttonRetry = (Button)findViewById(R.id.buttonRetry);
         imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
@@ -67,6 +73,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             textSinConexion.setVisibility(View.VISIBLE);
             buttonRetry.setVisibility(View.VISIBLE);
             imageSinConexion.setVisibility(View.VISIBLE);
+            layoutButton.setVisibility(View.INVISIBLE);
+            layoutRecientes.setVisibility(View.INVISIBLE);
+            layoutFavoritos.setVisibility(View.INVISIBLE);
         }
 
     }
