@@ -59,7 +59,8 @@
             android:text="@string/checkbox"
             android:textAlignment="viewEnd"
             android:textColorLink="@color/ic_launcher_background"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:buttonTint="@color/ic_launcher_background"/>
 
     </LinearLayout>
 </RelativeLayout>

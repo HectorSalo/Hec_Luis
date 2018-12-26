@@ -36,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     ConnectivityManager conexion;
     NetworkInfo networkInfo;
     ImageButton imageButton;
-    LinearLayout layoutButton, layoutFavoritos, layoutRecientes;
+    LinearLayout layoutButton, layoutRecientes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setItemIconTintList(null);
 
         layoutButton = (LinearLayout)findViewById(R.id.linearLayoutButton);
-        layoutFavoritos = (LinearLayout)findViewById(R.id.linearLayoutFavoritos);
         layoutRecientes = (LinearLayout)findViewById(R.id.linearLayoutRecientes);
 
         textSinConexion = (TextView)findViewById(R.id.textSinConexion);
@@ -64,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
         conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
-        imageButton = (ImageButton) findViewById(R.id.imageButtonPrueba);
+
         if (networkInfo != null && networkInfo.isConnected()) {
             textSinConexion.setVisibility(View.INVISIBLE);
             buttonRetry.setVisibility(View.INVISIBLE);
@@ -75,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             imageSinConexion.setVisibility(View.VISIBLE);
             layoutButton.setVisibility(View.INVISIBLE);
             layoutRecientes.setVisibility(View.INVISIBLE);
-            layoutFavoritos.setVisibility(View.INVISIBLE);
+
         }
 
     }
@@ -167,10 +166,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         this.recreate();
     }
 
-    public void compartir (View view) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Prueba de envio");
-        startActivity(Intent.createChooser(intent, "Compartir con"));
-    }
+
 }

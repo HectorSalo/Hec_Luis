@@ -96,7 +96,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType("text/plain");
-                                intent.putExtra(Intent.EXTRA_TEXT, "Mira esta tienda: "+listTiendas.get(i).getNombre_tienda()+" en " +listTiendas.get(i).getSucursal());
+                                intent.putExtra(Intent.EXTRA_TEXT, "Esta tienda te puede gustar: \n"+listTiendas.get(i).getNombre_tienda()+" en " +listTiendas.get(i).getSucursal());
                                 mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
 
                                 break;
@@ -127,7 +127,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
     private void cargarimagen(String imagen, final ViewHolderTiendas viewHolderTiendas) {
 
-        String urlImagen = "http://192.168.3.34:8080/elmejorprecio/" + imagen;
+        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen;
         urlImagen = urlImagen.replace(" ", "%20");
 
         ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
@@ -188,7 +188,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
 
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_favoritos.php?cod_sup="+ i.getCod_tienda() +"&nombre_sup="+i.getNombre_tienda()+"&sucursal="+i.getSucursal()+"&imagen="+i.getImagen()+"&latitud="+i.getLatitud()+"&longitud="+i.getLongitud();
+        String url = "https://chirinoshl.000webhostapp.com/enviar_favoritos.php?cod_sup="+ i.getCod_tienda() +"&nombre_sup="+i.getNombre_tienda()+"&sucursal="+i.getSucursal()+"&imagen="+i.getImagen()+"&latitud="+i.getLatitud()+"&longitud="+i.getLongitud();
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);

@@ -98,7 +98,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
     private void cargarimagen(String imagen_compras, final ViewHolderCompras viewHolderCompras) {
 
-        String urlImagen = "http://192.168.3.34:8080/elmejorprecio/" + imagen_compras;
+        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen_compras;
         urlImagen = urlImagen.replace(" ", "%20");
 
         ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
@@ -119,7 +119,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
     public void delete_compras (ConstructorCompras i) {
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/delete_compras.php?cod_plu="+ i.getCod_plu_compras();
+        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/delete_compras.php?cod_plu="+ i.getCod_plu_compras();
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
@@ -131,7 +131,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
 
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+ cod +"&nombre_plu="+ nombre +"&precio_plu="+ precio +"&marca_plu="+marca+"&imagen="+imagen;
+        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/enviar_compras.php?cod_plu="+ cod +"&nombre_plu="+ nombre +"&precio_plu="+ precio +"&marca_plu="+marca+"&imagen="+imagen;
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);

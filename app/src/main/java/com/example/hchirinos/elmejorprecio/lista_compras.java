@@ -107,7 +107,7 @@ public class lista_compras extends AppCompatActivity
 
     public void cargarWebServices2() {
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/conectar_compras.php";
+        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/conectar_compras.php";
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);

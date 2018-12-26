@@ -89,7 +89,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType("text/plain");
-                                intent.putExtra(Intent.EXTRA_TEXT, "Mira este producto: "+listProductos.get(i).getNombre_producto()+" a " +listProductos.get(i).getPrecio_producto());
+                                intent.putExtra(Intent.EXTRA_TEXT, "¿Qué te parece esta oferta? \n"+listProductos.get(i).getNombre_producto()+"\n" + "Bs. "+listProductos.get(i).getPrecio_producto());
                                 mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
 
                                 break;
@@ -115,7 +115,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
     private void cargarimagen(String imagen_producto, final ViewHolderProductos viewHolderProductos) {
 
-        String urlImagen = "http://192.168.3.34:8080/elmejorprecio/" + imagen_producto;
+        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen_producto;
         urlImagen = urlImagen.replace(" ", "%20");
 
         ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
@@ -138,7 +138,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
 
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto()+"&imagen="+i.getImagen_producto();
+        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto()+"&imagen="+i.getImagen_producto();
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);

@@ -158,7 +158,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
 
     private void cargarimagen(String imagen, final AdapterFavoritos.ViewHolderFavoritos viewHolderFavoritos) {
 
-        String urlImagen = "http://192.168.3.34:8080/elmejorprecio/" + imagen;
+        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen;
         urlImagen = urlImagen.replace(" ", "%20");
 
         ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
@@ -177,7 +177,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
 
     public void delete_Favoritos (ConstructorFavoritos i) {
 
-        String url = "http://192.168.3.34:8080/elmejorprecio/delete_favoritos.php?cod_sup="+ i.getCod_tienda();
+        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/delete_favoritos.php?cod_sup="+ i.getCod_tienda();
         url = url.replace(" ", "%20");
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
