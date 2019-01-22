@@ -1,11 +1,13 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -39,6 +41,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.admin.v1beta1.Progress;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,25 +64,27 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public class ProductosActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Spinner spinner_ordenar;
-    TextView textSinConexion;
-    Button buttonRetry;
-    ImageView imageSinConexion;
-    ConnectivityManager conexion;
-    NetworkInfo networkInfo;
+    private TextView textSinConexion;
+    private Button buttonRetry;
+    private ImageView imageSinConexion;
+    private ConnectivityManager conexion;
+    private NetworkInfo networkInfo;
+    private ProgressDialog progress;
 
+    private ArrayList<ConstructorProductos> listProductos;
+    private RecyclerView recyclerProductos;
+    private AdapterProductos adapterProductos;
 
-    ArrayList<ConstructorProductos> listProductos;
-    RecyclerView recyclerProductos;
-    AdapterProductos adapterProductos;
+    private RequestQueue request;
+    private JsonObjectRequest jsonObjectRequest;
 
-    RequestQueue request;
-    JsonObjectRequest jsonObjectRequest;
-
-
+    private FirebaseFirestore db;
 
 
     @Override
@@ -111,30 +126,27 @@ public class ProductosActivity extends AppCompatActivity
             imageSinConexion.setVisibility(View.VISIBLE);
         }
 
+        db = FirebaseFirestore.getInstance();
 
+        listProductos = new ArrayList<>();
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
         recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setAdapter(adapterProductos);
 
-        listProductos = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
-        cargarWebservices();
 
+
+        updateRealTime();
+
+        progress = new ProgressDialog(ProductosActivity.this);
+        progress.setMessage("Cargando...");
+        progress.show();
     }
 
-    private void cargarWebservices() {
-
-        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/conectar.php";
-
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-        request.add(jsonObjectRequest);
-    }
-
-
-
-
-    @Override
+     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -212,33 +224,6 @@ public class ProductosActivity extends AppCompatActivity
 
     @Override
     public void onResponse(JSONObject response) {
-
-        ConstructorProductos productos = null;
-
-        JSONArray json = response.optJSONArray("producto");
-
-        try {
-            for (int i=0; i<json.length(); i++) {
-                productos = new ConstructorProductos();
-                JSONObject jsonObject = null;
-                jsonObject = json.getJSONObject(i);
-
-                productos.setCodigo_plu((jsonObject.optInt("cod_plu")));
-                productos.setNombre_producto(jsonObject.optString("nombre_plu"));
-                productos.setMarca_producto(jsonObject.optString("marca_plu"));
-                productos.setPrecio_producto(jsonObject.optDouble("precio_plu"));
-                productos.setImagen_producto(jsonObject.optString("imagen"));
-
-                listProductos.add(productos);
-            }
-
-            //Envio de ArrayList al Adaptador
-            adapterProductos = new AdapterProductos(listProductos, this);
-            recyclerProductos.setAdapter(adapterProductos);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -354,6 +339,55 @@ public class ProductosActivity extends AppCompatActivity
         }
         return true;
     }
+
+    private void cargarFirebase() {
+        db.collection("Productos").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (DocumentSnapshot doc : task.getResult()) {
+                    ConstructorProductos productos = new ConstructorProductos();
+                    productos.setNombre_producto(doc.getString("descripcion"));
+                    productos.setMarca_producto(doc.getString("marca"));
+                    productos.setPrecio_producto(doc.getDouble("precio"));
+                    productos.setImagen_producto(doc.getString("imagen"));
+                    listProductos.add(productos);
+                }
+                adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+                recyclerProductos.setAdapter(adapterProductos);
+                progress.dismiss();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ProductosActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void updateRealTime () {
+
+      db.collection("Productos").addSnapshotListener(new EventListener<QuerySnapshot>() {
+          @Override
+          public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+              for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                  if ( (doc.getType() == DocumentChange.Type.ADDED)) {
+                      ConstructorProductos productos = new ConstructorProductos();
+                      productos.setNombre_producto(doc.getDocument().getString("descripcion"));
+                      productos.setMarca_producto(doc.getDocument().getString("marca"));
+                      productos.setPrecio_producto(doc.getDocument().getDouble("precio"));
+                      productos.setImagen_producto(doc.getDocument().getString("imagen"));
+                      listProductos.add(productos);
+
+                  }
+              }
+              adapterProductos.notifyDataSetChanged();
+              progress.dismiss();
+          }
+      });
+    }
+
+
 
     public void setButtonRetry (View view){
         this.recreate();

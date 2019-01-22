@@ -96,7 +96,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType("text/plain");
-                                intent.putExtra(Intent.EXTRA_TEXT, "Esta tienda te puede gustar: \n"+listTiendas.get(i).getNombre_tienda()+" en " +listTiendas.get(i).getSucursal());
+                                intent.putExtra(Intent.EXTRA_TEXT, "Esta tienda te puede gustar: \n"+listTiendas.get(i).getNombre_tienda()+" en " +listTiendas.get(i).getSucursal() + " " + listTiendas.get(i).getCod_tienda());
                                 mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
 
                                 break;

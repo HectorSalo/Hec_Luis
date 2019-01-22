@@ -66,7 +66,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         if (listProductos.get(i).getImagen_producto()!=null) {
 
-           cargarimagen(listProductos.get(i).getImagen_producto(), viewHolderProductos);
+           Glide.with(mContext).load(listProductos.get(i).getImagen_producto()).into(viewHolderProductos.imageView_producto);
 
         } else {
             viewHolderProductos.imageView_producto.setImageResource(R.drawable.common_google_signin_btn_icon_dark_focused);
@@ -113,26 +113,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
     }
 
-    private void cargarimagen(String imagen_producto, final ViewHolderProductos viewHolderProductos) {
-
-        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen_producto;
-        urlImagen = urlImagen.replace(" ", "%20");
-
-        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-
-                viewHolderProductos.imageView_producto.setImageBitmap(response);
-
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(mContext, "Error al cargar imagen", Toast.LENGTH_SHORT).show();
-            }
-        });
-        request.add(imageRequest);
-    }
 
     private void enviar_WS (ConstructorProductos i) {
 

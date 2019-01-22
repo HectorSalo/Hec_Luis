@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "503570854489",
+    "firebase_url": "https://learnfirebase-9ee43.firebaseio.com",
+    "project_id": "learnfirebase-9ee43",
+    "storage_bucket": "learnfirebase-9ee43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503570854489:android:c690dbef2b543ac8",
+        "android_client_info": {
+          "package_name": "com.example.hchirinos.elmejorprecio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "503570854489-qjk4mn8d44s6ic9uibns21k37ecjssos.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArNTYVPF8M1YqUZ83pFJRldaYRc6AVmLk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
