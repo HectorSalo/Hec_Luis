@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.ViewHolderProductos> implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.ViewHolderProductos>{
 
     ArrayList<ConstructorProductos> listProductos;
     Context mContext;
@@ -74,7 +75,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         viewHolderProductos.textView_option_item.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 // Display option menu
 
 
@@ -97,6 +98,13 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                             case R.id.option_compras:
 
                                 enviar_WS(listProductos.get(i));
+                                Snackbar.make(v, "Guardado en Lista de Compras", Snackbar.LENGTH_LONG).setAction("Ver Lista", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                       Intent intent = new Intent(mContext, lista_compras.class);
+                                       mContext.startActivity(intent);
+                                    }
+                                }).show();
 
                                 break;
                             default:
@@ -116,13 +124,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
     private void enviar_WS (ConstructorProductos i) {
 
-
-
-        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/enviar_compras.php?cod_plu="+ i.getCodigo_plu() +"&nombre_plu="+i.getNombre_producto()+"&precio_plu="+i.getPrecio_producto()+"&marca_plu="+i.getMarca_producto()+"&imagen="+i.getImagen_producto();
-        url = url.replace(" ", "%20");
-
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-        request.add(jsonObjectRequest);
     }
 
     @Override
@@ -130,19 +131,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         return listProductos.size();
     }
 
-    @Override
-    public void onErrorResponse(VolleyError error) {
 
-        Toast.makeText(mContext, "Error al guardar", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-
-        Toast.makeText(mContext, "Guardado en Lista de Compras", Toast.LENGTH_LONG).show();
-
-    }
 
 
 

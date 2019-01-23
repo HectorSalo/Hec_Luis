@@ -11,9 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -44,12 +46,15 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.admin.v1beta1.Progress;
 
@@ -67,7 +72,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 public class ProductosActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, SearchView.OnQueryTextListener, AdapterView.OnItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private Spinner spinner_ordenar;
     private TextView textSinConexion;
@@ -76,6 +81,8 @@ public class ProductosActivity extends AppCompatActivity
     private ConnectivityManager conexion;
     private NetworkInfo networkInfo;
     private ProgressDialog progress;
+    private SwipeRefreshLayout swRefresh;
+
 
     private ArrayList<ConstructorProductos> listProductos;
     private RecyclerView recyclerProductos;
@@ -85,6 +92,7 @@ public class ProductosActivity extends AppCompatActivity
     private JsonObjectRequest jsonObjectRequest;
 
     private FirebaseFirestore db;
+    private DocumentSnapshot lastDocument;
 
 
     @Override
@@ -110,6 +118,9 @@ public class ProductosActivity extends AppCompatActivity
         spinner_ordenar.setAdapter(adapter);
         spinner_ordenar.setOnItemSelectedListener(this);
 
+        swRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+
+
         textSinConexion = (TextView)findViewById(R.id.textSinConexion);
         buttonRetry = (Button)findViewById(R.id.buttonRetry);
         imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
@@ -129,22 +140,22 @@ public class ProductosActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
 
         listProductos = new ArrayList<>();
+        cargarFirestore();
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
         recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
         recyclerProductos.setAdapter(adapterProductos);
 
-        request = Volley.newRequestQueue(getApplicationContext());
 
-
-
-        updateRealTime();
-
+        swRefresh.setOnRefreshListener(this);
         progress = new ProgressDialog(ProductosActivity.this);
         progress.setMessage("Cargando...");
         progress.show();
     }
+
+
 
      @Override
     public void onBackPressed() {
@@ -156,6 +167,7 @@ public class ProductosActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -164,6 +176,7 @@ public class ProductosActivity extends AppCompatActivity
         MenuItem menuItem = menu.findItem(R.id.bar_buscar);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -310,6 +323,59 @@ public class ProductosActivity extends AppCompatActivity
 
     }
 
+
+
+    private void cargarFirestore () {
+
+        listProductos = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference reference = db.collection("Productos");
+
+        Query query = reference.orderBy("precio", Query.Direction.ASCENDING);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setCodigo_plu(doc.getId());
+                        productos.setNombre_producto(doc.getString("descripcion"));
+                        productos.setMarca_producto(doc.getString("marca"));
+                        productos.setPrecio_producto(doc.getDouble("precio"));
+                        productos.setImagen_producto(doc.getString("imagen"));
+                        listProductos.add(productos);
+
+                    }
+
+                    adapterProductos.updateList(listProductos);
+
+
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+    }
+
+
+
+
+
+    public void setButtonRetry (View view){
+        this.recreate();
+    }
+
+    @Override
+    public void onRefresh() {
+        cargarFirestore();
+        swRefresh.setRefreshing(false);
+    }
+
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -317,12 +383,9 @@ public class ProductosActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
-
         if (listProductos.isEmpty()) {
             Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
-
         } else {
-
             String userInput = newText.toLowerCase();
             ArrayList<ConstructorProductos> newList = new ArrayList<>();
 
@@ -337,59 +400,6 @@ public class ProductosActivity extends AppCompatActivity
             adapterProductos.updateList(newList);
 
         }
-        return true;
-    }
-
-    private void cargarFirebase() {
-        db.collection("Productos").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (DocumentSnapshot doc : task.getResult()) {
-                    ConstructorProductos productos = new ConstructorProductos();
-                    productos.setNombre_producto(doc.getString("descripcion"));
-                    productos.setMarca_producto(doc.getString("marca"));
-                    productos.setPrecio_producto(doc.getDouble("precio"));
-                    productos.setImagen_producto(doc.getString("imagen"));
-                    listProductos.add(productos);
-                }
-                adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
-                recyclerProductos.setAdapter(adapterProductos);
-                progress.dismiss();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ProductosActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private void updateRealTime () {
-
-      db.collection("Productos").addSnapshotListener(new EventListener<QuerySnapshot>() {
-          @Override
-          public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-              for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
-                  if ( (doc.getType() == DocumentChange.Type.ADDED)) {
-                      ConstructorProductos productos = new ConstructorProductos();
-                      productos.setNombre_producto(doc.getDocument().getString("descripcion"));
-                      productos.setMarca_producto(doc.getDocument().getString("marca"));
-                      productos.setPrecio_producto(doc.getDocument().getDouble("precio"));
-                      productos.setImagen_producto(doc.getDocument().getString("imagen"));
-                      listProductos.add(productos);
-
-                  }
-              }
-              adapterProductos.notifyDataSetChanged();
-              progress.dismiss();
-          }
-      });
-    }
-
-
-
-    public void setButtonRetry (View view){
-        this.recreate();
+        return false;
     }
 }

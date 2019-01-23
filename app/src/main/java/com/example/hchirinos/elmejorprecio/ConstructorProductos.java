@@ -6,7 +6,7 @@ import android.util.Base64;
 
 public class ConstructorProductos {
 
-    private int codigo_plu;
+    private String codigo_plu;
     private String nombre_producto;
     private String marca_producto;
     private double precio_producto;
@@ -16,7 +16,7 @@ public class ConstructorProductos {
     public ConstructorProductos() {}
 
 
-    public ConstructorProductos(int codigo_plu, String nombre_producto, String marca_producto, double precio_producto, String imagen_producto) {
+    public ConstructorProductos(String codigo_plu, String nombre_producto, String marca_producto, double precio_producto, String imagen_producto) {
         this.nombre_producto = nombre_producto;
         this.codigo_plu = codigo_plu;
         this.marca_producto = marca_producto;
@@ -29,7 +29,7 @@ public class ConstructorProductos {
         return nombre_producto;
     }
 
-    public int getCodigo_plu() {
+    public String getCodigo_plu() {
         return codigo_plu;
     }
 
@@ -64,7 +64,7 @@ public class ConstructorProductos {
 
     }
 
-    public void setCodigo_plu(int codigo_plu) {
+    public void setCodigo_plu(String codigo_plu) {
         this.codigo_plu = codigo_plu;
     }
 
