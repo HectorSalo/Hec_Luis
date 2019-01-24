@@ -25,6 +25,7 @@
     <string name="producto_menu_compras">Agregar a Compras</string>
     <string name="producto_menu_detalles">Ver Detalles</string>
     <string name="delete_menu_favorito">Quitar de Favoritos</string>
+    <string name="go_list">Ir Lista de Compras</string>
     <string name="share">Compartir</string>
 
 

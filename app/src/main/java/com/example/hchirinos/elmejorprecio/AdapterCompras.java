@@ -7,9 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +33,8 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
     ArrayList<ConstructorCompras> listCompras;
     Context mContext;
-    lista_compras lista_compras;
+    String precioGuardar, precioTot;
+
 
 
     RequestQueue request;
@@ -54,23 +58,15 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolderCompras viewHolderCompras, final int i) {
+    public void onBindViewHolder(@NonNull final ViewHolderCompras viewHolderCompras, final int i) {
+         double precioGuar = listCompras.get(i).getPrecio_producto_compras();
+         precioGuardar = String.valueOf(precioGuar);
+
 
         viewHolderCompras.textView_nombre_producto_compras.setText(listCompras.get(i).getNombre_producto_compras());
         viewHolderCompras.textView_marca_producto_compras.setText(listCompras.get(i).getMarca_producto_compras());
         viewHolderCompras.textView_precio_producto_compras.setText(String.valueOf(listCompras.get(i).getPrecio_producto_compras()));
         viewHolderCompras.checkBox_compras.setChecked(false);
-
-
-        if (listCompras.get(i).getImagen_compras()!=null) {
-
-            cargarimagen(listCompras.get(i).getImagen_compras(), viewHolderCompras);
-
-        } else {
-            viewHolderCompras.imageView_compras.setImageResource(R.drawable.common_google_signin_btn_icon_dark_focused);
-        }
-
-
 
         viewHolderCompras.checkBox_compras.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -94,28 +90,29 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
             }
         });
 
-     }
 
-    private void cargarimagen(String imagen_compras, final ViewHolderCompras viewHolderCompras) {
-
-        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen_compras;
-        urlImagen = urlImagen.replace(" ", "%20");
-
-        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
+        viewHolderCompras.btMas.setOnClickListener(new View.OnClickListener() {
+            double precioUnitario  = listCompras.get(i).getPrecio_producto_compras();
+            double precioTotal;
             @Override
-            public void onResponse(Bitmap response) {
-                viewHolderCompras.imageView_compras.setImageBitmap(response);
-
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(mContext, "Error al cargar imagen", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                cantidad(listCompras.get(i).getPrecio_producto_compras(), listCompras.get(i).getPrecio_producto_compras(),1);
+                viewHolderCompras.precioTotalProducto.setText(precioTot);
             }
         });
-        request.add(imageRequest);
-    }
 
+       viewHolderCompras.btMenos.setOnClickListener(new View.OnClickListener() {
+           double precioUnitario  = listCompras.get(i).getPrecio_producto_compras();
+           double precioTotal;
+           @Override
+           public void onClick(View v) {
+               precioTotal = precioTotal - precioUnitario;
+               precioTot = String.valueOf(precioTotal);
+               viewHolderCompras.precioTotalProducto.setText(precioTot);
+           }
+       });
+
+     }
 
     public void delete_compras (ConstructorCompras i) {
 
@@ -160,9 +157,9 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
         TextView textView_nombre_producto_compras;
         TextView textView_marca_producto_compras;
-        TextView textView_precio_producto_compras;
-        ImageView imageView_compras;
+        TextView textView_precio_producto_compras, precioTotalProducto;
         CheckBox checkBox_compras;
+        ImageButton btMas, btMenos;
 
         public ViewHolderCompras(@NonNull View itemView) {
             super(itemView);
@@ -170,13 +167,27 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
             textView_nombre_producto_compras = itemView.findViewById(R.id.textView_nombre_producto_compras);
             textView_marca_producto_compras = itemView.findViewById(R.id.textView_marca_producto_compras);
             textView_precio_producto_compras = itemView.findViewById(R.id.textView_precio_producto_compras);
-            imageView_compras = itemView.findViewById(R.id.imageView_producto_compras);
+            precioTotalProducto = itemView.findViewById(R.id.tvPrecioTotalProducto);
             checkBox_compras = itemView.findViewById(R.id.checkBox_compras);
-
-
+            btMas = itemView.findViewById(R.id.btMas);
+            btMenos = itemView.findViewById(R.id.btMenos);
         }
 
 
+    }
+
+    private String cantidad (double precioInicial, double precioUnitario, int i) {
+        String precioResultado = String.valueOf(precioInicial);
+
+        if ( i == 1) {
+            precioInicial = precioInicial + precioUnitario;
+            precioResultado = String.valueOf(precioInicial);
+        } else if (i == 2) {
+            precioInicial = precioInicial - precioUnitario;
+            precioResultado = String.valueOf(precioInicial);
+        }
+
+        return precioResultado;
     }
 
 

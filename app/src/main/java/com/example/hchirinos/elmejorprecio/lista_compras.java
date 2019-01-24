@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,19 +44,18 @@ import java.util.ArrayList;
 public class lista_compras extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, Response.Listener<JSONObject>, Response.ErrorListener  {
 
-    TextView textView_total_compras;
-    TextView textSinConexion;
-    Button buttonRetry;
-    ImageView imageSinConexion;
-    ConnectivityManager conexion;
-    NetworkInfo networkInfo;
+    private TextView textView_total_compras, textSinConexion;
+    private Button buttonRetry;
+    private ImageView imageSinConexion;
+    private ConnectivityManager conexion;
+    private NetworkInfo networkInfo;
 
-    ArrayList<ConstructorCompras> listCompras;
-    RecyclerView recyclerCompras;
-    AdapterCompras adapterCompras;
+    private ArrayList<ConstructorCompras> listCompras;
+    private RecyclerView recyclerCompras;
+    private AdapterCompras adapterCompras;
 
-    RequestQueue request;
-    JsonObjectRequest jsonObjectRequest;
+    private RequestQueue request;
+    private JsonObjectRequest jsonObjectRequest;
 
 
     @Override
@@ -91,10 +92,12 @@ public class lista_compras extends AppCompatActivity
             buttonRetry.setVisibility(View.VISIBLE);
             imageSinConexion.setVisibility(View.VISIBLE);
         }
-
+        LinearLayoutManager llM = new LinearLayoutManager(this.getApplicationContext());
         recyclerCompras = (RecyclerView)findViewById(R.id.recyclerView_listcompras);
         recyclerCompras.setHasFixedSize(true);
-        recyclerCompras.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+        recyclerCompras.setLayoutManager(llM);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, llM.getOrientation());
+        recyclerCompras.addItemDecoration(dividerItemDecoration);
 
         listCompras = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());

@@ -172,7 +172,7 @@ public class ProductosActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.productos, menu);
-
+        MenuItem ir_list = menu.findItem(R.id.bar_lista);
         MenuItem menuItem = menu.findItem(R.id.bar_buscar);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setOnQueryTextListener(this);
@@ -190,6 +190,11 @@ public class ProductosActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_buscar) {
             return true;
+        }
+
+        if (id == R.id.bar_lista) {
+            Intent intent = new Intent(this, lista_compras.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -248,7 +253,8 @@ public class ProductosActivity extends AppCompatActivity
         String seleccion = spinner_ordenar.getSelectedItem().toString();
 
         if (seleccion.equals("Menor a mayor")){
-
+            progress.setMessage("Cargando...");
+            progress.show();
             if (listProductos.isEmpty()) {
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
@@ -257,7 +263,8 @@ public class ProductosActivity extends AppCompatActivity
             }
 
         } else if (seleccion.equals("Mayor a menor")) {
-
+            progress.setMessage("Cargando...");
+            progress.show();
             if (listProductos.isEmpty()) {
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
@@ -266,6 +273,8 @@ public class ProductosActivity extends AppCompatActivity
             }
 
         } else if (seleccion.equals("A-Z")){
+            progress.setMessage("Cargando...");
+            progress.show();
             if (listProductos.isEmpty()) {
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
@@ -281,51 +290,37 @@ public class ProductosActivity extends AppCompatActivity
     // Ordenar lista
     private void sortListProductos_mayor() {
 
-        Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
-            @Override
-            public int compare(ConstructorProductos o1, ConstructorProductos o2) {
+        listProductos = new ArrayList<>();
 
-                return Double.compare(o2.getPrecio_producto(), o1.getPrecio_producto());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference reference = db.collection("Productos");
+
+        Query query = reference.orderBy("precio", Query.Direction.DESCENDING);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setCodigo_plu(doc.getId());
+                        productos.setNombre_producto(doc.getString("descripcion"));
+                        productos.setMarca_producto(doc.getString("marca"));
+                        productos.setPrecio_producto(doc.getDouble("precio"));
+                        productos.setImagen_producto(doc.getString("imagen"));
+                        listProductos.add(productos);
+
+                    }
+                    adapterProductos.updateList(listProductos);
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-        adapterProductos.notifyDataSetChanged();
-        recyclerProductos.setAdapter(adapterProductos);
     }
 
     private void sortListProductos_menor() {
-
-        Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
-            @Override
-            public int compare(ConstructorProductos o1, ConstructorProductos o2) {
-
-                return Double.compare(o1.getPrecio_producto(), o2.getPrecio_producto());
-            }
-        });
-
-        adapterProductos.notifyDataSetChanged();
-        recyclerProductos.setAdapter(adapterProductos);
-    }
-
-
-    private void sortlistProductos() {
-        Collections.sort(listProductos, new Comparator<ConstructorProductos>() {
-            @Override
-            public int compare(ConstructorProductos o1, ConstructorProductos o2) {
-                return o1.getNombre_producto().compareTo(o2.getNombre_producto());
-            }
-        });
-        adapterProductos.notifyDataSetChanged();
-        recyclerProductos.setAdapter(adapterProductos);
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-
-
-    private void cargarFirestore () {
 
         listProductos = new ArrayList<>();
 
@@ -348,10 +343,76 @@ public class ProductosActivity extends AppCompatActivity
                         listProductos.add(productos);
 
                     }
-
                     adapterProductos.updateList(listProductos);
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
 
+    private void sortlistProductos() {
+        listProductos = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference reference = db.collection("Productos");
+
+        Query query = reference.orderBy("descripcion", Query.Direction.ASCENDING);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setCodigo_plu(doc.getId());
+                        productos.setNombre_producto(doc.getString("descripcion"));
+                        productos.setMarca_producto(doc.getString("marca"));
+                        productos.setPrecio_producto(doc.getDouble("precio"));
+                        productos.setImagen_producto(doc.getString("imagen"));
+                        listProductos.add(productos);
+
+                    }
+                    adapterProductos.updateList(listProductos);
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
+
+    private void cargarFirestore () {
+        listProductos = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference reference = db.collection("Productos");
+
+        Query query = reference.orderBy("precio", Query.Direction.ASCENDING);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setCodigo_plu(doc.getId());
+                        productos.setNombre_producto(doc.getString("descripcion"));
+                        productos.setMarca_producto(doc.getString("marca"));
+                        productos.setPrecio_producto(doc.getDouble("precio"));
+                        productos.setImagen_producto(doc.getString("imagen"));
+                        listProductos.add(productos);
+
+                    }
+                    adapterProductos.updateList(listProductos);
                     progress.dismiss();
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -361,10 +422,6 @@ public class ProductosActivity extends AppCompatActivity
 
 
     }
-
-
-
-
 
     public void setButtonRetry (View view){
         this.recreate();
