@@ -72,7 +72,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                int cod = listCompras.get(i).getCod_plu_compras();
+                String cod = listCompras.get(i).getCod_plu_compras();
                 String nombre = listCompras.get(i).getNombre_producto_compras();
                 double precio = listCompras.get(i).getPrecio_producto_compras();
                 String marca = listCompras.get(i).getMarca_producto_compras();
@@ -96,7 +96,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
             double precioTotal;
             @Override
             public void onClick(View v) {
-                cantidad(listCompras.get(i).getPrecio_producto_compras(), listCompras.get(i).getPrecio_producto_compras(),1);
+                precioTot = cantidad(listCompras.get(i).getPrecio_producto_compras(), listCompras.get(i).getPrecio_producto_compras(),1);
                 viewHolderCompras.precioTotalProducto.setText(precioTot);
             }
         });
@@ -124,7 +124,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
     }
 
-    private void enviar_WS (int cod, String nombre, double precio, String marca, String imagen) {
+    private void enviar_WS (String cod, String nombre, double precio, String marca, String imagen) {
 
 
 

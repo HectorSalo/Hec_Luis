@@ -2,6 +2,9 @@ package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -49,7 +52,7 @@ public class lista_compras extends AppCompatActivity
     private ImageView imageSinConexion;
     private ConnectivityManager conexion;
     private NetworkInfo networkInfo;
-
+    private AdminSQLiteHelper conect;
     private ArrayList<ConstructorCompras> listCompras;
     private RecyclerView recyclerCompras;
     private AdapterCompras adapterCompras;
@@ -83,6 +86,8 @@ public class lista_compras extends AppCompatActivity
         conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
 
+        conect = new AdminSQLiteHelper(this, "MyList", null, AdminSQLiteHelper.VERSION);
+
         if (networkInfo != null && networkInfo.isConnected()) {
             textSinConexion.setVisibility(View.INVISIBLE);
             buttonRetry.setVisibility(View.INVISIBLE);
@@ -102,18 +107,31 @@ public class lista_compras extends AppCompatActivity
         listCompras = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
-        cargarWebServices2 ();
+        cargarList ();
 
 
     }
 
 
-    public void cargarWebServices2() {
+    public void cargarList() {
+        SQLiteDatabase db = conect.getWritableDatabase();
 
-        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/conectar_compras.php";
+        Cursor cursor =db.rawQuery("SELECT * FROM compras", null);
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-        request.add(jsonObjectRequest);
+        while (cursor.moveToNext()) {
+            ConstructorCompras plu = new ConstructorCompras();
+            plu.setCod_plu_compras(cursor.getString(0));
+            plu.setNombre_producto_compras(cursor.getString(1));
+            plu.setMarca_producto_compras(cursor.getString(2));
+            plu.setPrecio_producto_compras(cursor.getDouble(3));
+
+
+            listCompras.add(plu);
+        }
+
+        adapterCompras = new AdapterCompras(listCompras, this);
+        recyclerCompras.setAdapter(adapterCompras);
+
     }
 
 
@@ -217,35 +235,6 @@ public class lista_compras extends AppCompatActivity
     @Override
     public void onResponse(JSONObject response) {
 
-        ConstructorCompras compras = null;
-
-        JSONArray json = response.optJSONArray("compras");
-
-        try {
-            for (int i=0; i<json.length(); i++) {
-                compras = new ConstructorCompras();
-                JSONObject jsonObject = null;
-                jsonObject = json.getJSONObject(i);
-
-                compras.setCod_plu_compras((jsonObject.optInt("cod_plu")));
-                compras.setNombre_producto_compras(jsonObject.optString("nombre_plu"));
-                compras.setMarca_producto_compras(jsonObject.optString("marca_plu"));
-                compras.setPrecio_producto_compras(jsonObject.optDouble("precio_plu"));
-                compras.setImagen_compras(jsonObject.optString("imagen"));
-
-                listCompras.add(compras);
-
-
-            }
-
-            //Envio de ArrayList al Adaptador
-            adapterCompras = new AdapterCompras(listCompras, this);
-            recyclerCompras.setAdapter(adapterCompras);
-            totalsuma();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 

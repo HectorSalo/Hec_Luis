@@ -5,7 +5,7 @@ import android.widget.CheckBox;
 
 public class ConstructorCompras {
 
-    private int cod_plu_compras;
+    private String cod_plu_compras;
     private String nombre_producto_compras;
     private String marca_producto_compras;
     private double precio_producto_compras;
@@ -16,7 +16,7 @@ public class ConstructorCompras {
 
 
 
-    public int getCod_plu_compras() {
+    public String getCod_plu_compras() {
         return cod_plu_compras;
     }
 
@@ -43,7 +43,7 @@ public class ConstructorCompras {
     }
 
 
-    public void setCod_plu_compras(int cod_plu_compras) {
+    public void setCod_plu_compras(String cod_plu_compras) {
         this.cod_plu_compras = cod_plu_compras;
     }
 

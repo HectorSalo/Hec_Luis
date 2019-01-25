@@ -1,7 +1,9 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -97,14 +99,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
                             case R.id.option_compras:
 
-                                enviar_WS(listProductos.get(i));
-                                Snackbar.make(v, "Guardado en Lista de Compras", Snackbar.LENGTH_LONG).setAction("Ver Lista", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                       Intent intent = new Intent(mContext, lista_compras.class);
-                                       mContext.startActivity(intent);
-                                    }
-                                }).show();
+                                enviar_WS(v, listProductos.get(i));
 
                                 break;
                             default:
@@ -122,8 +117,32 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     }
 
 
-    private void enviar_WS (ConstructorProductos i) {
+    private void enviar_WS (View v, ConstructorProductos i) {
+        AdminSQLiteHelper conectDB = new AdminSQLiteHelper(mContext, "MyList", null, AdminSQLiteHelper.VERSION);
 
+        SQLiteDatabase db = conectDB.getWritableDatabase();
+
+        String idPlu = i.getCodigo_plu();
+        String name = i.getNombre_producto();
+        String marca = i.getMarca_producto();
+        String precio = String.valueOf(i.getPrecio_producto());
+
+        ContentValues registro = new ContentValues();
+        registro.put("idProducto", idPlu);
+        registro.put("descripcion", name);
+        registro.put("marca", marca);
+        registro.put("precio", precio);
+
+        db.insert("compras", null, registro);
+        db.close();
+
+        Snackbar.make(v, "Guardado en Lista de Compras", Snackbar.LENGTH_LONG).setAction("Ver Lista", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, lista_compras.class);
+                mContext.startActivity(intent);
+            }
+        }).show();
     }
 
     @Override
