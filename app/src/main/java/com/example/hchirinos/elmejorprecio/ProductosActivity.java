@@ -253,32 +253,35 @@ public class ProductosActivity extends AppCompatActivity
         String seleccion = spinner_ordenar.getSelectedItem().toString();
 
         if (seleccion.equals("Menor a mayor")){
-            progress.setMessage("Cargando...");
-            progress.show();
+
             if (listProductos.isEmpty()) {
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
+                progress.setMessage("Cargando...");
+                progress.show();
                 sortListProductos_menor();
             }
 
         } else if (seleccion.equals("Mayor a menor")) {
-            progress.setMessage("Cargando...");
-            progress.show();
+
             if (listProductos.isEmpty()) {
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
+                progress.setMessage("Cargando...");
+                progress.show();
                 sortListProductos_mayor();
             }
 
         } else if (seleccion.equals("A-Z")){
-            progress.setMessage("Cargando...");
-            progress.show();
+
             if (listProductos.isEmpty()) {
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
+                progress.setMessage("Cargando...");
+                progress.show();
                 sortlistProductos();
             }
 

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.SearchView;
@@ -37,6 +39,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +57,7 @@ public class lista_compras extends AppCompatActivity
 
     private TextView textView_total_compras, textSinConexion;
     private Button buttonRetry;
+    private ImageButton btMas;
     private ImageView imageSinConexion;
     private ConnectivityManager conexion;
     private NetworkInfo networkInfo;
@@ -59,6 +68,7 @@ public class lista_compras extends AppCompatActivity
 
     private RequestQueue request;
     private JsonObjectRequest jsonObjectRequest;
+
 
 
     @Override
@@ -79,6 +89,7 @@ public class lista_compras extends AppCompatActivity
         navigationView.setItemIconTintList(null);
 
         textView_total_compras = (TextView)findViewById(R.id.textView_total_compras);
+        btMas = (ImageButton)findViewById(R.id.btMas);
 
         textSinConexion = (TextView)findViewById(R.id.textSinConexion);
         buttonRetry = (Button)findViewById(R.id.buttonRetry);
@@ -107,12 +118,51 @@ public class lista_compras extends AppCompatActivity
         listCompras = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
-        cargarList ();
+        //cargarList ();
+        adapterCompras = new AdapterCompras(listCompras, this);
+        recyclerCompras.setAdapter(adapterCompras);
+        listPrueba();
+
+
 
 
     }
 
 
+    public void listPrueba() {
+        listCompras = new ArrayList<>();
+        SQLiteDatabase db = conect.getWritableDatabase();
+        FirebaseFirestore dbFirestore = FirebaseFirestore.getInstance();
+        CollectionReference reference = dbFirestore.collection("Productos");
+
+        Cursor cursor =db.rawQuery("SELECT * FROM compras", null);
+
+        while (cursor.moveToNext()) {
+            String idProducto = cursor.getString(0);
+
+            reference.document(idProducto).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot doc = task.getResult();
+                        ConstructorCompras productos = new ConstructorCompras();
+                        productos.setCod_plu_compras(doc.getId());
+                        productos.setNombre_producto_compras(doc.getString("descripcion"));
+                        productos.setMarca_producto_compras(doc.getString("marca"));
+                        productos.setPrecio_producto_compras(doc.getDouble("precio"));
+                        productos.setImagen_compras(doc.getString("imagen"));
+
+                        listCompras.add(productos);
+                        Toast.makeText(getApplicationContext(), "" + listCompras.size(), Toast.LENGTH_LONG).show();
+                        adapterCompras.updateList(listCompras);
+                    }
+                }
+            });
+
+        }
+
+
+    }
     public void cargarList() {
         SQLiteDatabase db = conect.getWritableDatabase();
 
@@ -124,6 +174,7 @@ public class lista_compras extends AppCompatActivity
             plu.setNombre_producto_compras(cursor.getString(1));
             plu.setMarca_producto_compras(cursor.getString(2));
             plu.setPrecio_producto_compras(cursor.getDouble(3));
+            plu.setCantidad(cursor.getInt(4));
 
 
             listCompras.add(plu);
@@ -238,9 +289,11 @@ public class lista_compras extends AppCompatActivity
 
     }
 
-    public void totalsuma() {
+    public void totalsuma(double i) {
+        String x = String.valueOf(i);
+        textView_total_compras.setText(x);
 
-        double suma = 0;
+        /*double suma = 0;
 
 
         for (int i = 0; i<listCompras.size(); i++) {
@@ -250,7 +303,7 @@ public class lista_compras extends AppCompatActivity
         }
 
         String total = "" + suma;
-        textView_total_compras.setText(total);
+        textView_total_compras.setText(total);*/
 
     }
 

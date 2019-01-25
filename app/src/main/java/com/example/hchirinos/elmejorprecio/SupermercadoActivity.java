@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -7,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +39,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,18 +56,20 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class SupermercadoActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
 
     private Spinner spinner_ordenar;
-    TextView textSinConexion;
-    Button buttonRetry;
-    ImageView imageSinConexion;
-    ConnectivityManager conexion;
-    NetworkInfo networkInfo;
+    private TextView textSinConexion;
+    private Button buttonRetry;
+    private ImageView imageSinConexion;
+    private ConnectivityManager conexion;
+    private NetworkInfo networkInfo;
+    private ProgressDialog progress;
+    private SwipeRefreshLayout swRefresh;
 
-    ArrayList<ConstructorTiendas> listTiendas;
-    RecyclerView recyclerTiendas;
-    AdapterTiendas adapterTiendas;
+    private ArrayList<ConstructorTiendas> listTiendas;
+    private RecyclerView recyclerTiendas;
+    private AdapterTiendas adapterTiendas;
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
@@ -93,6 +104,7 @@ public class SupermercadoActivity extends AppCompatActivity
         imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
         conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
+        swRefresh = (SwipeRefreshLayout) findViewById(R.id.swpRefresh);
 
         if (networkInfo != null && networkInfo.isConnected()) {
             textSinConexion.setVisibility(View.INVISIBLE);
@@ -111,18 +123,47 @@ public class SupermercadoActivity extends AppCompatActivity
         listTiendas = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
-        cargarWebservices ();
+        swRefresh.setOnRefreshListener(this);
+        progress = new ProgressDialog(SupermercadoActivity.this);
+        progress.setMessage("Cargando...");
+        progress.show();
+
+        cargarFirestore ();
+        adapterTiendas = new AdapterTiendas(listTiendas, this);
+        recyclerTiendas.setAdapter(adapterTiendas);
 
     }
 
-    private void cargarWebservices() {
+    private void cargarFirestore() {
+        listTiendas = new ArrayList<>();
 
-        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/conectar_tienda.php";
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference reference = db.collection("Tiendas");
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-        request.add(jsonObjectRequest);
+        Query query = reference.orderBy("comercio", Query.Direction.ASCENDING);
 
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorTiendas tiendas = new ConstructorTiendas();
+                        tiendas.setCod_tienda(doc.getId());
+                        tiendas.setNombre_tienda(doc.getString("comercio"));
+                        tiendas.setSucursal(doc.getString("sucursal"));
+                        tiendas.setImagen(doc.getString("imagen"));
+                        tiendas.setLatitud(doc.getGeoPoint("ubicacion").getLatitude());
+                        tiendas.setLongitud(doc.getGeoPoint("ubicacion").getLongitude());
+                        listTiendas.add(tiendas);
 
+                    }
+                    adapterTiendas.updateList(listTiendas);
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(SupermercadoActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 
@@ -207,6 +248,8 @@ public class SupermercadoActivity extends AppCompatActivity
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
+                progress.setMessage("Cargando...");
+                progress.show();
                 sortListSucursal();
             }
 
@@ -217,6 +260,8 @@ public class SupermercadoActivity extends AppCompatActivity
                 Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
 
             } else {
+                progress.setMessage("Cargando...");
+                progress.show();
                 sortListTiendas();
             }
 
@@ -226,26 +271,68 @@ public class SupermercadoActivity extends AppCompatActivity
 
     private void sortListSucursal() {
 
-        Collections.sort(listTiendas, new Comparator<ConstructorTiendas>() {
+        listTiendas = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference reference = db.collection("Tiendas");
+
+        Query query = reference.orderBy("sucursal", Query.Direction.ASCENDING);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public int compare(ConstructorTiendas o1, ConstructorTiendas o2) {
-                return o1.getSucursal().compareTo(o2.getSucursal());
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorTiendas tiendas = new ConstructorTiendas();
+                        tiendas.setCod_tienda(doc.getId());
+                        tiendas.setNombre_tienda(doc.getString("comercio"));
+                        tiendas.setSucursal(doc.getString("sucursal"));
+                        tiendas.setImagen(doc.getString("imagen"));
+                        tiendas.setLatitud(doc.getGeoPoint("ubicacion").getLatitude());
+                        tiendas.setLongitud(doc.getGeoPoint("ubicacion").getLongitude());
+                        listTiendas.add(tiendas);
+
+                    }
+                    adapterTiendas.updateList(listTiendas);
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(SupermercadoActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        adapterTiendas.notifyDataSetChanged();
-        recyclerTiendas.setAdapter(adapterTiendas);
     }
 
     private void sortListTiendas() {
 
-        Collections.sort(listTiendas, new Comparator<ConstructorTiendas>() {
+        listTiendas = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference reference = db.collection("Tiendas");
+
+        Query query = reference.orderBy("comercio", Query.Direction.ASCENDING);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public int compare(ConstructorTiendas o1, ConstructorTiendas o2) {
-                return o1.getNombre_tienda().compareTo(o2.getNombre_tienda());
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorTiendas tiendas = new ConstructorTiendas();
+                        tiendas.setCod_tienda(doc.getId());
+                        tiendas.setNombre_tienda(doc.getString("comercio"));
+                        tiendas.setSucursal(doc.getString("sucursal"));
+                        tiendas.setImagen(doc.getString("imagen"));
+                        tiendas.setLatitud(doc.getGeoPoint("ubicacion").getLatitude());
+                        tiendas.setLongitud(doc.getGeoPoint("ubicacion").getLongitude());
+                        listTiendas.add(tiendas);
+
+                    }
+                    adapterTiendas.updateList(listTiendas);
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(SupermercadoActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        adapterTiendas.notifyDataSetChanged();
-        recyclerTiendas.setAdapter(adapterTiendas);
     }
 
 
@@ -261,35 +348,6 @@ public class SupermercadoActivity extends AppCompatActivity
 
     @Override
     public void onResponse(JSONObject response) {
-
-        ConstructorTiendas tiendas = null;
-
-        JSONArray json = response.optJSONArray("tienda");
-
-        try {
-            for (int i=0; i<json.length(); i++) {
-                tiendas = new ConstructorTiendas();
-                JSONObject jsonObject = null;
-                jsonObject = json.getJSONObject(i);
-
-                tiendas.setCod_tienda(jsonObject.optInt("cod_sup"));
-                tiendas.setNombre_tienda(jsonObject.optString("nombre_sup"));
-                tiendas.setSucursal(jsonObject.optString("sucursal"));
-                tiendas.setImagen(jsonObject.optString("imagen"));
-                tiendas.setLatitud(jsonObject.optDouble("latitud"));
-                tiendas.setLongitud(jsonObject.optDouble("longitud"));
-
-
-                listTiendas.add(tiendas);
-            }
-
-            //Envio de ArrayList al Adaptador
-            adapterTiendas = new AdapterTiendas(listTiendas, this);
-            recyclerTiendas.setAdapter(adapterTiendas);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -323,6 +381,12 @@ public class SupermercadoActivity extends AppCompatActivity
 
     public void setButtonRetry (View view){
         this.recreate();
+    }
+
+    @Override
+    public void onRefresh() {
+        cargarFirestore();
+        swRefresh.setRefreshing(false);
     }
 }
 

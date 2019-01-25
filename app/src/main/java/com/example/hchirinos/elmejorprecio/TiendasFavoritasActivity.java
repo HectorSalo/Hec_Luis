@@ -42,16 +42,17 @@ import java.util.ArrayList;
 public class TiendasFavoritasActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener{
 
-    TextView textSinConexion;
-    Button buttonRetry;
-    ImageView imageSinConexion;
-    ConnectivityManager conexion;
-    NetworkInfo networkInfo;
+    private TextView textSinConexion;
+    private Button buttonRetry;
+    private ImageView imageSinConexion;
+    private ConnectivityManager conexion;
+    private NetworkInfo networkInfo;
 
 
-    ArrayList<ConstructorFavoritos> listFavoritos;
-    RecyclerView recyclerFavoritos;
-    AdapterFavoritos adapterFavoritos;
+    private ArrayList<ConstructorFavoritos> listFavoritos;
+    private ArrayList<String> idTiendas;
+    private RecyclerView recyclerFavoritos;
+    private AdapterFavoritos adapterFavoritos;
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
@@ -96,6 +97,7 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         recyclerFavoritos.setLayoutManager(new GridLayoutManager(this.getApplicationContext(), 3));
 
         listFavoritos = new ArrayList<>();
+        idTiendas = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
         cargarWebservices ();

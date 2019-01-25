@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -65,7 +66,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
         if (listTiendas.get(i).getImagen()!=null) {
 
-            cargarimagen(listTiendas.get(i).getImagen(), viewHolderTiendas);
+            Glide.with(mContext).load(listTiendas.get(i).getImagen()).into(viewHolderTiendas.imageView_tiendas);
 
         } else {
             viewHolderTiendas.imageView_tiendas.setImageResource(R.drawable.common_google_signin_btn_icon_dark_focused);
@@ -125,24 +126,6 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
     }
 
-    private void cargarimagen(String imagen, final ViewHolderTiendas viewHolderTiendas) {
-
-        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen;
-        urlImagen = urlImagen.replace(" ", "%20");
-
-        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                viewHolderTiendas.imageView_tiendas.setImageBitmap(response);
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(mContext, "Error al cargar imagen", Toast.LENGTH_SHORT).show();
-            }
-        });
-        request.add(imageRequest);
-    }
 
     @Override
     public int getItemCount() {
@@ -185,8 +168,6 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
     }
 
     private void enviar_WS (ConstructorTiendas i) {
-
-
 
         String url = "https://chirinoshl.000webhostapp.com/enviar_favoritos.php?cod_sup="+ i.getCod_tienda() +"&nombre_sup="+i.getNombre_tienda()+"&sucursal="+i.getSucursal()+"&imagen="+i.getImagen()+"&latitud="+i.getLatitud()+"&longitud="+i.getLongitud();
         url = url.replace(" ", "%20");

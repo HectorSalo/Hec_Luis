@@ -11,6 +11,7 @@ public class ConstructorProductos {
     private String marca_producto;
     private double precio_producto;
     private String imagen_producto;
+    private int cantidad;
 
 
     public ConstructorProductos() {}
@@ -45,6 +46,9 @@ public class ConstructorProductos {
         return imagen_producto;
     }
 
+    public int getCantidad() {
+        return cantidad;
+    }
 
     public void setNombre_producto(String nombre_producto) {
         this.nombre_producto = nombre_producto;
@@ -68,7 +72,9 @@ public class ConstructorProductos {
         this.codigo_plu = codigo_plu;
     }
 
-
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
 }
 
 

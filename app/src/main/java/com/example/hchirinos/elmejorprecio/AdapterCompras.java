@@ -37,6 +37,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
 
 
+
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
@@ -59,13 +60,12 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderCompras viewHolderCompras, final int i) {
-         double precioGuar = listCompras.get(i).getPrecio_producto_compras();
-         precioGuardar = String.valueOf(precioGuar);
 
 
         viewHolderCompras.textView_nombre_producto_compras.setText(listCompras.get(i).getNombre_producto_compras());
         viewHolderCompras.textView_marca_producto_compras.setText(listCompras.get(i).getMarca_producto_compras());
         viewHolderCompras.textView_precio_producto_compras.setText(String.valueOf(listCompras.get(i).getPrecio_producto_compras()));
+        viewHolderCompras.precioTotalProducto.setText(String.valueOf(listCompras.get(i).getCantidad()));
         viewHolderCompras.checkBox_compras.setChecked(false);
 
         viewHolderCompras.checkBox_compras.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -92,12 +92,12 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
 
         viewHolderCompras.btMas.setOnClickListener(new View.OnClickListener() {
-            double precioUnitario  = listCompras.get(i).getPrecio_producto_compras();
-            double precioTotal;
+            int x = listCompras.get(i).getCantidad();
             @Override
             public void onClick(View v) {
-                precioTot = cantidad(listCompras.get(i).getPrecio_producto_compras(), listCompras.get(i).getPrecio_producto_compras(),1);
-                viewHolderCompras.precioTotalProducto.setText(precioTot);
+            x = x + 1;
+            listCompras.get(i).setCantidad(x);
+            viewHolderCompras.precioTotalProducto.setText(String.valueOf(listCompras.get(i).getCantidad()));
             }
         });
 
@@ -160,6 +160,7 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
         TextView textView_precio_producto_compras, precioTotalProducto;
         CheckBox checkBox_compras;
         ImageButton btMas, btMenos;
+        NumberPicker numPicker;
 
         public ViewHolderCompras(@NonNull View itemView) {
             super(itemView);
@@ -169,11 +170,21 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
             textView_precio_producto_compras = itemView.findViewById(R.id.textView_precio_producto_compras);
             precioTotalProducto = itemView.findViewById(R.id.tvPrecioTotalProducto);
             checkBox_compras = itemView.findViewById(R.id.checkBox_compras);
+            numPicker = itemView.findViewById(R.id.numPicker);
             btMas = itemView.findViewById(R.id.btMas);
             btMenos = itemView.findViewById(R.id.btMenos);
+            numPicker.setMinValue(1);
+            numPicker.setMaxValue(50);
         }
 
 
+    }
+
+    public void updateList (ArrayList<ConstructorCompras> newList){
+
+        listCompras = new ArrayList<>();
+        listCompras.addAll(newList);
+        notifyDataSetChanged();
     }
 
     private String cantidad (double precioInicial, double precioUnitario, int i) {

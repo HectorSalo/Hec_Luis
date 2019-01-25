@@ -11,6 +11,7 @@ public class ConstructorCompras {
     private double precio_producto_compras;
     private CheckBox checkBox_compras;
     private String imagen_compras;
+    private int cantidad;
 
     public ConstructorCompras () {}
 
@@ -32,7 +33,9 @@ public class ConstructorCompras {
         return precio_producto_compras;
     }
 
-
+    public int getCantidad() {
+        return cantidad;
+    }
 
     public String getImagen_compras() {
         return imagen_compras;
@@ -65,5 +68,9 @@ public class ConstructorCompras {
 
     public void setCheckBox_compras(CheckBox checkBox_compras) {
         this.checkBox_compras = checkBox_compras;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 }

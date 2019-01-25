@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 public class AdminSQLiteHelper extends SQLiteOpenHelper {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     public AdminSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -15,7 +15,7 @@ public class AdminSQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table compras (idProducto varchar primary key , descripcion varchar, marca varchar, precio double)");
+        db.execSQL("create table compras (idProducto varchar primary key , descripcion varchar, marca varchar, precio double, cantidad int)");
     }
 
     @Override

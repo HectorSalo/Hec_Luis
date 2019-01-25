@@ -1,13 +1,17 @@
 package com.example.hchirinos.elmejorprecio;
 
+import com.google.firebase.firestore.GeoPoint;
+import com.google.type.LatLng;
+
 public class ConstructorTiendas {
 
-    private int cod_tienda;
+    private String cod_tienda;
     private String nombre_tienda;
     private String sucursal;
     private String imagen;
     private double latitud;
     private double longitud;
+
 
 
     public ConstructorTiendas() {}
@@ -18,7 +22,7 @@ public class ConstructorTiendas {
         this.sucursal = sucursal;
     }
 
-    public int getCod_tienda() {
+    public String getCod_tienda() {
         return cod_tienda;
     }
 
@@ -52,7 +56,7 @@ public class ConstructorTiendas {
         this.sucursal = sucursal;
     }
 
-    public void setCod_tienda(int cod_tienda) {
+    public void setCod_tienda(String cod_tienda) {
         this.cod_tienda = cod_tienda;
     }
 
