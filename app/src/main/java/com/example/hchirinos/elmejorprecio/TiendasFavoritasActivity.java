@@ -1,10 +1,14 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,6 +36,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,12 +56,13 @@ public class TiendasFavoritasActivity extends AppCompatActivity
     private ImageView imageSinConexion;
     private ConnectivityManager conexion;
     private NetworkInfo networkInfo;
-
+    private AdminSQLiteHelper conect;
 
     private ArrayList<ConstructorFavoritos> listFavoritos;
     private ArrayList<String> idTiendas;
     private RecyclerView recyclerFavoritos;
     private AdapterFavoritos adapterFavoritos;
+    private ProgressDialog progress;
 
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
@@ -82,6 +92,8 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
 
+        conect = new AdminSQLiteHelper(this, "MyList", null, AdminSQLiteHelper.VERSION);
+
         if (networkInfo != null && networkInfo.isConnected()) {
             textSinConexion.setVisibility(View.INVISIBLE);
             buttonRetry.setVisibility(View.INVISIBLE);
@@ -100,8 +112,52 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         idTiendas = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
-        cargarWebservices ();
+        adapterFavoritos = new AdapterFavoritos(listFavoritos, this);
+        recyclerFavoritos.setAdapter(adapterFavoritos);
+        progress = new ProgressDialog(TiendasFavoritasActivity.this);
+        progress.setMessage("Cargando...");
+        progress.show();
+        cargarFavoritas();
+
+
     }
+
+    private void cargarFavoritas() {
+        listFavoritos = new ArrayList<>();
+        SQLiteDatabase db = conect.getWritableDatabase();
+        FirebaseFirestore dbFirestore = FirebaseFirestore.getInstance();
+        CollectionReference reference = dbFirestore.collection("Tiendas");
+
+        Cursor cursor =db.rawQuery("SELECT * FROM tiendas", null);
+
+
+
+            while (cursor.moveToNext()) {
+                String idTienda = cursor.getString(0);
+
+                reference.document(idTienda).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot doc = task.getResult();
+                            ConstructorFavoritos tiendas = new ConstructorFavoritos();
+                            tiendas.setCod_tienda(doc.getId());
+                            tiendas.setNombre_tienda(doc.getString("comercio"));
+                            tiendas.setSucursal(doc.getString("sucursal"));
+                            tiendas.setImagen(doc.getString("imagen"));
+
+                            listFavoritos.add(tiendas);
+                            adapterFavoritos.updateList(listFavoritos);
+                            progress.dismiss();
+                        }
+                    }
+                });
+
+            }
+            progress.dismiss();
+        }
+
+
 
     @Override
     public void onBackPressed() {
@@ -150,6 +206,9 @@ public class TiendasFavoritasActivity extends AppCompatActivity
                 Toast.makeText(this, "Cuadricula", Toast.LENGTH_SHORT).show();
             }
             return true;
+        } else if (id == R.id.bar_favoritas) {
+            Intent myIntent = new Intent(this, SupermercadoActivity.class);
+            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -190,13 +249,6 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         return true;
     }
 
-    private void cargarWebservices () {
-        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/conectar_favoritos.php";
-
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-        request.add(jsonObjectRequest);
-
-    }
 
     @Override
     public void onErrorResponse(VolleyError error) {
@@ -206,34 +258,6 @@ public class TiendasFavoritasActivity extends AppCompatActivity
     @Override
     public void onResponse(JSONObject response) {
 
-        ConstructorFavoritos favoritos = null;
-
-        JSONArray json = response.optJSONArray("favoritos");
-
-        try {
-            for (int i=0; i<json.length(); i++) {
-                favoritos = new ConstructorFavoritos();
-                JSONObject jsonObject = null;
-                jsonObject = json.getJSONObject(i);
-
-                favoritos.setCod_tienda(jsonObject.optInt("cod_sup"));
-                favoritos.setNombre_tienda(jsonObject.optString("nombre_sup"));
-                favoritos.setSucursal(jsonObject.optString("sucursal"));
-                favoritos.setImagen(jsonObject.optString("imagen"));
-                favoritos.setLatitud(jsonObject.optDouble("latitud"));
-                favoritos.setLongitud(jsonObject.optDouble("longitud"));
-
-
-                listFavoritos.add(favoritos);
-            }
-
-            //Envio de ArrayList al Adaptador
-            adapterFavoritos = new AdapterFavoritos(listFavoritos, this);
-            recyclerFavoritos.setAdapter(adapterFavoritos);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 

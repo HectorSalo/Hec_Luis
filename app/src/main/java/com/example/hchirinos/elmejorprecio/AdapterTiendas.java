@@ -1,10 +1,13 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -75,7 +78,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
         viewHolderTiendas.textView_option_menu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
 
                 PopupMenu popupMenu = new PopupMenu(mContext, viewHolderTiendas.textView_option_menu);
@@ -86,10 +89,7 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
 
                         switch (item.getItemId()){
                             case R.id.option_favoritos:
-
-                                enviar_WS(listTiendas.get(i));
-
-                                Toast.makeText(mContext, "Agregado a Favoritos", Toast.LENGTH_LONG).show();
+                                enviar_WS(v, listTiendas.get(i));
 
                                 break;
 
@@ -167,12 +167,25 @@ public class AdapterTiendas extends RecyclerView.Adapter<AdapterTiendas.ViewHold
         notifyDataSetChanged();
     }
 
-    private void enviar_WS (ConstructorTiendas i) {
+    private void enviar_WS (View v, ConstructorTiendas i) {
 
-        String url = "https://chirinoshl.000webhostapp.com/enviar_favoritos.php?cod_sup="+ i.getCod_tienda() +"&nombre_sup="+i.getNombre_tienda()+"&sucursal="+i.getSucursal()+"&imagen="+i.getImagen()+"&latitud="+i.getLatitud()+"&longitud="+i.getLongitud();
-        url = url.replace(" ", "%20");
+        AdminSQLiteHelper conectDB = new AdminSQLiteHelper(mContext, "MyList", null, AdminSQLiteHelper.VERSION);
+        SQLiteDatabase db = conectDB.getWritableDatabase();
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-        request.add(jsonObjectRequest);
+        String idTienda = i.getCod_tienda();
+
+        ContentValues registro = new ContentValues();
+        registro.put("idTienda", idTienda);
+
+        db.insert("tiendas", null, registro);
+        db.close();
+
+        Snackbar.make(v, "Guardado en Tiendas Favoritas", Snackbar.LENGTH_LONG).setAction("Ver Lista", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, TiendasFavoritasActivity.class);
+                mContext.startActivity(intent);
+            }
+        }).show();
     }
 }

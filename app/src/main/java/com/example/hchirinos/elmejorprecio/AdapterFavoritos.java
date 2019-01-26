@@ -2,6 +2,8 @@ package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
 
@@ -76,7 +79,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
 
         if (listFavoritos.get(i).getImagen()!=null) {
 
-            cargarimagen(listFavoritos.get(i).getImagen(), viewHolderFavoritos);
+            Glide.with(mContext).load(listFavoritos.get(i).getImagen()).into(viewHolderFavoritos.imagenFavoritos);
 
         } else {
             viewHolderFavoritos.imagenFavoritos.setImageResource(R.drawable.common_google_signin_btn_icon_dark_focused);
@@ -99,8 +102,6 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
                                 delete_Favoritos(listFavoritos.get(i));
                                 listFavoritos.remove(i);
                                 notifyDataSetChanged();
-                                Toast.makeText(mContext, "Eliminado de Favoritos", Toast.LENGTH_LONG).show();
-
 
                                 break;
 
@@ -156,43 +157,25 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
         }
     }
 
-    private void cargarimagen(String imagen, final AdapterFavoritos.ViewHolderFavoritos viewHolderFavoritos) {
-
-        String urlImagen = "https://chirinoshl.000webhostapp.com/elmejorprecio/" + imagen;
-        urlImagen = urlImagen.replace(" ", "%20");
-
-        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                viewHolderFavoritos.imagenFavoritos.setImageBitmap(response);
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(mContext, "Error al cargar imagen", Toast.LENGTH_SHORT).show();
-            }
-        });
-        request.add(imageRequest);
-    }
 
     public void delete_Favoritos (ConstructorFavoritos i) {
+        String idTienda = i.getCod_tienda();
 
-        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/delete_favoritos.php?cod_sup="+ i.getCod_tienda();
-        url = url.replace(" ", "%20");
+        AdminSQLiteHelper conect = new AdminSQLiteHelper(mContext, "MyList", null, AdminSQLiteHelper.VERSION);
+        SQLiteDatabase db = conect.getWritableDatabase();
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                //Toast.makeText(mContext, "Eliminado de Favoritos", Toast.LENGTH_LONG).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(mContext, "Error al eliminar", Toast.LENGTH_LONG).show();
-            }
-        });
-        request.add(jsonObjectRequest);
+        db.delete("tiendas", "idTienda ='" + idTienda + "'", null);
+        db.close();
 
+        Toast.makeText(mContext, "Eliminado de Favoritos", Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void updateList (ArrayList<ConstructorFavoritos> newList){
+
+        listFavoritos = new ArrayList<>();
+        listFavoritos.addAll(newList);
+        notifyDataSetChanged();
     }
 
 }

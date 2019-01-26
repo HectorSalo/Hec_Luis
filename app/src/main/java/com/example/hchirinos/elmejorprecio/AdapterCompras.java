@@ -1,6 +1,7 @@
 package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -31,10 +32,10 @@ import java.util.ArrayList;
 
 public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHolderCompras> implements Response.Listener<JSONObject>, Response.ErrorListener {
 
-    ArrayList<ConstructorCompras> listCompras;
-    Context mContext;
-    String precioGuardar, precioTot;
-
+    private ArrayList<ConstructorCompras> listCompras;
+    private Context mContext;
+    private String precioGuardar, precioTot;
+    private ArrayList<String> listComprados = new ArrayList<>();
 
 
 
@@ -81,7 +82,6 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
                 if (isChecked) {
                     delete_compras(listCompras.get(i));
-                    Toast.makeText(mContext, "Producto comprado", Toast.LENGTH_SHORT).show();
 
                 } else {
                     enviar_WS(cod, nombre, precio, marca, imagen);
@@ -114,13 +114,23 @@ public class AdapterCompras extends RecyclerView.Adapter<AdapterCompras.ViewHold
 
      }
 
+     public void comprados () {
+        
+     }
+
+
+
     public void delete_compras (ConstructorCompras i) {
 
-        String url = "https://chirinoshl.000webhostapp.com/elmejorprecio/delete_compras.php?cod_plu="+ i.getCod_plu_compras();
-        url = url.replace(" ", "%20");
+        String idPro = i.getCod_plu_compras();
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
-        request.add(jsonObjectRequest);
+        AdminSQLiteHelper conect = new AdminSQLiteHelper(mContext, "MyList", null, AdminSQLiteHelper.VERSION);
+        SQLiteDatabase db = conect.getWritableDatabase();
+
+        db.delete("compras", "idProducto= '" + idPro + "'", null);
+        db.close();
+
+        Toast.makeText(mContext, "Comprado", Toast.LENGTH_SHORT).show();
 
     }
 

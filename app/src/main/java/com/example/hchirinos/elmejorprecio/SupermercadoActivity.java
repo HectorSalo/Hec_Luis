@@ -197,6 +197,9 @@ public class SupermercadoActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_buscar) {
             return true;
+        } else if (id == R.id.bar_Tienda) {
+            Intent myIntent = new Intent(this, TiendasFavoritasActivity.class);
+            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);

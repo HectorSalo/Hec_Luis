@@ -14,4 +14,9 @@
         android:title="@string/app_bar_buscar"
         app:showAsAction="always"
         />
+
+    <item
+        android:id="@+id/bar_favoritas"
+        android:title="@string/go_tiendas"
+        />
 </menu>

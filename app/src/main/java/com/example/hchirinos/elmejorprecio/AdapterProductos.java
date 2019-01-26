@@ -123,17 +123,12 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         SQLiteDatabase db = conectDB.getWritableDatabase();
 
         String idPlu = i.getCodigo_plu();
-        String name = i.getNombre_producto();
-        String marca = i.getMarca_producto();
-        String precio = String.valueOf(i.getPrecio_producto());
         String cantidad = String.valueOf(1);
 
         ContentValues registro = new ContentValues();
         registro.put("idProducto", idPlu);
-        registro.put("descripcion", name);
-        registro.put("marca", marca);
-        registro.put("precio", precio);
         registro.put("cantidad", cantidad);
+
 
         db.insert("compras", null, registro);
         db.close();

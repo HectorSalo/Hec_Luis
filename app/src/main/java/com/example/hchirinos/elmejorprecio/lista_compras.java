@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -65,6 +66,7 @@ public class lista_compras extends AppCompatActivity
     private ArrayList<ConstructorCompras> listCompras;
     private RecyclerView recyclerCompras;
     private AdapterCompras adapterCompras;
+    private ProgressDialog progress;
 
     private RequestQueue request;
     private JsonObjectRequest jsonObjectRequest;
@@ -118,18 +120,17 @@ public class lista_compras extends AppCompatActivity
         listCompras = new ArrayList<>();
         request = Volley.newRequestQueue(getApplicationContext());
 
-        //cargarList ();
         adapterCompras = new AdapterCompras(listCompras, this);
         recyclerCompras.setAdapter(adapterCompras);
-        listPrueba();
-
-
-
+        progress = new ProgressDialog(lista_compras.this);
+        progress.setMessage("Cargando...");
+        progress.show();
+        listBuy();
 
     }
 
 
-    public void listPrueba() {
+    public void listBuy() {
         listCompras = new ArrayList<>();
         SQLiteDatabase db = conect.getWritableDatabase();
         FirebaseFirestore dbFirestore = FirebaseFirestore.getInstance();
@@ -153,36 +154,15 @@ public class lista_compras extends AppCompatActivity
                         productos.setImagen_compras(doc.getString("imagen"));
 
                         listCompras.add(productos);
-                        Toast.makeText(getApplicationContext(), "" + listCompras.size(), Toast.LENGTH_LONG).show();
                         adapterCompras.updateList(listCompras);
+                        progress.dismiss();
                     }
                 }
             });
 
         }
 
-
-    }
-    public void cargarList() {
-        SQLiteDatabase db = conect.getWritableDatabase();
-
-        Cursor cursor =db.rawQuery("SELECT * FROM compras", null);
-
-        while (cursor.moveToNext()) {
-            ConstructorCompras plu = new ConstructorCompras();
-            plu.setCod_plu_compras(cursor.getString(0));
-            plu.setNombre_producto_compras(cursor.getString(1));
-            plu.setMarca_producto_compras(cursor.getString(2));
-            plu.setPrecio_producto_compras(cursor.getDouble(3));
-            plu.setCantidad(cursor.getInt(4));
-
-
-            listCompras.add(plu);
-        }
-
-        adapterCompras = new AdapterCompras(listCompras, this);
-        recyclerCompras.setAdapter(adapterCompras);
-
+        progress.dismiss();
     }
 
 
@@ -212,9 +192,15 @@ public class lista_compras extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_refresh) {
+            progress = new ProgressDialog(lista_compras.this);
+            progress.setMessage("Cargando...");
+            progress.show();
+            listBuy();
             Toast.makeText(this, "Lista actualizada", Toast.LENGTH_SHORT).show();
-            this.recreate();
             return true;
+        } else if (id == R.id.bar_Productos) {
+            Intent myIntent = new Intent(this, ProductosActivity.class);
+            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);

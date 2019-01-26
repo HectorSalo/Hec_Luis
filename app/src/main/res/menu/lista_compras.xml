@@ -10,5 +10,10 @@
 
         />
 
+    <item
+        android:id="@+id/bar_Productos"
+        android:title="@string/go_PLU"
+        />
+
 
 </menu>

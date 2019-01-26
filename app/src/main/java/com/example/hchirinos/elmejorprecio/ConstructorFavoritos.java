@@ -2,7 +2,7 @@ package com.example.hchirinos.elmejorprecio;
 
 public class ConstructorFavoritos {
 
-    private int cod_tienda;
+    private String cod_tienda;
     private String nombre_tienda;
     private String sucursal;
     private String imagen;
@@ -13,7 +13,7 @@ public class ConstructorFavoritos {
 
     public ConstructorFavoritos() {}
 
-    public int getCod_tienda() {
+    public String getCod_tienda() {
         return cod_tienda;
     }
 
@@ -45,7 +45,7 @@ public class ConstructorFavoritos {
         return longitud;
     }
 
-    public void setCod_tienda(int cod_tienda) {
+    public void setCod_tienda(String cod_tienda) {
         this.cod_tienda = cod_tienda;
     }
 
