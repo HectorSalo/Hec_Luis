@@ -317,6 +317,7 @@ public class ProductosActivity extends AppCompatActivity
                     adapterProductos.updateList(listProductos);
                     progress.dismiss();
                 } else {
+
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
                 }
             }
