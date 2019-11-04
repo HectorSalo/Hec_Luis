@@ -3,7 +3,6 @@ package com.example.hchirinos.elmejorprecio;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
 
 public class AdminSQLiteHelper extends SQLiteOpenHelper {
 
