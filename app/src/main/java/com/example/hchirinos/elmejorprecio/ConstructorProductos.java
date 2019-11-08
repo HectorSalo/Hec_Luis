@@ -6,74 +6,81 @@ import android.util.Base64;
 
 public class ConstructorProductos {
 
-    private String codigo_plu;
-    private String nombre_producto;
-    private String marca_producto;
-    private double precio_producto;
-    private String imagen_producto;
-    private int cantidad;
+    private String idProducto;
+    private String descripcionProducto;
+    private double precioProducto;
+    private String imagenProducto;
+    private int cantidadProducto;
+    private String vendedor;
+    private String unidadProducto;
 
 
     public ConstructorProductos() {}
 
-
-    public ConstructorProductos(String codigo_plu, String nombre_producto, String marca_producto, double precio_producto, String imagen_producto) {
-        this.nombre_producto = nombre_producto;
-        this.codigo_plu = codigo_plu;
-        this.marca_producto = marca_producto;
-        this.precio_producto = precio_producto;
-        this.imagen_producto = imagen_producto;
+    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto, String vendedor, String unidadProducto) {
+        this.idProducto = idProducto;
+        this.descripcionProducto = descripcionProducto;
+        this.precioProducto = precioProducto;
+        this.imagenProducto = imagenProducto;
+        this.cantidadProducto = cantidadProducto;
+        this.vendedor = vendedor;
+        this.unidadProducto = unidadProducto;
     }
 
-
-    public String getNombre_producto() {
-        return nombre_producto;
+    public String getIdProducto() {
+        return idProducto;
     }
 
-    public String getCodigo_plu() {
-        return codigo_plu;
+    public String getDescripcionProducto() {
+        return descripcionProducto;
     }
 
-    public String getMarca_producto() {
-        return marca_producto;
+    public double getPrecioProducto() {
+        return precioProducto;
     }
 
-    public double getPrecio_producto() {
-        return precio_producto;
+    public String getImagenProducto() {
+        return imagenProducto;
     }
 
-    public String getImagen_producto() {
-        return imagen_producto;
+    public int getCantidadProducto() {
+        return cantidadProducto;
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public String getVendedor() {
+        return vendedor;
     }
 
-    public void setNombre_producto(String nombre_producto) {
-        this.nombre_producto = nombre_producto;
+    public String getUnidadProducto() {
+        return unidadProducto;
     }
 
-    public void setMarca_producto(String marca_producto) {
-        this.marca_producto = marca_producto;
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
     }
 
-    public void setPrecio_producto(double precio_producto) {
-        this.precio_producto = precio_producto;
+    public void setDescripcionProducto(String descripcionProducto) {
+        this.descripcionProducto = descripcionProducto;
     }
 
-    public void setImagen_producto(String imagen_producto) {
-        this.imagen_producto = imagen_producto;
-
-
+    public void setPrecioProducto(double precioProducto) {
+        this.precioProducto = precioProducto;
     }
 
-    public void setCodigo_plu(String codigo_plu) {
-        this.codigo_plu = codigo_plu;
+    public void setImagenProducto(String imagenProducto) {
+        this.imagenProducto = imagenProducto;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setCantidadProducto(int cantidadProducto) {
+        this.cantidadProducto = cantidadProducto;
+    }
+
+    public void setVendedor(String vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public void setUnidadProducto(String unidadProducto) {
+        this.unidadProducto = unidadProducto;
     }
 }
 

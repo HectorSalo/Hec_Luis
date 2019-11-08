@@ -1,18 +1,22 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+
+import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,27 +53,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ProductosActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, Response.Listener<JSONObject>, Response.ErrorListener, SearchView.OnQueryTextListener, AdapterView.OnItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private Spinner spinner_ordenar;
     private TextView textSinConexion;
     private Button buttonRetry;
     private ImageView imageSinConexion;
     private ConnectivityManager conexion;
     private NetworkInfo networkInfo;
-    private ProgressDialog progress;
     private SwipeRefreshLayout swRefresh;
-
-
     private ArrayList<ConstructorProductos> listProductos;
     private RecyclerView recyclerProductos;
     private AdapterProductos adapterProductos;
-
-    private RequestQueue request;
-    private JsonObjectRequest jsonObjectRequest;
-
-    private FirebaseFirestore db;
-    private DocumentSnapshot lastDocument;
 
 
     @Override
@@ -89,14 +83,14 @@ public class ProductosActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        spinner_ordenar = (Spinner)findViewById(R.id.spinner_ordenar);
-        String [] opciones_ordenar = {"Ordenar", "Menor a mayor", "Mayor a menor", "A-Z"};
-        ArrayAdapter <String> adapter = new ArrayAdapter<String>(this, R.layout.personalizar_spinner_ordenar, opciones_ordenar);
-        spinner_ordenar.setAdapter(adapter);
-        spinner_ordenar.setOnItemSelectedListener(this);
+        recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        listProductos = new ArrayList<>();
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+        recyclerProductos.setAdapter(adapterProductos);
 
         swRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-
 
         textSinConexion = (TextView)findViewById(R.id.textSinConexion);
         buttonRetry = (Button)findViewById(R.id.buttonRetry);
@@ -114,22 +108,10 @@ public class ProductosActivity extends AppCompatActivity
             imageSinConexion.setVisibility(View.VISIBLE);
         }
 
-        db = FirebaseFirestore.getInstance();
-
-        listProductos = new ArrayList<>();
-        cargarFirestore();
-        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
-
-        recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
-        recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
-        recyclerProductos.setAdapter(adapterProductos);
-
-
         swRefresh.setOnRefreshListener(this);
-        progress = new ProgressDialog(ProductosActivity.this);
-        progress.setMessage("Cargando...");
-        progress.show();
+
+        cargarFirestore();
+
     }
 
 
@@ -149,7 +131,7 @@ public class ProductosActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.productos, menu);
-        MenuItem ir_list = menu.findItem(R.id.bar_lista);
+        MenuItem listOrdenar = menu.findItem(R.id.bar_ordenar);
         MenuItem menuItem = menu.findItem(R.id.bar_buscar);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setOnQueryTextListener(this);
@@ -169,9 +151,8 @@ public class ProductosActivity extends AppCompatActivity
             return true;
         }
 
-        if (id == R.id.bar_lista) {
-            Intent intent = new Intent(this, lista_compras.class);
-            startActivity(intent);
+        if (id == R.id.bar_ordenar) {
+            listOrdenar();
         }
 
         return super.onOptionsItemSelected(item);
@@ -184,8 +165,6 @@ public class ProductosActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_productos) {
-            Intent ir_productos = new Intent (this, ProductosActivity.class);
-            startActivity(ir_productos);
 
         } else if (id == R.id.nav_supermercados) {
             Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
@@ -212,70 +191,15 @@ public class ProductosActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public void onErrorResponse(VolleyError error) {
-
-    }
-
-    @Override
-    public void onResponse(JSONObject response) {
-
-    }
-
-    //spinner
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        String seleccion = spinner_ordenar.getSelectedItem().toString();
-
-        if (seleccion.equals("Menor a mayor")){
-
-            if (listProductos.isEmpty()) {
-                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
-
-            } else {
-                progress.setMessage("Cargando...");
-                progress.show();
-                sortListProductos_menor();
-            }
-
-        } else if (seleccion.equals("Mayor a menor")) {
-
-            if (listProductos.isEmpty()) {
-                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
-
-            } else {
-                progress.setMessage("Cargando...");
-                progress.show();
-                sortListProductos_mayor();
-            }
-
-        } else if (seleccion.equals("A-Z")){
-
-            if (listProductos.isEmpty()) {
-                Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
-
-            } else {
-                progress.setMessage("Cargando...");
-                progress.show();
-                sortlistProductos();
-            }
-
-        }
-
-
-    }
-
     // Ordenar lista
-    private void sortListProductos_mayor() {
+    private void ListProductosMayorPrecio() {
 
         listProductos = new ArrayList<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection("Productos");
+        CollectionReference reference = db.collection(VariablesEstaticas.BD_PRODUCTOS);
 
-        Query query = reference.orderBy("precio", Query.Direction.DESCENDING);
+        Query query = reference.orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.DESCENDING);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -283,16 +207,22 @@ public class ProductosActivity extends AppCompatActivity
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
-                        productos.setCodigo_plu(doc.getId());
-                        productos.setNombre_producto(doc.getString("descripcion"));
-                        productos.setMarca_producto(doc.getString("marca"));
-                        productos.setPrecio_producto(doc.getDouble("precio"));
-                        productos.setImagen_producto(doc.getString("imagen"));
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
                         listProductos.add(productos);
 
                     }
                     adapterProductos.updateList(listProductos);
-                    progress.dismiss();
+
                 } else {
 
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -301,14 +231,14 @@ public class ProductosActivity extends AppCompatActivity
         });
     }
 
-    private void sortListProductos_menor() {
+    private void ListProductosMenorPrecio() {
 
         listProductos = new ArrayList<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection("Productos");
+        CollectionReference reference = db.collection(VariablesEstaticas.BD_PRODUCTOS);
 
-        Query query = reference.orderBy("precio", Query.Direction.ASCENDING);
+        Query query = reference.orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -316,68 +246,37 @@ public class ProductosActivity extends AppCompatActivity
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
-                        productos.setCodigo_plu(doc.getId());
-                        productos.setNombre_producto(doc.getString("descripcion"));
-                        productos.setMarca_producto(doc.getString("marca"));
-                        productos.setPrecio_producto(doc.getDouble("precio"));
-                        productos.setImagen_producto(doc.getString("imagen"));
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
                         listProductos.add(productos);
 
                     }
                     adapterProductos.updateList(listProductos);
-                    progress.dismiss();
+
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
-
-    private void sortlistProductos() {
-        listProductos = new ArrayList<>();
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection("Productos");
-
-        Query query = reference.orderBy("descripcion", Query.Direction.ASCENDING);
-
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                        ConstructorProductos productos = new ConstructorProductos();
-                        productos.setCodigo_plu(doc.getId());
-                        productos.setNombre_producto(doc.getString("descripcion"));
-                        productos.setMarca_producto(doc.getString("marca"));
-                        productos.setPrecio_producto(doc.getDouble("precio"));
-                        productos.setImagen_producto(doc.getString("imagen"));
-                        listProductos.add(productos);
-
-                    }
-                    adapterProductos.updateList(listProductos);
-                    progress.dismiss();
-                } else {
-                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
 
 
     private void cargarFirestore () {
         listProductos = new ArrayList<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection("Productos");
+        CollectionReference reference = db.collection(VariablesEstaticas.BD_PRODUCTOS);
 
-        Query query = reference.orderBy("precio", Query.Direction.ASCENDING);
+        Query query = reference.orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -385,16 +284,22 @@ public class ProductosActivity extends AppCompatActivity
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
-                        productos.setCodigo_plu(doc.getId());
-                        productos.setNombre_producto(doc.getString("descripcion"));
-                        productos.setMarca_producto(doc.getString("marca"));
-                        productos.setPrecio_producto(doc.getDouble("precio"));
-                        productos.setImagen_producto(doc.getString("imagen"));
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
                         listProductos.add(productos);
 
                     }
                     adapterProductos.updateList(listProductos);
-                    progress.dismiss();
+
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
                 }
@@ -429,7 +334,7 @@ public class ProductosActivity extends AppCompatActivity
 
             for (ConstructorProductos name : listProductos) {
 
-                if (name.getNombre_producto().toLowerCase().contains(userInput) || name.getMarca_producto().toLowerCase().contains(userInput)) {
+                if (name.getDescripcionProducto().toLowerCase().contains(userInput)) {
 
                     newList.add(name);
                 }
@@ -439,5 +344,25 @@ public class ProductosActivity extends AppCompatActivity
 
         }
         return false;
+    }
+
+    public void listOrdenar() {
+        final CharSequence [] opciones = {"Mayor precio", "Menor precio", "Cancelar"};
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Ordenar Lista: ");
+        dialog.setItems(opciones, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (opciones[which].equals("Mayor precio")) {
+
+                } else if (opciones[which].equals("Menor precio")) {
+
+                } else if (opciones[which].equals("Cancelar")){
+                    dialog.dismiss();
+                }
+            }
+
+        });
+        dialog.show();
     }
 }

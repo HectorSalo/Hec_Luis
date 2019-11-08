@@ -10,7 +10,9 @@
         app:actionViewClass="android.widget.SearchView" />
 
     <item
-        android:id="@+id/bar_lista"
-        android:title="@string/go_list"
+        android:id="@+id/bar_ordenar"
+        android:title="@string/txt_ordenar"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_ordenar"
         />
 </menu>

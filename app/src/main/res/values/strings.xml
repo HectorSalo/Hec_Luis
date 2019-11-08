@@ -25,7 +25,6 @@
     <string name="producto_menu_compras">Agregar a Compras</string>
     <string name="producto_menu_detalles">Ver Detalles</string>
     <string name="delete_menu_favorito">Quitar de Favoritos</string>
-    <string name="go_list">Ir Lista de Compras</string>
     <string name="go_PLU">Ir a Productos</string>
     <string name="go_favoritas">Ir Tiendas Favoritas</string>
     <string name="go_tiendas">Ir a Tiendas</string>
@@ -35,7 +34,7 @@
     //lista de compras
     <string name="txt_total">Total gastos:</string>
     <string name="txt_monto">0.00</string>
-    <string name="checkbox"></string>
+    <string name="checkbox"> </string>
 
 
     //generales

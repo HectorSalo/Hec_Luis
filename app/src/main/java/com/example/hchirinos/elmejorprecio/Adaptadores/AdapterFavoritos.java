@@ -1,4 +1,4 @@
-package com.example.hchirinos.elmejorprecio;
+package com.example.hchirinos.elmejorprecio.Adaptadores;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,6 +18,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.example.hchirinos.elmejorprecio.AdminSQLiteHelper;
+import com.example.hchirinos.elmejorprecio.ConstructorFavoritos;
+import com.example.hchirinos.elmejorprecio.R;
+import com.example.hchirinos.elmejorprecio.VistaGridList;
 
 import java.util.ArrayList;
 

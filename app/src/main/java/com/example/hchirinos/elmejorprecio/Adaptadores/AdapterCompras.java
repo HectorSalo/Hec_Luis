@@ -1,4 +1,4 @@
-package com.example.hchirinos.elmejorprecio;
+package com.example.hchirinos.elmejorprecio.Adaptadores;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,6 +21,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.hchirinos.elmejorprecio.AdminSQLiteHelper;
+import com.example.hchirinos.elmejorprecio.ConstructorCompras;
+import com.example.hchirinos.elmejorprecio.R;
 
 import org.json.JSONObject;
 
