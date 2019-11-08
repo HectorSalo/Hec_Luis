@@ -88,7 +88,7 @@ public class PLUActivity extends AppCompatActivity
             startActivity(ir_productos);
 
         } else if (id == R.id.nav_supermercados) {
-            Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
+            Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {

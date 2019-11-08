@@ -37,7 +37,7 @@
             android:label="@string/title_activity_productos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SupermercadoActivity"
+            android:name=".VendedoresActivity"
             android:label="@string/title_activity_supermercado"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -64,7 +64,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -2,7 +2,7 @@
     <string name="app_name">El Mejor Precio</string>
 
     //activity_content_home
-    <string name="txt_Favoritos">Tiendas favoritas</string>
+    <string name="tvCambioPrecio">Cambiaron de precio</string>
     <string name="txt_recientes">Agregados Recientemente</string>
     <string name="button_PLU_inicio">Buscar Productos</string>
     <string name="button_maps_encontrar">Tiendas cercanas</string>
@@ -10,9 +10,9 @@
     //activity_home_drawer
     <string name="navigation_drawer_inicio">Inicio</string>
     <string name="navigation_drawer_PLU">Productos</string>
-    <string name="navigation_drawer_SUP">Tiendas</string>
+    <string name="navigation_drawer_SUP">Vendedores</string>
     <string name="navigation_drawer_subtitle">Personal</string>
-    <string name="navigation_drawer_favoritos">Tiendas Favoritas</string>
+    <string name="navigation_drawer_favoritos">Favoritos</string>
     <string name="navigation_drawer_listacompras">Mi Lista de Compras</string>
     <string name="navigation_drawer_subtitle2">Extras</string>
     <string name="navigation_drawer_configuracion">Configuracion</string>
@@ -46,13 +46,11 @@
     <string name="title_activity_plu">Buscar</string>
     <string name="title_activity_productos">Productos</string>
     <string name="title_activity_super">Buscar</string>
-    <string name="title_activity_supermercado">Tiendas</string>
+    <string name="title_activity_supermercado">Vendedores</string>
     <string name="title_activity_maps_buscar">Map</string>
     <string name="title_activity_lista_compras">Mi Lista de Compras</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_tiendas_favoritas">Tiendas Favoritas</string>
-    <string name="button_retry">Reintentar</string>
-    <string name="txt_sinConexion">Sin conexion a Internet</string>
 
 
 </resources>

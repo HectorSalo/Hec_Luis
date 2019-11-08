@@ -81,9 +81,7 @@ public class TiendasFavoritasActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
-        buttonRetry = (Button)findViewById(R.id.buttonRetry);
-        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
+
         conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
 
@@ -202,7 +200,7 @@ public class TiendasFavoritasActivity extends AppCompatActivity
             }
             return true;
         } else if (id == R.id.bar_favoritas) {
-            Intent myIntent = new Intent(this, SupermercadoActivity.class);
+            Intent myIntent = new Intent(this, VendedoresActivity.class);
             startActivity(myIntent);
         }
 
@@ -221,7 +219,7 @@ public class TiendasFavoritasActivity extends AppCompatActivity
             startActivity(ir_productos);
 
         } else if (id == R.id.nav_supermercados) {
-            Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
+            Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {

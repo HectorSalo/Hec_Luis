@@ -1,8 +1,10 @@
-package com.example.hchirinos.elmejorprecio;
+package com.example.hchirinos.elmejorprecio.Constructores;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+
+import java.util.Date;
 
 public class ConstructorProductos {
 
@@ -13,11 +15,12 @@ public class ConstructorProductos {
     private int cantidadProducto;
     private String vendedor;
     private String unidadProducto;
+    private Date fechaIngreso;
 
 
     public ConstructorProductos() {}
 
-    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto, String vendedor, String unidadProducto) {
+    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto, String vendedor, String unidadProducto, Date fechaIngreso) {
         this.idProducto = idProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioProducto = precioProducto;
@@ -25,6 +28,7 @@ public class ConstructorProductos {
         this.cantidadProducto = cantidadProducto;
         this.vendedor = vendedor;
         this.unidadProducto = unidadProducto;
+        this.fechaIngreso = fechaIngreso;
     }
 
     public String getIdProducto() {
@@ -55,6 +59,10 @@ public class ConstructorProductos {
         return unidadProducto;
     }
 
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
     public void setIdProducto(String idProducto) {
         this.idProducto = idProducto;
     }
@@ -81,6 +89,10 @@ public class ConstructorProductos {
 
     public void setUnidadProducto(String unidadProducto) {
         this.unidadProducto = unidadProducto;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 }
 

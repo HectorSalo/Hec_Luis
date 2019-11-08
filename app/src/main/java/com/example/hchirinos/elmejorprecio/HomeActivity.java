@@ -6,14 +6,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.SearchView;
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -24,13 +28,8 @@ import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    TextView textSinConexion;
-    Button buttonRetry;
-    ImageView imageSinConexion;
-    ConnectivityManager conexion;
-    NetworkInfo networkInfo;
-    ImageButton imageButton;
-    LinearLayout layoutButton, layoutRecientes;
+    private NetworkInfo networkInfo;
+    private RecyclerView recyclerRecientes, recyclerCambioPrecio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,25 +48,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        layoutButton = (LinearLayout)findViewById(R.id.linearLayoutButton);
-        layoutRecientes = (LinearLayout)findViewById(R.id.linearLayoutRecientes);
+        recyclerCambioPrecio = findViewById(R.id.recyclerViewCambioPrecio);
+        recyclerRecientes = findViewById(R.id.recyclerViewRecientes);
 
-        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
-        buttonRetry = (Button)findViewById(R.id.buttonRetry);
-        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
-        conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = conexion.getActiveNetworkInfo();
+        ConstraintLayout constraintLayout = findViewById(R.id.constraintHome);
+
+        ConnectivityManager conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conexion != null) {
+            networkInfo = conexion.getActiveNetworkInfo();
+        }
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            textSinConexion.setVisibility(View.INVISIBLE);
-            buttonRetry.setVisibility(View.INVISIBLE);
-            imageSinConexion.setVisibility(View.INVISIBLE);
+
         } else {
-            textSinConexion.setVisibility(View.VISIBLE);
-            buttonRetry.setVisibility(View.VISIBLE);
-            imageSinConexion.setVisibility(View.VISIBLE);
-            layoutButton.setVisibility(View.INVISIBLE);
-            layoutRecientes.setVisibility(View.INVISIBLE);
+            Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recreate();
+                }
+            });
+            snackbar.show();
 
         }
 
@@ -118,7 +118,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(ir_productos);
 
         } else if (id == R.id.nav_supermercados) {
-            Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
+            Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
@@ -132,32 +132,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_configuracion){
 
         } else if (id == R.id.nav_inicio) {
-            Intent ir_inicio = new Intent(this, HomeActivity.class);
-            startActivity(ir_inicio);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    //Metodo Buscar Productos
-    public void Ir_PLU (View view) {
-        Intent ir_plu = new Intent(this, PLUActivity.class);
-        startActivity(ir_plu);
-    }
-
-    //Metodo Buscar en el Mapa
-    public void Ir_maps_encontrar (View view){
-        Intent myIntent = new Intent(this, Maps_buscar.class);
-        Bundle miBundle = new Bundle();
-        miBundle.putString("inicio", "1");
-        myIntent.putExtras(miBundle);
-        startActivity(myIntent);
-}
-
-    public void setButtonRetry (View view){
-        this.recreate();
     }
 
 

@@ -1,7 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
@@ -25,45 +26,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class ProductosActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private TextView textSinConexion;
-    private Button buttonRetry;
-    private ImageView imageSinConexion;
-    private ConnectivityManager conexion;
     private NetworkInfo networkInfo;
     private SwipeRefreshLayout swRefresh;
     private ArrayList<ConstructorProductos> listProductos;
     private RecyclerView recyclerProductos;
     private AdapterProductos adapterProductos;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -83,6 +70,9 @@ public class ProductosActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        ConstraintLayout constraintLayout = findViewById(R.id.layoutProductos);
+        progressBar = findViewById(R.id.progressBarProductos);
+
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
         recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
@@ -92,25 +82,26 @@ public class ProductosActivity extends AppCompatActivity
 
         swRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
 
-        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
-        buttonRetry = (Button)findViewById(R.id.buttonRetry);
-        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
-        conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = conexion.getActiveNetworkInfo();
+        ConnectivityManager conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conexion != null) {
+            networkInfo = conexion.getActiveNetworkInfo();
+        }
+
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            textSinConexion.setVisibility(View.INVISIBLE);
-            buttonRetry.setVisibility(View.INVISIBLE);
-            imageSinConexion.setVisibility(View.INVISIBLE);
+            cargarFirestore();
         } else {
-            textSinConexion.setVisibility(View.VISIBLE);
-            buttonRetry.setVisibility(View.VISIBLE);
-            imageSinConexion.setVisibility(View.VISIBLE);
+            Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recreate();
+                }
+            });
+            snackbar.show();
+            cargarFirestore();
         }
 
         swRefresh.setOnRefreshListener(this);
-
-        cargarFirestore();
 
     }
 
@@ -122,7 +113,7 @@ public class ProductosActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            startActivity(new Intent(this, HomeActivity.class));
         }
     }
 
@@ -167,7 +158,7 @@ public class ProductosActivity extends AppCompatActivity
         if (id == R.id.nav_productos) {
 
         } else if (id == R.id.nav_supermercados) {
-            Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
+            Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
@@ -195,6 +186,10 @@ public class ProductosActivity extends AppCompatActivity
     private void ListProductosMayorPrecio() {
 
         listProductos = new ArrayList<>();
+
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference reference = db.collection(VariablesEstaticas.BD_PRODUCTOS);
@@ -272,9 +267,13 @@ public class ProductosActivity extends AppCompatActivity
 
     private void cargarFirestore () {
         listProductos = new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection(VariablesEstaticas.BD_PRODUCTOS);
+        CollectionReference reference = db.collection(VariablesEstaticas.BD_VENDEDORES).document().collection(VariablesEstaticas.BD_PRODUCTOS);
 
         Query query = reference.orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING);
 
@@ -299,18 +298,15 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
-
+                    progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
 
 
-    }
-
-    public void setButtonRetry (View view){
-        this.recreate();
     }
 
     @Override
@@ -347,16 +343,16 @@ public class ProductosActivity extends AppCompatActivity
     }
 
     public void listOrdenar() {
-        final CharSequence [] opciones = {"Mayor precio", "Menor precio", "Cancelar"};
+        final CharSequence [] opciones = {"Mayor precio", "Menor precio", "Más recientes", "Más antiguos", "Cancelar"};
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Ordenar Lista: ");
         dialog.setItems(opciones, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (opciones[which].equals("Mayor precio")) {
-
+                    ListProductosMayorPrecio();
                 } else if (opciones[which].equals("Menor precio")) {
-
+                    ListProductosMenorPrecio();
                 } else if (opciones[which].equals("Cancelar")){
                     dialog.dismiss();
                 }

@@ -1,29 +1,19 @@
 package com.example.hchirinos.elmejorprecio.Adaptadores;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.NonNull;
 
-import com.example.hchirinos.elmejorprecio.AdminSQLiteHelper;
-import com.example.hchirinos.elmejorprecio.ConstructorProductos;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.R;
-import com.example.hchirinos.elmejorprecio.lista_compras;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

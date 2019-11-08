@@ -86,22 +86,16 @@ public class lista_compras extends AppCompatActivity
         textView_total_compras = (TextView)findViewById(R.id.textView_total_compras);
         btMas = (ImageButton)findViewById(R.id.btMas);
 
-        textSinConexion = (TextView)findViewById(R.id.textSinConexion);
-        buttonRetry = (Button)findViewById(R.id.buttonRetry);
-        imageSinConexion = (ImageView)findViewById(R.id.imageSinConexion);
+
         conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
 
         conect = new AdminSQLiteHelper(this, "MyList", null, AdminSQLiteHelper.VERSION);
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            textSinConexion.setVisibility(View.INVISIBLE);
-            buttonRetry.setVisibility(View.INVISIBLE);
-            imageSinConexion.setVisibility(View.INVISIBLE);
+
         } else {
-            textSinConexion.setVisibility(View.VISIBLE);
-            buttonRetry.setVisibility(View.VISIBLE);
-            imageSinConexion.setVisibility(View.VISIBLE);
+
         }
         LinearLayoutManager llM = new LinearLayoutManager(this.getApplicationContext());
         recyclerCompras = (RecyclerView)findViewById(R.id.recyclerView_listcompras);
@@ -211,7 +205,7 @@ public class lista_compras extends AppCompatActivity
             startActivity(ir_productos);
 
         } else if (id == R.id.nav_supermercados) {
-            Intent ir_supermercado = new Intent(this, SupermercadoActivity.class);
+            Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {

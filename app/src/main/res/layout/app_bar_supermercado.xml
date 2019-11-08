@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SupermercadoActivity">
+    tools:context=".VendedoresActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <include layout="@layout/content_supermercado" />
+    <include layout="@layout/content_vendedores" />
 
     <!-- Botones flotantes
     <android.support.design.widget.FloatingActionButton
