@@ -7,14 +7,19 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
+import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterVendedores;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -30,6 +35,9 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -97,10 +105,37 @@ public class VendedoresActivity extends AppCompatActivity
 
     private void cargarFirestore() {
         listVendedores = new ArrayList<>();
-        //progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        adapterVendedores = new AdapterVendedores(listVendedores, this);
+        recyclerVendedores.setHasFixedSize(true);
+        recyclerVendedores.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerVendedores.setAdapter(adapterVendedores);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection(VariablesEstaticas.BD_VENDEDORES);
+
+        db.collectionGroup(VariablesEstaticas.BD_DETALLES_VENDEDOR).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorVendedores vendedor = new ConstructorVendedores();
+                        vendedor.setIdVendedor(doc.getId());
+                        vendedor.setNombreVendedor(doc.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR));
+                        vendedor.setCorreoVendedor(doc.getString(VariablesEstaticas.BD_CORREO_VENDEDOR));
+                        vendedor.setTelefonoVendedor(doc.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR));
+                        vendedor.setImagen(doc.getString(VariablesEstaticas.BD_IMAGEN_VENDEDOR));
+
+                        listVendedores.add(vendedor);
+
+                    }
+                    adapterVendedores.updateList(listVendedores);
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(VendedoresActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
 
     }
 

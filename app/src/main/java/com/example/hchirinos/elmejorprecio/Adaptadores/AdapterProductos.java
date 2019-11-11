@@ -8,11 +8,16 @@ import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.R;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 
@@ -42,8 +47,9 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolderProductos viewHolderProductos, final int i) {
+    public void onBindViewHolder(@NonNull final ViewHolderProductos viewHolderProductos, int i) {
 
+        final int position = i;
 
         //Comunica el adaptador con la clase ViewHolderProductos
         viewHolderProductos.textView_nombre_producto.setText(listProductos.get(i).getDescripcionProducto());
@@ -54,6 +60,28 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
            Glide.with(mContext).load(listProductos.get(i).getImagenProducto()).into(viewHolderProductos.imageView_producto);
 
         }
+
+        viewHolderProductos.imageButtonCompartir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selection = listProductos.get(position).getDescripcionProducto() + "\n$" + listProductos.get(position).getPrecioProducto() + "\nVende: " + listProductos.get(position).getVendedor();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, selection);
+                mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
+            }
+        });
+
+        viewHolderProductos.toggleButtonFavorito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewHolderProductos.toggleButtonFavorito.isChecked()) {
+                    Toast.makeText(mContext, "Agregado a Favoritos", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "Quitado de Favoritos", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -73,7 +101,8 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         TextView textView_nombre_producto;
         TextView textView_precio_producto;
         ImageView imageView_producto;
-
+        ImageButton imageButtonCompartir;
+        ToggleButton toggleButtonFavorito;
 
 
         public ViewHolderProductos(@NonNull View itemView) {
@@ -82,6 +111,8 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             textView_nombre_producto = itemView.findViewById(R.id.tvDescripcionProducto);
             textView_precio_producto = itemView.findViewById(R.id.textView_precio_producto);
             imageView_producto = itemView.findViewById(R.id.imageView_producto);
+            imageButtonCompartir = itemView.findViewById(R.id.imageButtonCompartir);
+            toggleButtonFavorito = itemView.findViewById(R.id.toggleButtonFavoritos);
 
         }
     }

@@ -9,9 +9,12 @@ import com.example.hchirinos.elmejorprecio.R;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.drm.DrmStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +43,7 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderTiendas viewHolderTiendas, final int i) {
 
+
         viewHolderTiendas.textViewNombreVendedor.setText(listVendedores.get(i).getNombreVendedor());
 
         if (listVendedores.get(i).getImagen()!=null) {
@@ -47,6 +51,7 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
             Glide.with(mContext).load(listVendedores.get(i).getImagen()).into(viewHolderTiendas.imageViewImagenVendedor);
 
         }
+
 
     }
 
@@ -61,6 +66,7 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
 
         TextView textViewNombreVendedor;
         ImageView imageViewImagenVendedor;
+
 
         public ViewHolderTiendas(@NonNull View itemView) {
             super(itemView);

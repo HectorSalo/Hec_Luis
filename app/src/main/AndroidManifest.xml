@@ -29,7 +29,7 @@
                 android:value=".HomeActivity" />
         </activity>
         <activity
-            android:name=".PLUActivity"
+            android:name=".InfoActivity"
             android:label="@string/title_activity_plu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

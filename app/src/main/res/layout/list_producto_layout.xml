@@ -45,20 +45,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
 
-                    <ImageButton
-                        android:id="@+id/imageButtonFavorito"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/googleg_standard_color_18" />
+                    <ToggleButton
+                        android:id="@+id/toggleButtonFavoritos"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/selector_favorito"
+                        android:textOff=""
+                        android:textOn="" />
 
                     <ImageButton
                         android:id="@+id/imageButtonCompartir"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:background="#fff"
                         app:srcCompat="@drawable/ic_menu_share" />
 
                     <ImageButton

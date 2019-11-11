@@ -186,17 +186,15 @@ public class ProductosActivity extends AppCompatActivity
     private void ListProductosMayorPrecio() {
 
         listProductos = new ArrayList<>();
-
+        progressBar.setVisibility(View.VISIBLE);
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
         recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
-        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+        recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection(VariablesEstaticas.BD_PRODUCTOS);
 
-        Query query = reference.orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.DESCENDING);
-
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.DESCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -217,10 +215,10 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
-
+                    progressBar.setVisibility(View.GONE);
                 } else {
-
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -229,13 +227,15 @@ public class ProductosActivity extends AppCompatActivity
     private void ListProductosMenorPrecio() {
 
         listProductos = new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection(VariablesEstaticas.BD_PRODUCTOS);
 
-        Query query = reference.orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING);
-
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -256,9 +256,90 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
-
+                    progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public void ListProductosMasRecientes() {
+        listProductos = new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setAdapter(adapterProductos);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.ASCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
+                        listProductos.add(productos);
+
+                    }
+                    adapterProductos.updateList(listProductos);
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public void ListProductosMasViejos() {
+        listProductos = new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setAdapter(adapterProductos);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.DESCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
+                        listProductos.add(productos);
+
+                    }
+                    adapterProductos.updateList(listProductos);
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -268,16 +349,14 @@ public class ProductosActivity extends AppCompatActivity
     private void cargarFirestore () {
         listProductos = new ArrayList<>();
         progressBar.setVisibility(View.VISIBLE);
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
         recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
-        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+        recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference reference = db.collection(VariablesEstaticas.BD_VENDEDORES).document().collection(VariablesEstaticas.BD_PRODUCTOS);
 
-        Query query = reference.orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING);
-
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -353,6 +432,10 @@ public class ProductosActivity extends AppCompatActivity
                     ListProductosMayorPrecio();
                 } else if (opciones[which].equals("Menor precio")) {
                     ListProductosMenorPrecio();
+                } else if (opciones[which].equals("Más recientes")) {
+                    ListProductosMasRecientes();
+                } else if (opciones[which].equals("Más antiguos")) {
+                    ListProductosMasViejos();
                 } else if (opciones[which].equals("Cancelar")){
                     dialog.dismiss();
                 }
