@@ -8,15 +8,15 @@
 
         <item
             android:id="@+id/nav_inicio"
-            android:icon="@drawable/inicio"
+            android:icon="@drawable/ic_home"
             android:title="@string/navigation_drawer_inicio" />
         <item
             android:id="@+id/nav_productos"
-            android:icon="@drawable/productos"
+            android:icon="@drawable/ic_productos"
             android:title="@string/navigation_drawer_PLU" />
         <item
             android:id="@+id/nav_supermercados"
-            android:icon="@drawable/tienda3"
+            android:icon="@drawable/ic_vendedor"
             android:title="@string/navigation_drawer_SUP" />
     </group>
 
@@ -24,12 +24,9 @@
         <menu>
             <item
                 android:id="@+id/nav_favorito"
-                android:icon="@android:drawable/btn_star_big_on"
+                android:icon="@drawable/ic_favoritos"
                 android:title="@string/navigation_drawer_favoritos" />
-            <item
-                android:id="@+id/nav_listacompras"
-                android:icon="@drawable/lista_compras"
-                android:title="@string/navigation_drawer_listacompras" />
+
         </menu>
     </item>
 

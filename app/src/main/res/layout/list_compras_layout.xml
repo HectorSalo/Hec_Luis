@@ -88,7 +88,7 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_mas"
+
                 tools:ignore="VectorDrawableCompat" />
 
             <ImageButton
@@ -97,7 +97,7 @@
                 android:layout_height="45dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_menos"
+
                 tools:ignore="VectorDrawableCompat" />
 
 
@@ -112,7 +112,7 @@
             android:layout_marginStart="15dp"
             android:buttonTint="@color/ic_launcher_background"
             android:paddingBottom="5dp"
-            android:text="@string/checkbox"
+            android:text="text"
             android:textColorLink="@color/ic_launcher_background"
             android:visibility="visible" />
 

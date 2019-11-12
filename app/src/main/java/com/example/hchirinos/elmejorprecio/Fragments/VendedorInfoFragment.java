@@ -17,12 +17,12 @@ import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProductoInfoFragment.OnFragmentInteractionListener} interface
+ * {@link VendedorInfoFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ProductoInfoFragment#newInstance} factory method to
+ * Use the {@link VendedorInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductoInfoFragment extends Fragment {
+public class VendedorInfoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +34,7 @@ public class ProductoInfoFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public ProductoInfoFragment() {
+    public VendedorInfoFragment() {
         // Required empty public constructor
     }
 
@@ -44,11 +44,11 @@ public class ProductoInfoFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProductoInfoFragment.
+     * @return A new instance of fragment VendedorInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProductoInfoFragment newInstance(String param1, String param2) {
-        ProductoInfoFragment fragment = new ProductoInfoFragment();
+    public static VendedorInfoFragment newInstance(String param1, String param2) {
+        VendedorInfoFragment fragment = new VendedorInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,14 +68,15 @@ public class ProductoInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View vista = inflater.inflate(R.layout.fragment_producto_info, container, false);
-        TextView tvDescripcion = vista.findViewById(R.id.tvInfoProductoDescripcion);
-        TextView tvCantidades = vista.findViewById(R.id.tvInfoProductoCantidad);
-        TextView tvVendedor = vista.findViewById(R.id.tvInfoProductoVenddor);
+        View vista = inflater.inflate(R.layout.fragment_vendedor_info, container, false);
+        TextView tvNombre = vista.findViewById(R.id.tvInfoVendedorNombre);
+        TextView tvTelefono = vista.findViewById(R.id.tvInfoVendedorTelefono);
+        TextView tvCorreo = vista.findViewById(R.id.tvInfoVendedorCorreo);
 
-        tvDescripcion.setText(VariablesGenerales.descripcionInfoProducto);
-        tvCantidades.setText(VariablesGenerales.cantidadesInfoProducto);
-        tvVendedor.setText(VariablesGenerales.vendedorInfoProducto);
+        tvNombre.setText(VariablesGenerales.nombreInfoVendedor);
+        tvTelefono.setText(VariablesGenerales.telefonoInfoVendedor);
+        tvCorreo.setText(VariablesGenerales.correoInfoVendedor);
+
         return vista;
     }
 

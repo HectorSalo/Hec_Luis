@@ -6,36 +6,51 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
-import android.view.View;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import android.view.View;
+
+import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterFavoritos;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorFavoritos;
+import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+
+public class FavoritosActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     private NetworkInfo networkInfo;
-    private RecyclerView recyclerRecientes, recyclerCambioPrecio;
+    private ArrayList<ConstructorFavoritos> listFavoritos;
+    private RecyclerView recyclerFavoritos;
+    private AdapterFavoritos adapterFavoritos;
+    private ProgressBar progressBar;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_tiendas_favoritas);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -43,18 +58,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        recyclerCambioPrecio = findViewById(R.id.recyclerViewCambioPrecio);
-        recyclerRecientes = findViewById(R.id.recyclerViewRecientes);
+        ConstraintLayout constraintLayout = findViewById(R.id.constraintFavoritos);
+        listFavoritos = new ArrayList<>();
+        recyclerFavoritos = (RecyclerView)findViewById(R.id.recyclerFavoritos);
+        recyclerFavoritos.setHasFixedSize(true);
+        recyclerFavoritos.setLayoutManager(new GridLayoutManager(this, 2));
+        adapterFavoritos = new AdapterFavoritos(listFavoritos, this);
+        recyclerFavoritos.setAdapter(adapterFavoritos);
+        progressBar = findViewById(R.id.progressBarFavoritos);
 
-        ConstraintLayout constraintLayout = findViewById(R.id.constraintHome);
 
         ConnectivityManager conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (conexion != null) {
-            networkInfo = conexion.getActiveNetworkInfo();
-        }
+        networkInfo = conexion.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-
+            cargarFavoritos();
         } else {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
                 @Override
@@ -63,10 +81,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
             snackbar.show();
-
+            cargarFavoritos();
         }
 
+
     }
+
+    private void cargarFavoritos() {
+
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -74,16 +99,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            startActivity(new Intent(this, HomeActivity.class));
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.favoritos, menu);
+        MenuItem menuItem = menu.findItem(R.id.bar_buscar);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
         return true;
-
     }
 
     @Override
@@ -94,11 +121,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.bar_buscar) {
+        if (id == R.id.bar_buscar) {
             return true;
-
-            }*/
-
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -109,6 +134,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_productos) {
+            // Handle the camera action
             Intent ir_productos = new Intent (this, ProductosActivity.class);
             startActivity(ir_productos);
 
@@ -123,7 +149,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_configuracion){
 
         } else if (id == R.id.nav_inicio) {
-
+            Intent ir_inicio = new Intent(this, HomeActivity.class);
+            startActivity(ir_inicio);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -132,4 +159,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
 }

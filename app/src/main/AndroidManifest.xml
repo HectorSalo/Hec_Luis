@@ -30,8 +30,8 @@
         </activity>
         <activity
             android:name=".InfoActivity"
-            android:label="@string/title_activity_plu"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/producto_menu_detalles"
+            android:theme="@style/Theme.AppCompat.DialogWhenLarge" />
         <activity
             android:name=".ProductosActivity"
             android:label="@string/title_activity_productos"
@@ -72,8 +72,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TiendasFavoritasActivity"
-            android:label="@string/title_activity_tiendas_favoritas"
+            android:name=".FavoritosActivity"
+            android:label="@string/title_activity_favoritos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

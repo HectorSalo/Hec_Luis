@@ -209,12 +209,8 @@ public class lista_compras extends AppCompatActivity
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
-            Intent irFavoritos = new Intent(this, TiendasFavoritasActivity.class);
+            Intent irFavoritos = new Intent(this, FavoritosActivity.class);
             startActivity(irFavoritos);
-
-        } else if (id == R.id.nav_listacompras) {
-            Intent ir_lista_compras = new Intent(this, lista_compras.class);
-            startActivity(ir_lista_compras);
 
         } else if (id == R.id.nav_configuracion){
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
+import com.example.hchirinos.elmejorprecio.InfoActivity;
 import com.example.hchirinos.elmejorprecio.R;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 
 import java.util.ArrayList;
 
@@ -83,6 +85,18 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             }
         });
 
+        viewHolderProductos.imageButtonInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VariablesGenerales.descripcionInfoProducto = listProductos.get(position).getDescripcionProducto();
+                VariablesGenerales.cantidadesInfoProducto = listProductos.get(position).getCantidadProducto() + " " + listProductos.get(position).getUnidadProducto();
+                VariablesGenerales.vendedorInfoProducto = listProductos.get(position).getVendedor();
+                VariablesGenerales.infoProducto = true;
+                VariablesGenerales.infoVendedor = false;
+                mContext.startActivity(new Intent(mContext, InfoActivity.class));
+            }
+        });
+
     }
 
 
@@ -101,7 +115,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         TextView textView_nombre_producto;
         TextView textView_precio_producto;
         ImageView imageView_producto;
-        ImageButton imageButtonCompartir;
+        ImageButton imageButtonCompartir, imageButtonInfo;
         ToggleButton toggleButtonFavorito;
 
 
@@ -113,6 +127,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             imageView_producto = itemView.findViewById(R.id.imageView_producto);
             imageButtonCompartir = itemView.findViewById(R.id.imageButtonCompartir);
             toggleButtonFavorito = itemView.findViewById(R.id.toggleButtonFavoritos);
+            imageButtonInfo = itemView.findViewById(R.id.imageButtonInfoProducto);
 
         }
     }

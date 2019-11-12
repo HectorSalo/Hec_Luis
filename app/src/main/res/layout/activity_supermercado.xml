@@ -20,6 +20,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_supermercado"
-        app:menu="@menu/activity_supermercado_drawer" />
+        app:menu="@menu/activity_vendedores_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

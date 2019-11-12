@@ -13,11 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
-import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterVendedores;
-import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -33,9 +32,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -101,6 +98,18 @@ public class VendedoresActivity extends AppCompatActivity
 
         swRefresh.setOnRefreshListener(this);
 
+        adapterVendedores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VariablesGenerales.nombreInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
+                VariablesGenerales.telefonoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
+                VariablesGenerales.correoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
+                VariablesGenerales.infoProducto = false;
+                VariablesGenerales.infoVendedor = true;
+                startActivity(new Intent(VendedoresActivity.this, InfoActivity.class));
+            }
+        });
+
     }
 
     private void cargarFirestore() {
@@ -153,7 +162,7 @@ public class VendedoresActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.supermercado, menu);
+        getMenuInflater().inflate(R.menu.vendedores, menu);
         MenuItem menuItem = menu.findItem(R.id.bar_buscar);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setOnQueryTextListener(this);
@@ -170,11 +179,7 @@ public class VendedoresActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.bar_buscar) {
             return true;
-        } else if (id == R.id.bar_Tienda) {
-            Intent myIntent = new Intent(this, TiendasFavoritasActivity.class);
-            startActivity(myIntent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -191,12 +196,8 @@ public class VendedoresActivity extends AppCompatActivity
         } else if (id == R.id.nav_supermercados) {
 
         } else if (id == R.id.nav_favorito) {
-            Intent irFavoritos = new Intent(this, TiendasFavoritasActivity.class);
+            Intent irFavoritos = new Intent(this, FavoritosActivity.class);
             startActivity(irFavoritos);
-
-        } else if (id == R.id.nav_listacompras) {
-            Intent ir_lista_compras = new Intent(this, lista_compras.class);
-            startActivity(ir_lista_compras);
 
         } else if (id == R.id.nav_configuracion){
 
@@ -243,5 +244,7 @@ public class VendedoresActivity extends AppCompatActivity
         cargarFirestore();
         swRefresh.setRefreshing(false);
     }
+
+
 }
 

@@ -4,8 +4,6 @@
     //activity_content_home
     <string name="tvCambioPrecio">Cambiaron de precio</string>
     <string name="txt_recientes">Agregados Recientemente</string>
-    <string name="button_PLU_inicio">Buscar Productos</string>
-    <string name="button_maps_encontrar">Tiendas cercanas</string>
 
     //activity_home_drawer
     <string name="navigation_drawer_inicio">Inicio</string>
@@ -13,7 +11,6 @@
     <string name="navigation_drawer_SUP">Vendedores</string>
     <string name="navigation_drawer_subtitle">Personal</string>
     <string name="navigation_drawer_favoritos">Favoritos</string>
-    <string name="navigation_drawer_listacompras">Mi Lista de Compras</string>
     <string name="navigation_drawer_subtitle2">Extras</string>
     <string name="navigation_drawer_configuracion">Configuracion</string>
 
@@ -26,34 +23,22 @@
     <string name="producto_menu_detalles">Ver Detalles</string>
     <string name="delete_menu_favorito">Quitar de Favoritos</string>
     <string name="go_PLU">Ir a Productos</string>
-    <string name="go_favoritas">Ir Tiendas Favoritas</string>
-    <string name="go_tiendas">Ir a Tiendas</string>
     <string name="share">Compartir</string>
 
 
-    //lista de compras
-    <string name="txt_total">Total gastos:</string>
-    <string name="txt_monto">0.00</string>
-    <string name="checkbox"> </string>
-
-
     //generales
-    <string name="txt_ordenar">Ordenar</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">El Mejor Precio</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_plu">Buscar</string>
     <string name="title_activity_productos">Productos</string>
+    <string name="title_activity_favoritos">Favoritos</string>
     <string name="title_activity_super">Buscar</string>
     <string name="title_activity_supermercado">Vendedores</string>
     <string name="title_activity_maps_buscar">Map</string>
     <string name="title_activity_lista_compras">Mi Lista de Compras</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_tiendas_favoritas">Tiendas Favoritas</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -33,7 +33,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -162,12 +161,8 @@ public class ProductosActivity extends AppCompatActivity
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
-            Intent irFavoritos = new Intent(this, TiendasFavoritasActivity.class);
+            Intent irFavoritos = new Intent(this, FavoritosActivity.class);
             startActivity(irFavoritos);
-
-        } else if (id == R.id.nav_listacompras) {
-            Intent ir_lista_compras = new Intent(this, lista_compras.class);
-            startActivity(ir_lista_compras);
 
         } else if (id == R.id.nav_configuracion){
 

@@ -22,9 +22,10 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.ViewHolderTiendas> {
+public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.ViewHolderTiendas> implements View.OnClickListener {
 
     private ArrayList<ConstructorVendedores> listVendedores;
+    private View.OnClickListener listener;
     private Context mContext;
 
     public AdapterVendedores(ArrayList<ConstructorVendedores> listVendedores, Context mContext) {
@@ -37,6 +38,7 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
     @Override
     public ViewHolderTiendas onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_vendedores, null, false);
+        view.setOnClickListener(this);
         return new ViewHolderTiendas(view);
     }
 
@@ -61,6 +63,13 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
         return listVendedores.size();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (listener != null) {
+            listener.onClick(v);
+        }
+    }
+
 
     public class ViewHolderTiendas extends RecyclerView.ViewHolder {
 
@@ -82,6 +91,10 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
         listVendedores = new ArrayList<>();
         listVendedores.addAll(newList);
         notifyDataSetChanged();
+    }
+
+    public void setOnClickListener (View.OnClickListener listener) {
+        this.listener = listener;
     }
 
 }
