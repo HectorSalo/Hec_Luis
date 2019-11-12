@@ -7,8 +7,17 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import android.view.View;
+
+import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
@@ -16,15 +25,23 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private NetworkInfo networkInfo;
-    private RecyclerView recyclerRecientes, recyclerCambioPrecio;
+    private RecyclerView recyclerRecientes, recyclerCambioPrecio, recyclerOfertas;
+    private AdapterProductos adapterRecientes, adapterCambioPrecio, adapterOferta;
+    private ArrayList<ConstructorProductos> listRecientes, listCambioPrecio, listOferta;
+    private ProgressBar progressBarRecientes, progressBarCambioPrecio, progressBarOfertas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +60,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        progressBarCambioPrecio = findViewById(R.id.progressBarCambioPrecio);
+        progressBarOfertas = findViewById(R.id.progressBarOfertas);
+        progressBarRecientes = findViewById(R.id.progressBarRecientes);
+
+        listRecientes = new ArrayList<>();
+        listCambioPrecio = new ArrayList<>();
+        listOferta = new ArrayList<>();
         recyclerCambioPrecio = findViewById(R.id.recyclerViewCambioPrecio);
         recyclerRecientes = findViewById(R.id.recyclerViewRecientes);
+        recyclerOfertas = findViewById(R.id.recyclerViewOferta);
+        recyclerCambioPrecio.setHasFixedSize(true);
+        recyclerRecientes.setHasFixedSize(true);
+        recyclerOfertas.setHasFixedSize(true);
+        recyclerCambioPrecio.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerRecientes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerOfertas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        adapterRecientes = new AdapterProductos(listRecientes, this);
+        adapterCambioPrecio = new AdapterProductos(listCambioPrecio, this);
+        adapterOferta = new AdapterProductos(listOferta, this);
+        recyclerRecientes.setAdapter(adapterRecientes);
+        recyclerOfertas.setAdapter(adapterOferta);
+        recyclerCambioPrecio.setAdapter(adapterCambioPrecio);
 
         ConstraintLayout constraintLayout = findViewById(R.id.constraintHome);
 
@@ -54,7 +91,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (networkInfo != null && networkInfo.isConnected()) {
-
+            cargarRecientes();
+            cargarOfertas();
+            cargarCambioPrecio();
         } else {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
                 @Override
@@ -66,6 +105,126 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+    }
+
+    private void cargarCambioPrecio() {
+        listCambioPrecio = new ArrayList<>();
+
+        adapterCambioPrecio = new AdapterProductos(listCambioPrecio, HomeActivity.this);
+        recyclerCambioPrecio.setHasFixedSize(true);
+        recyclerCambioPrecio.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerCambioPrecio.setAdapter(adapterCambioPrecio);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
+                        listCambioPrecio.add(productos);
+
+                    }
+                    adapterCambioPrecio.updateList(listCambioPrecio);
+                    progressBarCambioPrecio.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(HomeActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBarCambioPrecio.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void cargarOfertas() {
+        listOferta = new ArrayList<>();
+
+        adapterOferta = new AdapterProductos(listOferta, HomeActivity.this);
+        recyclerOfertas.setHasFixedSize(true);
+        recyclerOfertas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerOfertas.setAdapter(adapterOferta);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
+                        listOferta.add(productos);
+
+                    }
+                    adapterOferta.updateList(listOferta);
+                    progressBarOfertas.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(HomeActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBarOfertas.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void cargarRecientes() {
+        listRecientes = new ArrayList<>();
+
+        adapterRecientes = new AdapterProductos(listRecientes, HomeActivity.this);
+        recyclerRecientes.setHasFixedSize(true);
+        recyclerRecientes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerRecientes.setAdapter(adapterRecientes);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
+                        listRecientes.add(productos);
+
+                    }
+                    adapterRecientes.updateList(listRecientes);
+                    progressBarRecientes.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(HomeActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBarRecientes.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override

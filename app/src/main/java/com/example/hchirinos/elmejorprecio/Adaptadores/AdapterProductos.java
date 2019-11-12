@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.InfoActivity;
 import com.example.hchirinos.elmejorprecio.R;
@@ -55,7 +56,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         //Comunica el adaptador con la clase ViewHolderProductos
         viewHolderProductos.textView_nombre_producto.setText(listProductos.get(i).getDescripcionProducto());
-        viewHolderProductos.textView_precio_producto.setText("$ " + listProductos.get(i).getPrecioProducto());
+        viewHolderProductos.textView_precio_producto.setText("$" + listProductos.get(i).getPrecioProducto());
 
         if (listProductos.get(i).getImagenProducto()!=null) {
 
@@ -79,8 +80,16 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             public void onClick(View v) {
                 if (viewHolderProductos.toggleButtonFavorito.isChecked()) {
                     Toast.makeText(mContext, "Agregado a Favoritos", Toast.LENGTH_SHORT).show();
+                    viewHolderProductos.lottieAnimationViewLike.setVisibility(View.VISIBLE);
+                    viewHolderProductos.lottieAnimationViewLike.setAnimation("like.json");
+                    viewHolderProductos.lottieAnimationViewLike.playAnimation();
+
                 } else {
                     Toast.makeText(mContext, "Quitado de Favoritos", Toast.LENGTH_SHORT).show();
+                    viewHolderProductos.lottieAnimationViewLike.setVisibility(View.VISIBLE);
+                    viewHolderProductos.lottieAnimationViewLike.setAnimation("dislike.json");
+                    viewHolderProductos.lottieAnimationViewLike.playAnimation();
+
                 }
             }
         });
@@ -117,6 +126,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         ImageView imageView_producto;
         ImageButton imageButtonCompartir, imageButtonInfo;
         ToggleButton toggleButtonFavorito;
+        LottieAnimationView lottieAnimationViewLike;
 
 
         public ViewHolderProductos(@NonNull View itemView) {
@@ -128,6 +138,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             imageButtonCompartir = itemView.findViewById(R.id.imageButtonCompartir);
             toggleButtonFavorito = itemView.findViewById(R.id.toggleButtonFavoritos);
             imageButtonInfo = itemView.findViewById(R.id.imageButtonInfoProducto);
+            lottieAnimationViewLike = itemView.findViewById(R.id.lottieAnimationViewLike);
 
         }
     }

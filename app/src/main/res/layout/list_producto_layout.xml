@@ -59,6 +59,18 @@
                         android:textOff=""
                         android:textOn="" />
 
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottieAnimationViewLike"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        app:lottie_imageAssetsFolder="assets"
+                        app:lottie_fileName="like.json"
+                        app:lottie_loop="false"
+                        android:visibility="gone">
+
+                    </com.airbnb.lottie.LottieAnimationView>
+
                     <ImageButton
                         android:id="@+id/imageButtonCompartir"
                         android:layout_width="50dp"

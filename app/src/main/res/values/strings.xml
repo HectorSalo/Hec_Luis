@@ -4,6 +4,7 @@
     //activity_content_home
     <string name="tvCambioPrecio">Cambiaron de precio</string>
     <string name="txt_recientes">Agregados Recientemente</string>
+    <string name="txt_oferta">Ofertas de la Semana</string>
 
     //activity_home_drawer
     <string name="navigation_drawer_inicio">Inicio</string>
