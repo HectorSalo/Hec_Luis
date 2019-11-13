@@ -9,7 +9,8 @@
         <item
             android:id="@+id/nav_inicio"
             android:icon="@drawable/ic_home"
-            android:title="@string/navigation_drawer_inicio" />
+            android:title="@string/navigation_drawer_inicio"
+            />
         <item
             android:id="@+id/nav_productos"
             android:icon="@drawable/ic_productos"

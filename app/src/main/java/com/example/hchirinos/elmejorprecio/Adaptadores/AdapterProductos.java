@@ -23,6 +23,8 @@ import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.ArrayList;
 
@@ -64,6 +66,18 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         }
 
+        viewHolderProductos.likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                Toast.makeText(mContext, "Favoritos", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                Toast.makeText(mContext, "Quitado Favoritos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         viewHolderProductos.imageButtonCompartir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,24 +89,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             }
         });
 
-        viewHolderProductos.toggleButtonFavorito.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewHolderProductos.toggleButtonFavorito.isChecked()) {
-                    Toast.makeText(mContext, "Agregado a Favoritos", Toast.LENGTH_SHORT).show();
-                    viewHolderProductos.lottieAnimationViewLike.setVisibility(View.VISIBLE);
-                    viewHolderProductos.lottieAnimationViewLike.setAnimation("like.json");
-                    viewHolderProductos.lottieAnimationViewLike.playAnimation();
-
-                } else {
-                    Toast.makeText(mContext, "Quitado de Favoritos", Toast.LENGTH_SHORT).show();
-                    viewHolderProductos.lottieAnimationViewLike.setVisibility(View.VISIBLE);
-                    viewHolderProductos.lottieAnimationViewLike.setAnimation("dislike.json");
-                    viewHolderProductos.lottieAnimationViewLike.playAnimation();
-
-                }
-            }
-        });
 
         viewHolderProductos.imageButtonInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,8 +121,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         TextView textView_precio_producto;
         ImageView imageView_producto;
         ImageButton imageButtonCompartir, imageButtonInfo;
-        ToggleButton toggleButtonFavorito;
-        LottieAnimationView lottieAnimationViewLike;
+        LikeButton likeButton;
 
 
         public ViewHolderProductos(@NonNull View itemView) {
@@ -136,9 +131,8 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             textView_precio_producto = itemView.findViewById(R.id.textView_precio_producto);
             imageView_producto = itemView.findViewById(R.id.imageView_producto);
             imageButtonCompartir = itemView.findViewById(R.id.imageButtonCompartir);
-            toggleButtonFavorito = itemView.findViewById(R.id.toggleButtonFavoritos);
             imageButtonInfo = itemView.findViewById(R.id.imageButtonInfoProducto);
-            lottieAnimationViewLike = itemView.findViewById(R.id.lottieAnimationViewLike);
+            likeButton = itemView.findViewById(R.id.likeButton);
 
         }
     }
@@ -153,10 +147,5 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     private void agregarFavoritos () {
 
     }
-
-    private void compartir() {
-
-    }
-
 
 }

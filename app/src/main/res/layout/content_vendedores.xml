@@ -8,6 +8,7 @@
     tools:context=".VendedoresActivity"
     tools:showIn="@layout/app_bar_supermercado"
     android:id="@+id/constraintVendedores"
+    android:background="#BBDEFB"
     >
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

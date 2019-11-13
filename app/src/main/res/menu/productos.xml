@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/bar_buscar"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_search"
         android:title="@string/app_bar_buscar"
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView" />

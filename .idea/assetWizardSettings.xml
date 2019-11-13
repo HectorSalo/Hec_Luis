@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="opacityPercent" value="60" />
+                                                <entry key="opacityPercent" value="80" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_favorite_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_search_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,8 +45,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_favoritos" />
-                                      <entry key="themeColor" value="ff0000" />
+                                      <entry key="outputName" value="ic_search" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="ffc947" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -57,7 +58,7 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
-                                      <entry key="foregroundImage">
+                                      <entry key="foregroundClipArt">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
@@ -68,6 +69,24 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="foregroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="color" value="000000" />
+                                                <entry key="scalingPercent" value="64" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="foregroundImage" value="C:\Users\Chirinos\Downloads\logomejorprecio.png" />
                                     </map>
                                   </option>
                                 </PersistentState>

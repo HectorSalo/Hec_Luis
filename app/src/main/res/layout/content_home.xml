@@ -8,7 +8,7 @@
     tools:context=".HomeActivity"
     tools:showIn="@layout/app_bar_home"
     android:id="@+id/constraintHome"
-    android:background="#606A84"
+    android:background="#BBDEFB"
     >
 
     <ScrollView
@@ -59,7 +59,7 @@
                         android:text="@string/txt_recientes"
                         android:textSize="24sp"
                         android:textStyle="italic"
-                        android:textColor="#fff"/>
+                        android:textColor="@color/colorPrimaryDark"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewRecientes"
@@ -102,7 +102,7 @@
                         android:text="@string/txt_oferta"
                         android:textSize="24sp"
                         android:textStyle="italic"
-                        android:textColor="#fff"/>
+                        android:textColor="@color/colorPrimaryDark"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewOferta"
@@ -145,7 +145,7 @@
                     android:text="@string/tvCambioPrecio"
                     android:textSize="24sp"
                     android:textStyle="italic"
-                        android:textColor="#fff"/>
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewCambioPrecio"

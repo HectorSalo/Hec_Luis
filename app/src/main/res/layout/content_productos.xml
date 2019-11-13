@@ -8,6 +8,7 @@
     tools:context=".ProductosActivity"
     tools:showIn="@layout/app_bar_productos"
     android:id="@+id/layoutProductos"
+    android:background="#BBDEFB"
     >
 
 
