@@ -17,4 +17,7 @@ public class VariablesEstaticas {
     public static final String BD_CORREO_VENDEDOR = "CorreoVendedor";
     public static final String BD_IMAGEN_VENDEDOR = "ImagenVendedor";
 
+    public static final String BD_ID_PRODUCTO_FAVORITO = "idProducto";
+    public static final String BD_FAVORITOS = "favoritos";
+    public static final int VERSION_SQLITE = 3;
 }

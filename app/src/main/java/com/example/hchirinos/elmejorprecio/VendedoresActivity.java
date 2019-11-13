@@ -200,7 +200,7 @@ public class VendedoresActivity extends AppCompatActivity
             startActivity(irFavoritos);
 
         } else if (id == R.id.nav_configuracion){
-
+            startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_inicio) {
             Intent ir_inicio = new Intent(this, HomeActivity.class);
             startActivity(ir_inicio);
@@ -223,7 +223,7 @@ public class VendedoresActivity extends AppCompatActivity
             Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
         } else {
             String userInput = newText.toLowerCase();
-            ArrayList<ConstructorVendedores> newList = new ArrayList<>();
+            final ArrayList<ConstructorVendedores> newList = new ArrayList<>();
 
             for (ConstructorVendedores name : listVendedores) {
 
@@ -234,6 +234,18 @@ public class VendedoresActivity extends AppCompatActivity
             }
 
             adapterVendedores.updateList(newList);
+
+            adapterVendedores.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    VariablesGenerales.nombreInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
+                    VariablesGenerales.telefonoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
+                    VariablesGenerales.correoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
+                    VariablesGenerales.infoProducto = false;
+                    VariablesGenerales.infoVendedor = true;
+                    startActivity(new Intent(VendedoresActivity.this, InfoActivity.class));
+                }
+            });
 
         }
         return true;

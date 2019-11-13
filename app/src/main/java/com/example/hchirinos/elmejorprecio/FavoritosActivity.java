@@ -2,41 +2,57 @@ package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterFavoritos;
-import com.example.hchirinos.elmejorprecio.Constructores.ConstructorFavoritos;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
+import com.example.hchirinos.elmejorprecio.SQLite.ConectSQLiteHelper;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
 public class FavoritosActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
 
     private NetworkInfo networkInfo;
-    private ArrayList<ConstructorFavoritos> listFavoritos;
+    private ArrayList<ConstructorProductos> listFavoritos;
+    private ArrayList<String> listaEnviarFavoritos;
     private RecyclerView recyclerFavoritos;
     private AdapterFavoritos adapterFavoritos;
     private ProgressBar progressBar;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -45,8 +61,6 @@ public class FavoritosActivity extends AppCompatActivity
         setContentView(R.layout.activity_favoritos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,17 +76,18 @@ public class FavoritosActivity extends AppCompatActivity
         listFavoritos = new ArrayList<>();
         recyclerFavoritos = (RecyclerView)findViewById(R.id.recyclerFavoritos);
         recyclerFavoritos.setHasFixedSize(true);
-        recyclerFavoritos.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this));
         adapterFavoritos = new AdapterFavoritos(listFavoritos, this);
         recyclerFavoritos.setAdapter(adapterFavoritos);
         progressBar = findViewById(R.id.progressBarFavoritos);
+        swipeRefreshLayout = findViewById(R.id.swpRefreshFavoritos);
 
 
         ConnectivityManager conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = conexion.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            cargarFavoritos();
+            llenarLista();
         } else {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
                 @Override
@@ -81,14 +96,69 @@ public class FavoritosActivity extends AppCompatActivity
                 }
             });
             snackbar.show();
-            cargarFavoritos();
+            llenarLista();
+        }
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    public void llenarLista() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        listaEnviarFavoritos = new ArrayList<>();
+
+        ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(getApplicationContext(), VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
+        SQLiteDatabase db = conectSQLiteHelper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * from " + VariablesEstaticas.BD_FAVORITOS , null);
+
+        while (cursor.moveToNext()) {
+            listaEnviarFavoritos.add(cursor.getString(0));
+        }
+
+        if (!listaEnviarFavoritos.isEmpty()) {
+            for (int i = 0; i < listaEnviarFavoritos.size(); i++) {
+                cargarFavoritos(listaEnviarFavoritos.get(i));
+            }
+
+        } else {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(FavoritosActivity.this, "No tiene Favoritos", Toast.LENGTH_SHORT).show();
         }
 
 
     }
 
-    private void cargarFavoritos() {
+    private void cargarFavoritos(String id) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_ID_PRODUCTO_FAVORITO, id).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
+                        listFavoritos.add(productos);
+                    }
+                    adapterFavoritos.updateList(listFavoritos);
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(FavoritosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
 
@@ -143,11 +213,9 @@ public class FavoritosActivity extends AppCompatActivity
             startActivity(ir_supermercado);
 
         } else if (id == R.id.nav_favorito) {
-            Intent irFavoritos = new Intent(this, FavoritosActivity.class);
-            startActivity(irFavoritos);
 
         } else if (id == R.id.nav_configuracion){
-
+            startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_inicio) {
             Intent ir_inicio = new Intent(this, HomeActivity.class);
             startActivity(ir_inicio);
@@ -166,6 +234,31 @@ public class FavoritosActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
+
+        if (listFavoritos.isEmpty()) {
+            Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
+        } else {
+            String userInput = newText.toLowerCase();
+            ArrayList<ConstructorProductos> newList = new ArrayList<>();
+
+            for (ConstructorProductos name : listFavoritos) {
+
+                if (name.getDescripcionProducto().toLowerCase().contains(userInput)) {
+
+                    newList.add(name);
+                }
+            }
+
+            adapterFavoritos.updateList(newList);
+
+        }
+
         return false;
+    }
+
+    @Override
+    public void onRefresh() {
+        llenarLista();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

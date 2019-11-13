@@ -9,4 +9,5 @@ public class VariablesGenerales {
     public static String correoInfoVendedor = null;
     public static boolean infoProducto = false;
     public static boolean infoVendedor = false;
+
 }

@@ -1,10 +1,10 @@
 package com.example.hchirinos.elmejorprecio.Adaptadores;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.InfoActivity;
 import com.example.hchirinos.elmejorprecio.R;
@@ -12,16 +12,17 @@ import com.example.hchirinos.elmejorprecio.R;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
+import com.example.hchirinos.elmejorprecio.SQLite.ConectSQLiteHelper;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -30,9 +31,8 @@ import java.util.ArrayList;
 
 public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.ViewHolderProductos>{
 
-    ArrayList<ConstructorProductos> listProductos;
-    Context mContext;
-
+    private ArrayList<ConstructorProductos> listProductos;
+    private Context mContext;
 
     public AdapterProductos (ArrayList<ConstructorProductos> listProductos, Context mContext){
         this.listProductos = listProductos;
@@ -69,12 +69,12 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         viewHolderProductos.likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                Toast.makeText(mContext, "Favoritos", Toast.LENGTH_SHORT).show();
+                agregarFavoritos(listProductos.get(position));
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
-                Toast.makeText(mContext, "Quitado Favoritos", Toast.LENGTH_SHORT).show();
+                quitarFavoritos(listProductos.get(position));
             }
         });
 
@@ -144,8 +144,27 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         notifyDataSetChanged();
     }
 
-    private void agregarFavoritos () {
+    private void agregarFavoritos (ConstructorProductos i) {
+        String id = i.getIdProducto();
+        String descripcion = i.getDescripcionProducto();
+        ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(mContext, VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
+        SQLiteDatabase db = conectSQLiteHelper.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put(VariablesEstaticas.BD_ID_PRODUCTO_FAVORITO, id);
+        values.put(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, descripcion);
+
+        db.insert(VariablesEstaticas.BD_FAVORITOS, null, values);
+        db.close();
+    }
+
+    private void quitarFavoritos (ConstructorProductos i) {
+        String id = i.getIdProducto();
+        ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(mContext, VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
+        SQLiteDatabase db = conectSQLiteHelper.getWritableDatabase();
+
+        db.delete(VariablesEstaticas.BD_FAVORITOS, "idProducto= '" + id + "'", null);
+        db.close();
     }
 
 }

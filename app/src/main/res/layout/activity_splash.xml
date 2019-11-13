@@ -13,13 +13,13 @@
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="splash.json"
+        app:lottie_fileName="test.json"
         app:lottie_imageAssetsFolder="assets"
         app:lottie_loop="false"></com.airbnb.lottie.LottieAnimationView>
 
@@ -30,6 +30,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/logomejorprecio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

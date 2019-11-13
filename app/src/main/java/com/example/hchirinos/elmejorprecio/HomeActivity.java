@@ -280,7 +280,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(irFavoritos);
 
         } else if (id == R.id.nav_configuracion){
-
+            startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_inicio) {
 
         }

@@ -165,7 +165,7 @@ public class ProductosActivity extends AppCompatActivity
             startActivity(irFavoritos);
 
         } else if (id == R.id.nav_configuracion){
-
+            startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.nav_inicio) {
             Intent ir_inicio = new Intent(this, HomeActivity.class);
             startActivity(ir_inicio);
