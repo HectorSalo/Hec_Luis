@@ -43,19 +43,24 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="notificaciones_header">Notificaciones</string>
+    <string name="acerca_header">Información</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    <!-- Notificaciones Preferences -->
+    <string name="notificaciones_title">Permitir Notificaciones</string>
+    <string name="vibracion_title">Vibración</string>
+    <string name="vibracion_summary_on">Vibrar al recibir la notificación
     </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="vibracion_summary_off">Recibir notificación sólo con sonido</string>
 
+    <!-- Acerca de Preferences -->
+    <string name="acerca_title">Acerca de&#8230;</string>
+
+    <!-- Activity Acerca de -->
+    <string name="acerca">Información de App</string>
+    <string name="desarrollado">Desarrollado por</string>
+    <string name="skysam">Inversiones SkySam, C.A.</string>
+    <string name="atencion_cliente">Atención al usuario:</string>
+    <string name="contacto">inversionesskysam@gmail.com</string>
 
 </resources>
