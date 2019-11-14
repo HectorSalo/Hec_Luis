@@ -47,7 +47,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.d("Notificacion", "Desactivada");
             }
 
-        
+
 
     }
 
