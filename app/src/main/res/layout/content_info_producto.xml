@@ -8,10 +8,53 @@
     tools:context=".InfoProductoActivity"
     tools:showIn="@layout/activity_info_producto">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/vendedor_info_producto" />
+
+        <TextView
+            android:id="@+id/tvVendedorInfoProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/texto_vacio" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/cantidad_info_producto" />
+
+        <TextView
+            android:id="@+id/tvCantidadInfoProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/texto_vacio" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/precio_info_producto" />
+
+        <TextView
+            android:id="@+id/tvPrecioInfoProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/texto_vacio" />
+
+
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

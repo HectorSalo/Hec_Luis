@@ -101,6 +101,7 @@ public class VendedoresActivity extends AppCompatActivity
         adapterVendedores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                VariablesGenerales.idInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getIdVendedor();
                 VariablesGenerales.nombreInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
                 VariablesGenerales.telefonoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
                 VariablesGenerales.correoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
@@ -128,7 +129,7 @@ public class VendedoresActivity extends AppCompatActivity
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorVendedores vendedor = new ConstructorVendedores();
-                        vendedor.setIdVendedor(doc.getId());
+                        vendedor.setIdVendedor(doc.getString(VariablesEstaticas.BD_ID_VENDEDOR));
                         vendedor.setNombreVendedor(doc.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR));
                         vendedor.setCorreoVendedor(doc.getString(VariablesEstaticas.BD_CORREO_VENDEDOR));
                         vendedor.setTelefonoVendedor(doc.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR));

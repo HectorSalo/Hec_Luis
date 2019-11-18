@@ -8,10 +8,63 @@
     tools:context=".InfoVendedorActivity"
     tools:showIn="@layout/activity_info_vendedor">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/ubicacion_preferida" />
+
+        <TextView
+            android:id="@+id/tvUbicacionPreferida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/texto_vacio" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/telefonos_vendedor" />
+
+        <TextView
+            android:id="@+id/tvTelefonoVendedor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/texto_vacio" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/correo_vendedor" />
+
+        <TextView
+            android:id="@+id/tvCorreoVendedor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/texto_vacio" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/otros_productos" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerOtrosProductos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

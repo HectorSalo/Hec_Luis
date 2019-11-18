@@ -154,4 +154,15 @@
     </string>
     <string name="title_activity_info_vendedor">InfoVendedorActivity</string>
 
+    <string name="ubicacion_preferida">Ubicación preferida para entregas:</string>
+    <string name="texto_vacio"> </string>
+    <string name="telefonos_vendedor">Telefonos:</string>
+    <string name="correo_vendedor">Correo:</string>
+    <string name="otros_productos">Productos de este vendedor:</string>
+
+    <string name="vendedor_info_producto">Vendedor:</string>
+    <string name="cantidad_info_producto">Cantidad a la venta:</string>
+    <string name="precio_info_producto">Precio:</string>
+
+
 </resources>

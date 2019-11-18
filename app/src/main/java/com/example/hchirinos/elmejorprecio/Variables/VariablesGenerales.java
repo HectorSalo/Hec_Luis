@@ -5,7 +5,9 @@ public class VariablesGenerales {
     public static String cantidadesInfoProducto = null;
     public static String vendedorInfoProducto = null;
     public static String imagenInfoProducto = null;
+    public static String precioInfoProducto = null;
 
+    public static String idInfoVendedor = null;
     public static String nombreInfoVendedor = null;
     public static String telefonoInfoVendedor = null;
     public static String correoInfoVendedor = null;
