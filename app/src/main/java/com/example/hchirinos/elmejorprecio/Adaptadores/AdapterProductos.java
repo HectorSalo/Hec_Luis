@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.InfoActivity;
+import com.example.hchirinos.elmejorprecio.InfoProductoActivity;
 import com.example.hchirinos.elmejorprecio.R;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -98,7 +99,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                 VariablesGenerales.vendedorInfoProducto = listProductos.get(position).getVendedor();
                 VariablesGenerales.infoProducto = true;
                 VariablesGenerales.infoVendedor = false;
-                mContext.startActivity(new Intent(mContext, InfoActivity.class));
+                mContext.startActivity(new Intent(mContext, InfoProductoActivity.class));
             }
         });
 
