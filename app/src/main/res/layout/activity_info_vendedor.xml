@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".InfoProductoActivity">
+    tools:context=".InfoVendedorActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -24,13 +24,12 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
-                android:id="@+id/imagenInfoProducto"
+                android:id="@+id/imagenInfoVendedor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/acerca"
 
                 />
-
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -42,7 +41,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_info_producto" />
+    <include layout="@layout/content_info_vendedor" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

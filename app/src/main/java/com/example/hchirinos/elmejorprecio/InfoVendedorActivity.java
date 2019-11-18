@@ -13,19 +13,20 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
-public class InfoProductoActivity extends AppCompatActivity {
+public class InfoVendedorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_info_producto);
+        setContentView(R.layout.activity_info_vendedor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        this.setTitle(VariablesGenerales.descripcionInfoProducto);
+        this.setTitle(VariablesGenerales.nombreInfoVendedor);
 
-        ImageView imageView = findViewById(R.id.imagenInfoProducto);
-        Glide.with(this).load(VariablesGenerales.imagenInfoProducto).into(imageView);
+        ImageView imageView = findViewById(R.id.imagenInfoVendedor);
+
+        Glide.with(this).load(VariablesGenerales.imagenInfoVendedor).into(imageView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

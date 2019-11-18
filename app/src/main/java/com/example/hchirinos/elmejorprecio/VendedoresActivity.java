@@ -104,9 +104,9 @@ public class VendedoresActivity extends AppCompatActivity
                 VariablesGenerales.nombreInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
                 VariablesGenerales.telefonoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
                 VariablesGenerales.correoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
-                VariablesGenerales.infoProducto = false;
-                VariablesGenerales.infoVendedor = true;
-                startActivity(new Intent(VendedoresActivity.this, InfoActivity.class));
+                VariablesGenerales.imagenInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getImagen();
+
+                startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
             }
         });
 
@@ -241,9 +241,8 @@ public class VendedoresActivity extends AppCompatActivity
                     VariablesGenerales.nombreInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
                     VariablesGenerales.telefonoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
                     VariablesGenerales.correoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
-                    VariablesGenerales.infoProducto = false;
-                    VariablesGenerales.infoVendedor = true;
-                    startActivity(new Intent(VendedoresActivity.this, InfoActivity.class));
+
+                    startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
                 }
             });
 

@@ -6,7 +6,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
-import com.example.hchirinos.elmejorprecio.InfoActivity;
 import com.example.hchirinos.elmejorprecio.InfoProductoActivity;
 import com.example.hchirinos.elmejorprecio.R;
 
@@ -97,8 +96,8 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                 VariablesGenerales.descripcionInfoProducto = listProductos.get(position).getDescripcionProducto();
                 VariablesGenerales.cantidadesInfoProducto = listProductos.get(position).getCantidadProducto() + " " + listProductos.get(position).getUnidadProducto();
                 VariablesGenerales.vendedorInfoProducto = listProductos.get(position).getVendedor();
-                VariablesGenerales.infoProducto = true;
-                VariablesGenerales.infoVendedor = false;
+                VariablesGenerales.imagenInfoProducto = listProductos.get(position).getImagenProducto();
+
                 mContext.startActivity(new Intent(mContext, InfoProductoActivity.class));
             }
         });

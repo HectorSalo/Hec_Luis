@@ -19,9 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".InfoVendedorActivity"
+            android:label="@string/title_activity_info_vendedor"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".InfoProductoActivity"
             android:label="@string/title_activity_info_producto"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -46,10 +50,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
         </activity>
-        <activity
-            android:name=".InfoActivity"
-            android:label="@string/producto_menu_detalles"
-            android:theme="@style/Theme.AppCompat.DialogWhenLarge" />
         <activity
             android:name=".ProductosActivity"
             android:label="@string/title_activity_productos"
