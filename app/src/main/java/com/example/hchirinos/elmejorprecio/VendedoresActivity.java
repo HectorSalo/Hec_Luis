@@ -239,6 +239,8 @@ public class VendedoresActivity extends AppCompatActivity
             adapterVendedores.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    VariablesGenerales.idInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getIdVendedor();
+                    VariablesGenerales.imagenInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getImagen();
                     VariablesGenerales.nombreInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
                     VariablesGenerales.telefonoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
                     VariablesGenerales.correoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
