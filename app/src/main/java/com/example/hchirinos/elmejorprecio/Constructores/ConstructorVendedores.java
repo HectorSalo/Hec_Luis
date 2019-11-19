@@ -10,8 +10,10 @@ public class ConstructorVendedores {
     private String telefonoVendedor;
     private String correoVendedor;
     private String imagen;
+    private String ubicacionPreferida;
     private double latitud;
     private double longitud;
+    private GeoPoint latlong;
 
 
 
@@ -55,6 +57,14 @@ public class ConstructorVendedores {
         return longitud;
     }
 
+    public String getUbicacionPreferida() {
+        return ubicacionPreferida;
+    }
+
+    public GeoPoint getLatlong() {
+        return latlong;
+    }
+
     public void setIdVendedor(String idVendedor) {
         this.idVendedor = idVendedor;
     }
@@ -81,5 +91,13 @@ public class ConstructorVendedores {
 
     public void setLongitud(double longitud) {
         this.longitud = longitud;
+    }
+
+    public void setUbicacionPreferida(String ubicacionPreferida) {
+        this.ubicacionPreferida = ubicacionPreferida;
+    }
+
+    public void setLatlong(GeoPoint latlong) {
+        this.latlong = latlong;
     }
 }

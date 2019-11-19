@@ -33,11 +33,27 @@
             app:key="vibracion"
             app:summaryOff="@string/vibracion_summary_off"
             app:summaryOn="@string/vibracion_summary_on"
-            app:title="@string/vibracion_title" />
+            app:title="@string/vibracion_title"
+            android:icon="@drawable/ic_vibracion_off"
+            />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/acerca_header">
+    <PreferenceCategory app:title="@string/personal_title">
+
+        <ListPreference
+            android:key="tema"
+            android:title="@string/tema_title"
+            android:icon="@drawable/ic_tema"
+            android:summary="@string/summary_tema"
+            android:entries="@array/escoger_tema"
+            android:entryValues="@array/escoger_tema"
+            android:defaultValue="0"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/acerca">
         <PreferenceScreen
             app:title="@string/acerca_title"
             android:icon="@drawable/ic_info"

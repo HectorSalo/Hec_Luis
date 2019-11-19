@@ -53,6 +53,7 @@ public class FavoritosActivity extends AppCompatActivity
     private AdapterFavoritos adapterFavoritos;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ConstraintLayout constraintLayout;
 
 
     @Override
@@ -72,7 +73,7 @@ public class FavoritosActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        ConstraintLayout constraintLayout = findViewById(R.id.constraintFavoritos);
+        constraintLayout = findViewById(R.id.constraintFavoritos);
         listFavoritos = new ArrayList<>();
         recyclerFavoritos = (RecyclerView)findViewById(R.id.recyclerFavoritos);
         recyclerFavoritos.setHasFixedSize(true);
@@ -123,7 +124,13 @@ public class FavoritosActivity extends AppCompatActivity
 
         } else {
             progressBar.setVisibility(View.GONE);
-            Toast.makeText(FavoritosActivity.this, "No tiene Favoritos", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(constraintLayout, "No tiene Favoritos", Snackbar.LENGTH_INDEFINITE).setAction("Agregar", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FavoritosActivity.this, ProductosActivity.class));
+                }
+            });
+            snackbar.show();
         }
 
 

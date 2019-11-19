@@ -3,4 +3,12 @@
     <color name="colorPrimary">#1565c0</color>
     <color name="colorPrimaryDark">#003c8f</color>
     <color name="colorAccent">#ff9800</color>
+
+    <color name="colorBackgroundClaro">#fff</color>
+    <color name="colorTextClaro">#000</color>
+
+    <color name="colorBackgroundOscuro">#373636</color>
+    <color name="colorNavDrawerOscuro">#616060</color>
+    <color name="colorTextOscuro">#fff</color>
+
 </resources>

@@ -1,6 +1,9 @@
 package com.example.hchirinos.elmejorprecio;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -16,13 +19,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
@@ -31,7 +37,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback {
+public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -50,7 +56,8 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_encontrar);
         mapFragment.getMapAsync(this);
 
-
+        latDestino = VariablesGenerales.latlongInfoVendedor.getLatitude();
+        lngDestino = VariablesGenerales.latlongInfoVendedor.getLongitude();
     }
 
 
@@ -59,35 +66,80 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
         mMap = googleMap;
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
             } else {
-
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        1);
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},1);
 
             }
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             } else {
-
-               ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        1);
-
+               ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             }
             return;
         }
+
         mMap.setMyLocationEnabled(true);
 
+        LatLng miPosicion = new LatLng(latDestino, lngDestino);
+        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    LatLng miPosicion = new LatLng(latDestino, lngDestino);
+                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+                    mMap.setMyLocationEnabled(true);
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    avisoNoUbicacion();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
+    public void avisoNoUbicacion() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MapsInfoVendedor.this);
+        dialog.setTitle("¡Aviso!");
+        dialog.setMessage("No podrá establecer una ruta desde su ubicación al Lugar de Entrega");
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        dialog.show();
+
+        LatLng miPosicion = new LatLng(latDestino, lngDestino);
+        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+    }
+
+
+    public void establecerOrigenDestino() {
         request = Volley.newRequestQueue(this);
 
 
@@ -109,7 +161,7 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
                     latUbicacionS = String.valueOf(latUbicacion);
                     lngUbicacionS = String.valueOf(lngUbicacion);
 
-                    Rutas(latUbicacionS, lngUbicacionS, latDestinoS, lngDestinoS);
+                    //Rutas(latUbicacionS, lngUbicacionS, latDestinoS, lngDestinoS);
 
 
                 }
@@ -132,33 +184,6 @@ public class Maps_buscar extends FragmentActivity implements OnMapReadyCallback 
                     }
                 }
             });
-        }
-
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 

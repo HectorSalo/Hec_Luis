@@ -18,41 +18,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/vendedor_info_producto" />
+            android:text="@string/vendedor_info_producto"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvVendedorInfoProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/texto_vacio" />
+            android:text="@string/texto_vacio"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/cantidad_info_producto" />
+            android:text="@string/cantidad_info_producto"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvCantidadInfoProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/texto_vacio" />
+            android:text="@string/texto_vacio"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/precio_info_producto" />
+            android:text="@string/precio_info_producto"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvPrecioInfoProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/texto_vacio" />
+            android:text="@string/texto_vacio"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
 
     </LinearLayout>

@@ -106,6 +106,8 @@ public class VendedoresActivity extends AppCompatActivity
                 VariablesGenerales.telefonoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
                 VariablesGenerales.correoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
                 VariablesGenerales.imagenInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getImagen();
+                VariablesGenerales.ubicacionInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getUbicacionPreferida();
+                VariablesGenerales.latlongInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getLatlong();
 
                 startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
             }
@@ -134,6 +136,8 @@ public class VendedoresActivity extends AppCompatActivity
                         vendedor.setCorreoVendedor(doc.getString(VariablesEstaticas.BD_CORREO_VENDEDOR));
                         vendedor.setTelefonoVendedor(doc.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR));
                         vendedor.setImagen(doc.getString(VariablesEstaticas.BD_IMAGEN_VENDEDOR));
+                        vendedor.setUbicacionPreferida(doc.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA));
+                        vendedor.setLatlong(doc.getGeoPoint(VariablesEstaticas.BD_LATITUD_LONGITUD));
 
                         listVendedores.add(vendedor);
 
@@ -244,6 +248,8 @@ public class VendedoresActivity extends AppCompatActivity
                     VariablesGenerales.nombreInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
                     VariablesGenerales.telefonoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
                     VariablesGenerales.correoInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
+                    VariablesGenerales.ubicacionInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getUbicacionPreferida();
+                    VariablesGenerales.latlongInfoVendedor = newList.get(recyclerVendedores.getChildAdapterPosition(v)).getLatlong();
 
                     startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
                 }

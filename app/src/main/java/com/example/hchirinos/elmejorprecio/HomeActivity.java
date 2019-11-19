@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -120,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_CAMBIO_PRECIO, true).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -160,7 +161,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_OFERTA_SEMANA, true).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -200,7 +201,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.ASCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).limit(6).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

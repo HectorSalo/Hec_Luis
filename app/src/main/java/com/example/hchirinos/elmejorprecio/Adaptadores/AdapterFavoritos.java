@@ -6,25 +6,17 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.hchirinos.elmejorprecio.AdminSQLiteHelper;
-import com.example.hchirinos.elmejorprecio.Constructores.ConstructorFavoritos;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
-import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 

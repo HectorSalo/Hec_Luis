@@ -21,7 +21,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_vendedores"
         app:menu="@menu/activity_vendedores_drawer"
-        android:background="#616060"
         app:itemTextColor="#ffc947"
         app:itemIconTint="#ffc947"/>
 

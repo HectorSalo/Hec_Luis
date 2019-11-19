@@ -65,7 +65,7 @@ public class InfoProductoActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                    Toast.makeText(InfoProductoActivity.this, VariablesGenerales.vendedorInfoProducto, Toast.LENGTH_SHORT).show();
+
                 VariablesGenerales.imagenInfoVendedor = snapshot.getString(VariablesEstaticas.BD_IMAGEN_VENDEDOR);
                 VariablesGenerales.telefonoInfoVendedor = snapshot.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR);
                 VariablesGenerales.correoInfoVendedor = snapshot.getString(VariablesEstaticas.BD_CORREO_VENDEDOR);

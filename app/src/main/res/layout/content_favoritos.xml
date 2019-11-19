@@ -8,7 +8,7 @@
     tools:context=".FavoritosActivity"
     tools:showIn="@layout/app_bar_tiendas_favoritas"
     android:id="@+id/constraintFavoritos"
-    android:background="#BBDEFB">
+    >
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swpRefreshFavoritos"

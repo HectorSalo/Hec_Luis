@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -53,6 +54,11 @@ public class InfoVendedorActivity extends AppCompatActivity {
 
         tvTelefono.setText(VariablesGenerales.telefonoInfoVendedor);
         tvCorreo.setText(VariablesGenerales.correoInfoVendedor);
+        if (!VariablesGenerales.ubicacionInfoVendedor.isEmpty()) {
+            tvUbicacion.setText(VariablesGenerales.ubicacionInfoVendedor);
+        } else {
+            tvUbicacion.setText("Este vendedor no tiene un lugar específico para la entrega");
+        }
 
         listProductos = new ArrayList<>();
         adapterProductos = new AdapterProductos(listProductos, this);
@@ -64,8 +70,12 @@ public class InfoVendedorActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (!VariablesGenerales.ubicacionInfoVendedor.isEmpty()) {
+                    startActivity(new Intent(InfoVendedorActivity.this, MapsInfoVendedor.class));
+                } else {
+                    Snackbar.make(view, "Este vendedor no tiene un lugar específico para la entrega", Snackbar.LENGTH_LONG)
+                            .show();
+                }
             }
         });
 

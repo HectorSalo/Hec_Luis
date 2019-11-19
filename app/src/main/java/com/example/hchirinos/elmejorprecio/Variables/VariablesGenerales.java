@@ -1,5 +1,7 @@
 package com.example.hchirinos.elmejorprecio.Variables;
 
+import com.google.firebase.firestore.GeoPoint;
+
 public class VariablesGenerales {
     public static String descripcionInfoProducto = null;
     public static String cantidadesInfoProducto = null;
@@ -12,4 +14,6 @@ public class VariablesGenerales {
     public static String telefonoInfoVendedor = null;
     public static String correoInfoVendedor = null;
     public static String imagenInfoVendedor = null;
+    public static String ubicacionInfoVendedor = null;
+    public static GeoPoint latlongInfoVendedor = null;
 }
