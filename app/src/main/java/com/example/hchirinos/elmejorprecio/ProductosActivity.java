@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,6 +83,17 @@ public class ProductosActivity extends AppCompatActivity
         recyclerProductos.setAdapter(adapterProductos);
 
         swRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
+        if (!temaClaro) {
+
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        }
 
         ConnectivityManager conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (conexion != null) {

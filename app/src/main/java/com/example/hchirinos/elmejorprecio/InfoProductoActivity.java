@@ -1,6 +1,7 @@
 package com.example.hchirinos.elmejorprecio;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -18,7 +19,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -46,6 +49,17 @@ public class InfoProductoActivity extends AppCompatActivity {
         tvVendedor.setText(VariablesGenerales.vendedorInfoProducto);
         tvCantidad.setText(VariablesGenerales.cantidadesInfoProducto);
         tvPrecio.setText(VariablesGenerales.precioInfoProducto);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
+        if (!temaClaro) {
+
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        }
 
         cargarVendedor();
 

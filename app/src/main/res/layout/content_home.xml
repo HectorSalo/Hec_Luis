@@ -57,9 +57,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/txt_recientes"
+                        android:textColor="@color/colorAccent"
                         android:textSize="24sp"
-                        android:textStyle="italic"
-                        android:textColor="@color/colorPrimaryDark"/>
+                        android:textStyle="italic" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewRecientes"
@@ -100,9 +100,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/txt_oferta"
+                        android:textColor="@color/colorAccent"
                         android:textSize="24sp"
-                        android:textStyle="italic"
-                        android:textColor="@color/colorPrimaryDark"/>
+                        android:textStyle="italic" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerViewOferta"
@@ -138,14 +138,14 @@
                         android:layout_marginBottom="8dp" />
 
                     <TextView
-                    android:id="@+id/textView10"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tvCambioPrecio"
-                    android:textSize="24sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/colorPrimaryDark"/>
+                        android:id="@+id/textView10"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tvCambioPrecio"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="24sp"
+                        android:textStyle="italic" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewCambioPrecio"

@@ -2,11 +2,14 @@ package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -76,6 +79,17 @@ public class VendedoresActivity extends AppCompatActivity
         listVendedores = new ArrayList<>();
         adapterVendedores = new AdapterVendedores(listVendedores, this);
         recyclerVendedores.setAdapter(adapterVendedores);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
+        if (!temaClaro) {
+
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        }
 
         ConnectivityManager conexion = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (conexion != null) {

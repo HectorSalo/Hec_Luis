@@ -21,11 +21,11 @@
         <activity
             android:name=".InfoVendedorActivity"
             android:label="@string/title_activity_info_vendedor"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppThemeDiaNoche"></activity>
         <activity
             android:name=".InfoProductoActivity"
             android:label="@string/title_activity_info_producto"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppThemeDiaNoche" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -37,15 +37,17 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="MaestrosNotif" />
 
-        <activity android:name=".AcercadeActivity" />
+        <activity android:name=".AcercadeActivity"
+            android:theme="@style/AppThemeDiaNoche"/>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppThemeSetting"/>
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
             android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeDiaNoche">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
@@ -53,11 +55,11 @@
         <activity
             android:name=".ProductosActivity"
             android:label="@string/title_activity_productos"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppThemeDiaNoche" />
         <activity
             android:name=".VendedoresActivity"
             android:label="@string/title_activity_supermercado"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppThemeDiaNoche" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -92,7 +94,7 @@
         <activity
             android:name=".FavoritosActivity"
             android:label="@string/title_activity_favoritos"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppThemeDiaNoche" />
 
         <service
             android:name=".FCM.MyFirebaseMessagingService"

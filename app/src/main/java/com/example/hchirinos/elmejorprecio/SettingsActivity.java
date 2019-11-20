@@ -2,6 +2,7 @@ package com.example.hchirinos.elmejorprecio;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -34,6 +36,17 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
+        if (!temaClaro) {
+
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        }
     }
 
 
@@ -48,6 +61,10 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, HomeActivity.class));
+    }
 
     public static class SettingsFragment extends PreferenceFragmentCompat  implements SharedPreferences.OnSharedPreferenceChangeListener{
         @Override
@@ -97,15 +114,16 @@ public class SettingsActivity extends AppCompatActivity {
                 case "tema":
                     String escogenciaTema = sharedPreferences.getString("tema", "Tema Claro");
                     if (escogenciaTema.equals("Tema Claro")) {
-                        Toast.makeText(getContext(), "Claro", Toast.LENGTH_SHORT).show();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("temaClaro", true);
                         editor.commit();
+                        getActivity().recreate();
                     } else {
-                        Toast.makeText(getContext(), "Oscuro", Toast.LENGTH_SHORT).show();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("temaClaro", false);
                         editor.commit();
+                        getActivity().recreate();
+
                     }
                     break;
             }
@@ -123,5 +141,6 @@ public class SettingsActivity extends AppCompatActivity {
             getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
     }
+
 
 }
