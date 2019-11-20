@@ -55,8 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String NOTIFICATION_CHANNEL_ID = "MaestrosNotif";
 
 
-            NotificationCompat.Builder notificationBuilder =
-                    new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+            NotificationCompat.Builder notificationBuilder =  new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
             notificationBuilder
                     .setSmallIcon(R.drawable.ic_stat_ic_notification)
                     .setColor(rgb(255, 160, 0))
@@ -69,13 +68,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                     .setContentInfo("info");
 
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
             // Since android Oreo notification channel is needed.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
-                        "Notification",
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,"Notification", NotificationManager.IMPORTANCE_DEFAULT);
 
                 notificationChannel.setDescription("Descripcion");
                 notificationChannel.enableLights(true);
@@ -87,6 +84,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
             notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
+            
 
         } else {
             Log.d("MSG", "Desactivada");
