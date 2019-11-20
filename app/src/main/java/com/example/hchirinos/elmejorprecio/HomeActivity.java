@@ -49,7 +49,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private AdapterProductos adapterRecientes, adapterCambioPrecio, adapterOferta;
     private ArrayList<ConstructorProductos> listRecientes, listCambioPrecio, listOferta;
     private ProgressBar progressBarRecientes, progressBarCambioPrecio, progressBarOfertas;
-    private Window window;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +56,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        this.window = getWindow();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

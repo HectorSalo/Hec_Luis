@@ -107,7 +107,7 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
                     // contacts-related task you need to do.
 
                 } else {
-                    avisoNoUbicacion();
+
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -117,25 +117,6 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
             // other 'case' lines to check for other
             // permissions this app might request
         }
-    }
-
-
-    public void avisoNoUbicacion() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(MapsInfoVendedor.this);
-        dialog.setTitle("¡Aviso!");
-        dialog.setMessage("No podrá establecer una ruta desde su ubicación al Lugar de Entrega");
-        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        dialog.show();
-
-        LatLng miPosicion = new LatLng(latDestino, lngDestino);
-        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
     }
 
 

@@ -85,6 +85,7 @@ public class InfoProductoActivity extends AppCompatActivity {
                 VariablesGenerales.correoInfoVendedor = snapshot.getString(VariablesEstaticas.BD_CORREO_VENDEDOR);
                 VariablesGenerales.nombreInfoVendedor = VariablesGenerales.vendedorInfoProducto;
                 VariablesGenerales.idInfoVendedor = snapshot.getString(VariablesEstaticas.BD_ID_VENDEDOR);
+                VariablesGenerales.ubicacionInfoVendedor = snapshot.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA);
                 }
 
             }
