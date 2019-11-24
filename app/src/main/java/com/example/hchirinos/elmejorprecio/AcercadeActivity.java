@@ -7,6 +7,8 @@ import androidx.preference.PreferenceManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 public class AcercadeActivity extends AppCompatActivity {
 
     @Override
@@ -14,16 +16,6 @@ public class AcercadeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acercade);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
-        if (!temaClaro) {
-
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
-        } else {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
-        }
     }
 
     @Override

@@ -98,7 +98,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="86" />
+                                                <entry key="scalingPercent" value="82" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -109,7 +109,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="foregroundImage" value="C:\Users\hchirinos\Downloads\logodolar.png" />
+                                      <entry key="backgroundColor" value="003c8f" />
+                                      <entry key="foregroundImage" value="C:\Users\Chirinos\Downloads\logomp.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -189,11 +190,6 @@
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

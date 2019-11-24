@@ -84,7 +84,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/Theme.Design.NoActionBar">
+            android:theme="@style/AppThemeDiaNoche">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

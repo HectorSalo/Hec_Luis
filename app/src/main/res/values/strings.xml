@@ -59,14 +59,11 @@
     <string name="summary_tema">Escoja el tema de su preferencia</string>
 
     <!-- Acerca de Preferences -->
-    <string name="acerca_title">Acerca de&#8230;</string>
+    <string name="acerca_title">Desarrollado por&#8230;</string>
 
     <!-- Activity Acerca de -->
     <string name="acerca">Información de App</string>
-    <string name="desarrollado">Desarrollado por</string>
-    <string name="skysam">Inversiones SkySam, C.A.</string>
-    <string name="atencion_cliente">Atención al usuario:</string>
-    <string name="contacto">inversionesskysam@gmail.com</string>
+
     <string name="title_activity_info_producto">InfoProductoActivity</string>
 
     <string name="title_activity_info_vendedor">InfoVendedorActivity</string>

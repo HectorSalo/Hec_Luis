@@ -84,7 +84,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
             notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
-            
+
 
         } else {
             Log.d("MSG", "Desactivada");
