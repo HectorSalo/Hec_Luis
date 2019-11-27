@@ -13,6 +13,7 @@ public class VariablesEstaticas {
     public static final String BD_FECHA_INGRESO = "FechaIngreso";
     public static final String BD_CAMBIO_PRECIO = "CambioPrecio";
     public static final String BD_OFERTA_SEMANA = "OfertaSemana";
+    public static final String BD_PRODUCTO_ACTIVO = "ProductoActivo";
 
     public static final String BD_ID_VENDEDOR = "idVendedor";
     public static final String BD_NOMBRE_VENDEDOR = "NombreVendedor";

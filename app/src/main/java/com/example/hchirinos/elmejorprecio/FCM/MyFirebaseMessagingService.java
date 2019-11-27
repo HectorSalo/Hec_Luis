@@ -11,10 +11,10 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.example.hchirinos.elmejorprecio.HomeActivity;
 import com.example.hchirinos.elmejorprecio.R;
@@ -31,19 +31,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean activarVibrar = sharedPreferences.getBoolean("activarVibrar", false);
+
                 if (remoteMessage.getNotification() != null) {
-                    Log.d("MSG", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-                    showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+
+                    if (activarVibrar) {
+                        Log.d("MSG", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+                        showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                    } else {
+                        Log.d("MSG", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+                        showNotificationNoVibrar(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+                    }
                 }
 
     }
 
     private void showNotification(String title, String body) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean notifActivo = sharedPreferences.getBoolean("activarNotif", true);
-        boolean vibrarActivo = sharedPreferences.getBoolean("activarVibrar", false);
-
-        if (notifActivo) {
 
             Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -58,7 +62,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationCompat.Builder notificationBuilder =  new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
             notificationBuilder
                     .setSmallIcon(R.drawable.ic_stat_ic_notification)
-                    .setColor(rgb(255, 160, 0))
+                    .setColor(rgb(0, 60, 255))
                     .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true)
@@ -72,7 +76,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             // Since android Oreo notification channel is needed.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,"Notification", NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,"Notification", NotificationManager.IMPORTANCE_HIGH);
 
                 notificationChannel.setDescription("Descripcion");
                 notificationChannel.enableLights(true);
@@ -85,10 +89,63 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
 
+    }
 
-        } else {
-            Log.d("MSG", "Desactivada");
+
+    private void showNotificationNoVibrar(String title, String body) {
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //
+        String NOTIFICATION_CHANNEL_ID = "MaestrosNotif";
+
+
+        NotificationCompat.Builder notificationBuilder =  new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        notificationBuilder
+                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setColor(rgb(0, 60, 255))
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setVibrate(null)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+
+                .setContentInfo("info");
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,"Notification", NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription("Descripcion");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.setVibrationPattern(null);
+            notificationChannel.enableLights(true);
+            notificationManager.createNotificationChannel(notificationChannel);
         }
+
+
+        notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
+
+    }
+
+    @Override
+    public void onNewToken(String token) {
+
+
+        Log.d("Token", "Refreshed token: " + token);
+
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // Instance ID token to your app server.
+
     }
 
 }

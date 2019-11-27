@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
@@ -22,7 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
@@ -90,6 +93,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         recyclerCambioPrecio.setAdapter(adapterCambioPrecio);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean subscripcionInicial = sharedPreferences.getBoolean("subsinicial", true);
         boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
         if (!temaClaro) {
 
@@ -98,6 +102,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        }
+
+        if (subscripcionInicial) {
+            subsInicial();
         }
 
         ConstraintLayout constraintLayout = findViewById(R.id.constraintHome);
@@ -122,6 +130,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+    }
+
+    private void subsInicial() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("subsinicial", false);
+        editor.commit();
+
+        FirebaseMessaging.getInstance().subscribeToTopic("notif")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Subscripcion exitosa";
+                        if (!task.isSuccessful()) {
+                            msg = "Failed";
+                        }
+                        Log.d("suscrito", msg);
+
+                    }
+                });
     }
 
     private void cargarCambioPrecio() {

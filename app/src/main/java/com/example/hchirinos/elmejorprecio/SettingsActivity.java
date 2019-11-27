@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -18,6 +20,10 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -88,11 +94,13 @@ public class SettingsActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("activarNotif", false);
                         editor.commit();
+                        anularFCM();
                     } else {
                         switchPreferenceCompatNotif.setIcon(R.drawable.ic_noitificacion);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("activarNotif", true);
                         editor.commit();
+                        suscribirseFCM();
                     }
                     break;
 
@@ -127,6 +135,35 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     break;
             }
+        }
+
+        private void suscribirseFCM() {
+            FirebaseMessaging.getInstance().subscribeToTopic("notif")
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            String msg = "Subscripcion exitosa";
+                            if (!task.isSuccessful()) {
+                                msg = "Failed";
+                            }
+                            Log.d("suscrito", msg);
+
+                        }
+                    });
+        }
+
+        private void anularFCM() {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("notif").addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    String msg = "Anulacion exitosa";
+                    if (!task.isSuccessful()) {
+                        msg = "Failed anulacion";
+                    }
+                    Log.d("anulado", msg);
+
+                }
+            });
         }
 
         @Override
