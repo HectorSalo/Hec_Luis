@@ -203,7 +203,7 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.DESCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -244,7 +244,7 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -284,7 +284,7 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.ASCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -324,7 +324,7 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.DESCENDING).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -365,7 +365,7 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
