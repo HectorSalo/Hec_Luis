@@ -12,10 +12,13 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
@@ -53,6 +56,7 @@ public class ProductosActivity extends AppCompatActivity
     private RecyclerView recyclerProductos;
     private AdapterProductos adapterProductos;
     private ProgressBar progressBar;
+    private NavigationView navigationView;
 
 
     @Override
@@ -68,7 +72,7 @@ public class ProductosActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
@@ -77,7 +81,7 @@ public class ProductosActivity extends AppCompatActivity
 
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
         listProductos = new ArrayList<>();
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setAdapter(adapterProductos);
@@ -166,27 +170,50 @@ public class ProductosActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Menu menu = navigationView.getMenu();
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_productos) {
+        if (id == R.id.nav_catalogos) {
+            MenuItem itemServicios = menu.findItem(R.id.nav_servicios);
+            MenuItem itemProductos = menu.findItem(R.id.nav_productos);
 
+            SpannableString textServicios = new SpannableString(itemServicios.getTitle());
+            textServicios.setSpan(new TextAppearanceSpan(this, R.style.TextAppearanceCatalogo), 0, textServicios.length(), 0);
+            itemServicios.setTitle(textServicios);
+
+            SpannableString textProductos = new SpannableString(itemProductos.getTitle());
+            textProductos.setSpan(new TextAppearanceSpan(this, R.style.TextAppearanceCatalogo), 0, textProductos.length(), 0);
+            itemProductos.setTitle(textProductos);
+
+            if (menu.findItem(R.id.nav_productos).isVisible()) {
+                menu.findItem(R.id.nav_servicios).setVisible(false);
+                menu.findItem(R.id.nav_productos).setVisible(false);
+            } else {
+                menu.findItem(R.id.nav_servicios).setVisible(true);
+                menu.findItem(R.id.nav_productos).setVisible(true);
+            }
+
+        } else if (id == R.id.nav_productos) {
+            startActivity(new Intent(this, ProductosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_servicios) {
+            startActivity(new Intent(this, ProductosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_supermercados) {
-            Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
-            startActivity(ir_supermercado);
-
+            startActivity(new Intent(this, VendedoresActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
-            Intent irFavoritos = new Intent(this, FavoritosActivity.class);
-            startActivity(irFavoritos);
-
+            startActivity(new Intent(this, FavoritosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_inicio) {
-            Intent ir_inicio = new Intent(this, HomeActivity.class);
-            startActivity(ir_inicio);
+            startActivity(new Intent(this, HomeActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -198,7 +225,7 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -239,7 +266,7 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -279,7 +306,7 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -319,7 +346,7 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -360,7 +387,7 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(this));
+        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerProductos.setAdapter(adapterProductos);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

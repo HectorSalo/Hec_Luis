@@ -12,14 +12,28 @@
             android:title="@string/navigation_drawer_inicio"
             />
         <item
+            android:id="@+id/nav_catalogos"
+            android:icon="@drawable/ic_catalogo"
+            android:title="@string/navigation_drawer_catalogo" />
+        <item
             android:id="@+id/nav_productos"
             android:icon="@drawable/ic_productos"
-            android:title="@string/navigation_drawer_PLU" />
+            android:title="@string/navigation_drawer_PLU"
+            android:visible="false"
+            />
+        <item
+            android:id="@+id/nav_servicios"
+            android:icon="@drawable/ic_servicios"
+            android:title="@string/navigation_drawer_servicio"
+            android:visible="false"
+            />
         <item
             android:id="@+id/nav_supermercados"
             android:icon="@drawable/ic_vendedor"
             android:title="@string/navigation_drawer_SUP" />
+
     </group>
+
 
     <item android:title="@string/navigation_drawer_subtitle">
         <menu>

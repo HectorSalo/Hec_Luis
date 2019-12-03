@@ -8,6 +8,8 @@
 
     //activity_home_drawer
     <string name="navigation_drawer_inicio">Inicio</string>
+    <string name="navigation_drawer_catalogo">Catálogos</string>
+    <string name="navigation_drawer_servicio">Servicios</string>
     <string name="navigation_drawer_PLU">Productos</string>
     <string name="navigation_drawer_SUP">Vendedores</string>
     <string name="navigation_drawer_subtitle">Personal</string>

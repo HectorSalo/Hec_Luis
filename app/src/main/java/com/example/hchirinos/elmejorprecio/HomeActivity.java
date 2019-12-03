@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.View;
 
@@ -52,6 +55,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private AdapterProductos adapterRecientes, adapterCambioPrecio, adapterOferta;
     private ArrayList<ConstructorProductos> listRecientes, listCambioPrecio, listOferta;
     private ProgressBar progressBarRecientes, progressBarCambioPrecio, progressBarOfertas;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
@@ -310,28 +314,53 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Menu menu = navigationView.getMenu();
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_productos) {
-            Intent ir_productos = new Intent (this, ProductosActivity.class);
-            startActivity(ir_productos);
+        if (id == R.id.nav_catalogos) {
+            MenuItem itemServicios = menu.findItem(R.id.nav_servicios);
+            MenuItem itemProductos = menu.findItem(R.id.nav_productos);
 
+            SpannableString textServicios = new SpannableString(itemServicios.getTitle());
+            textServicios.setSpan(new TextAppearanceSpan(this, R.style.TextAppearanceCatalogo), 0, textServicios.length(), 0);
+            itemServicios.setTitle(textServicios);
+
+            SpannableString textProductos = new SpannableString(itemProductos.getTitle());
+            textProductos.setSpan(new TextAppearanceSpan(this, R.style.TextAppearanceCatalogo), 0, textProductos.length(), 0);
+            itemProductos.setTitle(textProductos);
+
+            if (menu.findItem(R.id.nav_productos).isVisible()) {
+                menu.findItem(R.id.nav_servicios).setVisible(false);
+                menu.findItem(R.id.nav_productos).setVisible(false);
+            } else {
+                menu.findItem(R.id.nav_servicios).setVisible(true);
+                menu.findItem(R.id.nav_productos).setVisible(true);
+            }
+
+        } else if (id == R.id.nav_productos) {
+            startActivity(new Intent(this, ProductosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_servicios) {
+            startActivity(new Intent(this, ProductosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_supermercados) {
             Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
+            drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_favorito) {
             Intent irFavoritos = new Intent(this, FavoritosActivity.class);
             startActivity(irFavoritos);
+            drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_inicio) {
 
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

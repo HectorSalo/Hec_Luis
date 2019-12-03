@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterVendedores;
@@ -50,6 +53,7 @@ public class VendedoresActivity extends AppCompatActivity
     private RecyclerView recyclerVendedores;
     private AdapterVendedores adapterVendedores;
     private ProgressBar progressBar;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class VendedoresActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
@@ -112,20 +116,7 @@ public class VendedoresActivity extends AppCompatActivity
 
         swRefresh.setOnRefreshListener(this);
 
-        adapterVendedores.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VariablesGenerales.idInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getIdVendedor();
-                VariablesGenerales.nombreInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
-                VariablesGenerales.telefonoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
-                VariablesGenerales.correoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
-                VariablesGenerales.imagenInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getImagen();
-                VariablesGenerales.ubicacionInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getUbicacionPreferida();
-                VariablesGenerales.latlongInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getLatlong();
-
-                startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
-            }
-        });
+        selecVendedor();
 
     }
 
@@ -157,6 +148,7 @@ public class VendedoresActivity extends AppCompatActivity
 
                     }
                     adapterVendedores.updateList(listVendedores);
+                    selecVendedor();
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(VendedoresActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -206,27 +198,49 @@ public class VendedoresActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Menu menu = navigationView.getMenu();
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_productos) {
-            Intent ir_productos = new Intent (this, ProductosActivity.class);
-            startActivity(ir_productos);
+        if (id == R.id.nav_catalogos) {
+            MenuItem itemServicios = menu.findItem(R.id.nav_servicios);
+            MenuItem itemProductos = menu.findItem(R.id.nav_productos);
 
+            SpannableString textServicios = new SpannableString(itemServicios.getTitle());
+            textServicios.setSpan(new TextAppearanceSpan(this, R.style.TextAppearanceCatalogo), 0, textServicios.length(), 0);
+            itemServicios.setTitle(textServicios);
+
+            SpannableString textProductos = new SpannableString(itemProductos.getTitle());
+            textProductos.setSpan(new TextAppearanceSpan(this, R.style.TextAppearanceCatalogo), 0, textProductos.length(), 0);
+            itemProductos.setTitle(textProductos);
+
+            if (menu.findItem(R.id.nav_productos).isVisible()) {
+                menu.findItem(R.id.nav_servicios).setVisible(false);
+                menu.findItem(R.id.nav_productos).setVisible(false);
+            } else {
+                menu.findItem(R.id.nav_servicios).setVisible(true);
+                menu.findItem(R.id.nav_productos).setVisible(true);
+            }
+
+        } else if (id == R.id.nav_productos) {
+            startActivity(new Intent(this, ProductosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_servicios) {
+            startActivity(new Intent(this, ProductosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_supermercados) {
 
         } else if (id == R.id.nav_favorito) {
-            Intent irFavoritos = new Intent(this, FavoritosActivity.class);
-            startActivity(irFavoritos);
-
+            startActivity(new Intent(this, FavoritosActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_inicio) {
-            Intent ir_inicio = new Intent(this, HomeActivity.class);
-            startActivity(ir_inicio);
+            startActivity(new Intent(this, HomeActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -271,6 +285,23 @@ public class VendedoresActivity extends AppCompatActivity
 
         }
         return true;
+    }
+
+    private void selecVendedor () {
+        adapterVendedores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VariablesGenerales.idInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getIdVendedor();
+                VariablesGenerales.nombreInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getNombreVendedor();
+                VariablesGenerales.telefonoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getTelefonoVendedor();
+                VariablesGenerales.correoInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getCorreoVendedor();
+                VariablesGenerales.imagenInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getImagen();
+                VariablesGenerales.ubicacionInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getUbicacionPreferida();
+                VariablesGenerales.latlongInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getLatlong();
+
+                startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
+            }
+        });
     }
 
     @Override
