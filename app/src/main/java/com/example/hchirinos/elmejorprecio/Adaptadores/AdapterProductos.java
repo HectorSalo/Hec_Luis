@@ -98,6 +98,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                 VariablesGenerales.vendedorInfoProducto = listProductos.get(position).getVendedor();
                 VariablesGenerales.imagenInfoProducto = listProductos.get(position).getImagenProducto();
                 VariablesGenerales.precioInfoProducto = "$" + listProductos.get(position).getPrecioProducto();
+                VariablesGenerales.estadoInfoProducto = listProductos.get(position).getEstadoProducto();
 
                 mContext.startActivity(new Intent(mContext, InfoProductoActivity.class));
             }

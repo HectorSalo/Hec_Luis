@@ -1,6 +1,7 @@
 package com.example.hchirinos.elmejorprecio.Adaptadores;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.NonNull;
@@ -15,8 +16,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.hchirinos.elmejorprecio.AdminSQLiteHelper;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
+import com.example.hchirinos.elmejorprecio.InfoProductoActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
@@ -62,6 +65,32 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
             @Override
             public void unLiked(LikeButton likeButton) {
                 quitarFavoritos(listFavoritos.get(position));
+            }
+        });
+
+        viewHolderFavoritos.imageButtonCompartir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selection = listFavoritos.get(position).getDescripcionProducto() + "\n$" + listFavoritos.get(position).getPrecioProducto() + "\nVende: " + listFavoritos.get(position).getVendedor();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, selection);
+                mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
+            }
+        });
+
+
+        viewHolderFavoritos.imageButtonInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VariablesGenerales.descripcionInfoProducto = listFavoritos.get(position).getDescripcionProducto();
+                VariablesGenerales.cantidadesInfoProducto = listFavoritos.get(position).getCantidadProducto() + " " + listFavoritos.get(position).getUnidadProducto();
+                VariablesGenerales.vendedorInfoProducto = listFavoritos.get(position).getVendedor();
+                VariablesGenerales.imagenInfoProducto = listFavoritos.get(position).getImagenProducto();
+                VariablesGenerales.precioInfoProducto = "$" + listFavoritos.get(position).getPrecioProducto();
+                VariablesGenerales.estadoInfoProducto = listFavoritos.get(position).getEstadoProducto();
+
+                mContext.startActivity(new Intent(mContext, InfoProductoActivity.class));
             }
         });
 

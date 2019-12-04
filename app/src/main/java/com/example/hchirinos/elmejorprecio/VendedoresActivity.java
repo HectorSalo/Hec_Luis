@@ -226,11 +226,13 @@ public class VendedoresActivity extends AppCompatActivity
         } else if (id == R.id.nav_productos) {
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
+            VariablesGenerales.verProductos = true;
         } else if (id == R.id.nav_servicios) {
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
+            VariablesGenerales.verProductos = false;
         } else if (id == R.id.nav_supermercados) {
-
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             startActivity(new Intent(this, FavoritosActivity.class));
             drawer.closeDrawer(GravityCompat.START);

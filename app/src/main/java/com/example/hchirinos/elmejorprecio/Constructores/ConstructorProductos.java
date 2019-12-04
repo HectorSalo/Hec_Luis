@@ -16,6 +16,7 @@ public class ConstructorProductos {
     private String vendedor;
     private String unidadProducto;
     private Date fechaIngreso;
+    private String estadoProducto;
 
 
     public ConstructorProductos() {}
@@ -63,6 +64,10 @@ public class ConstructorProductos {
         return fechaIngreso;
     }
 
+    public String getEstadoProducto() {
+        return estadoProducto;
+    }
+
     public void setIdProducto(String idProducto) {
         this.idProducto = idProducto;
     }
@@ -93,6 +98,10 @@ public class ConstructorProductos {
 
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
+    }
+
+    public void setEstadoProducto(String estadoProducto) {
+        this.estadoProducto = estadoProducto;
     }
 }
 

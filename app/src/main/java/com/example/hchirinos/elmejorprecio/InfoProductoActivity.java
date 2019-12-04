@@ -45,10 +45,12 @@ public class InfoProductoActivity extends AppCompatActivity {
         TextView tvVendedor = findViewById(R.id.tvVendedorInfoProducto);
         TextView tvCantidad = findViewById(R.id.tvCantidadInfoProducto);
         TextView tvPrecio = findViewById(R.id.tvPrecioInfoProducto);
+        TextView tvEstado = findViewById(R.id.tvEstadoProducto);
 
         tvVendedor.setText(VariablesGenerales.vendedorInfoProducto);
         tvCantidad.setText(VariablesGenerales.cantidadesInfoProducto);
         tvPrecio.setText(VariablesGenerales.precioInfoProducto);
+        tvEstado.setText(VariablesGenerales.estadoInfoProducto);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);

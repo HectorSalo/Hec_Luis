@@ -2,7 +2,7 @@
     <string name="app_name">El Mejor Precio</string>
 
     //activity_content_home
-    <string name="tvCambioPrecio">Cambiaron de precio</string>
+    <string name="tvCambioPrecio">Cambiaron de Precio</string>
     <string name="txt_recientes">Agregados Recientemente</string>
     <string name="txt_oferta">Ofertas de la Semana</string>
 
@@ -79,6 +79,7 @@
     <string name="vendedor_info_producto">Vendedor:</string>
     <string name="cantidad_info_producto">Cantidad a la venta:</string>
     <string name="precio_info_producto">Precio:</string>
+    <string name="estado_info_producto">Estado del artículo:</string>
 
 
 </resources>

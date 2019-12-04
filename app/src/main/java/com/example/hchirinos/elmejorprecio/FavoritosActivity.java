@@ -145,6 +145,7 @@ public class FavoritosActivity extends AppCompatActivity
             Snackbar snackbar = Snackbar.make(constraintLayout, "No tiene Favoritos", Snackbar.LENGTH_INDEFINITE).setAction("Agregar", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    VariablesGenerales.verProductos = true;
                     startActivity(new Intent(FavoritosActivity.this, ProductosActivity.class));
                 }
             });
@@ -169,6 +170,7 @@ public class FavoritosActivity extends AppCompatActivity
                         productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+                        productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -254,16 +256,18 @@ public class FavoritosActivity extends AppCompatActivity
         } else if (id == R.id.nav_productos) {
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
+            VariablesGenerales.verProductos = true;
         } else if (id == R.id.nav_servicios) {
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
+            VariablesGenerales.verProductos = false;
         } else if (id == R.id.nav_supermercados) {
             Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
             drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_favorito) {
-
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
             drawer.closeDrawer(GravityCompat.START);

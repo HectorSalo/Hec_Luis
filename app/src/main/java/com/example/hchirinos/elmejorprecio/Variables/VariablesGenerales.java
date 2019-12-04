@@ -8,6 +8,7 @@ public class VariablesGenerales {
     public static String vendedorInfoProducto = null;
     public static String imagenInfoProducto = null;
     public static String precioInfoProducto = null;
+    public static String estadoInfoProducto = null;
 
     public static String idInfoVendedor = null;
     public static String nombreInfoVendedor = null;
@@ -16,4 +17,6 @@ public class VariablesGenerales {
     public static String imagenInfoVendedor = null;
     public static String ubicacionInfoVendedor = null;
     public static GeoPoint latlongInfoVendedor = null;
+
+    public static boolean verProductos = true;
 }
