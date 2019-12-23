@@ -107,7 +107,8 @@ public class ProductosActivity extends AppCompatActivity
 
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            cargarProductoServicio();
+            //cargarProductoServicio();
+            resultadosBuscarHome();
         } else {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
                 @Override
@@ -116,7 +117,8 @@ public class ProductosActivity extends AppCompatActivity
                 }
             });
             snackbar.show();
-            cargarProductoServicio();
+            //cargarProductoServicio();
+            resultadosBuscarHome();
         }
 
         swRefresh.setOnRefreshListener(this);
@@ -643,6 +645,49 @@ public class ProductosActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void resultadosBuscarHome () {
+        listProductos = new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+        adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+        recyclerProductos.setHasFixedSize(true);
+        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerProductos.setAdapter(adapterProductos);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereLessThan(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, "Audifonos").whereGreaterThan(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, "Audifonos").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorProductos productos = new ConstructorProductos();
+                        productos.setIdProducto(doc.getId());
+                        productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
+                        productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
+                        productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
+                        productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
+                        productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
+                        productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+
+                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
+                        int cantidadInt = (int) cantidadD;
+                        productos.setCantidadProducto(cantidadInt);
+
+                        listProductos.add(productos);
+
+                    }
+                    adapterProductos.updateList(listProductos);
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
     }
 
     @Override

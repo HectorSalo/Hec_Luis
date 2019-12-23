@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
+    <item
+        android:id="@+id/bar_buscar"
+        android:title="@string/app_bar_buscar"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
 
 </menu>
 
