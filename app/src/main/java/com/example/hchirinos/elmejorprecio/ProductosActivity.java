@@ -58,6 +58,7 @@ public class ProductosActivity extends AppCompatActivity
     private AdapterProductos adapterProductos;
     private ProgressBar progressBar;
     private NavigationView navigationView;
+    private ConstraintLayout constraintLayout;
 
 
     @Override
@@ -77,7 +78,7 @@ public class ProductosActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-        ConstraintLayout constraintLayout = findViewById(R.id.layoutProductos);
+        constraintLayout = findViewById(R.id.layoutProductos);
         progressBar = findViewById(R.id.progressBarProductos);
 
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
@@ -107,8 +108,11 @@ public class ProductosActivity extends AppCompatActivity
 
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            //cargarProductoServicio();
-            resultadosBuscarHome();
+            if (VariablesGenerales.verResultadosBuscar) {
+                resultadosBuscarHome();
+            } else {
+                cargarProductoServicio();
+            }
         } else {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
                 @Override
@@ -117,8 +121,11 @@ public class ProductosActivity extends AppCompatActivity
                 }
             });
             snackbar.show();
-            //cargarProductoServicio();
-            resultadosBuscarHome();
+            if (VariablesGenerales.verResultadosBuscar) {
+                resultadosBuscarHome();
+            } else {
+                cargarProductoServicio();
+            }
         }
 
         swRefresh.setOnRefreshListener(this);
@@ -140,12 +147,15 @@ public class ProductosActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (!VariablesGenerales.verResultadosBuscar) {
+            getMenuInflater().inflate(R.menu.productos, menu);
+            MenuItem listOrdenar = menu.findItem(R.id.bar_ordenar);
+            MenuItem menuItem = menu.findItem(R.id.bar_buscar);
+            SearchView searchView = (SearchView) menuItem.getActionView();
+            searchView.setOnQueryTextListener(this);
+        }
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.productos, menu);
-        MenuItem listOrdenar = menu.findItem(R.id.bar_ordenar);
-        MenuItem menuItem = menu.findItem(R.id.bar_buscar);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setOnQueryTextListener(this);
+
 
         return true;
     }
@@ -202,10 +212,12 @@ public class ProductosActivity extends AppCompatActivity
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
             VariablesGenerales.verProductos = true;
+            VariablesGenerales.verResultadosBuscar = false;
         } else if (id == R.id.nav_servicios) {
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
             VariablesGenerales.verProductos = false;
+            VariablesGenerales.verResultadosBuscar = false;
         } else if (id == R.id.nav_supermercados) {
             startActivity(new Intent(this, VendedoresActivity.class));
             drawer.closeDrawer(GravityCompat.START);
@@ -265,6 +277,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Productos");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -306,6 +319,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Servicios");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -348,6 +362,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Productos");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -389,6 +404,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Servicios");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -430,6 +446,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Productos");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -471,6 +488,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Servicios");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -512,6 +530,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Productos");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -553,6 +572,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Servicios");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -595,6 +615,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Productos");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -638,6 +659,7 @@ public class ProductosActivity extends AppCompatActivity
 
                     }
                     adapterProductos.updateList(listProductos);
+                    getSupportActionBar().setTitle("Servicios");
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -657,7 +679,7 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereLessThan(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, "Audifonos").whereGreaterThan(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, "Audifonos").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -678,7 +700,21 @@ public class ProductosActivity extends AppCompatActivity
                         listProductos.add(productos);
 
                     }
-                    adapterProductos.updateList(listProductos);
+
+                        ArrayList<ConstructorProductos> newList = new ArrayList<>();
+
+                        for (ConstructorProductos name : listProductos) {
+
+                            if (name.getDescripcionProducto().toLowerCase().contains(VariablesGenerales.textBuscar.toLowerCase())) {
+                                newList.add(name);
+                            }
+                        }
+
+                        adapterProductos.updateList(newList);
+                        getSupportActionBar().setTitle("'" + VariablesGenerales.textBuscar + "'");
+                        Snackbar.make(constraintLayout, newList.size() + " resultados para su búsqueda", Snackbar.LENGTH_INDEFINITE).show();
+
+
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(ProductosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
@@ -692,8 +728,13 @@ public class ProductosActivity extends AppCompatActivity
 
     @Override
     public void onRefresh() {
-        cargarProductoServicio();
-        swRefresh.setRefreshing(false);
+        if (!VariablesGenerales.verResultadosBuscar) {
+            cargarProductoServicio();
+            swRefresh.setRefreshing(false);
+        } else {
+            resultadosBuscarHome();
+            swRefresh.setRefreshing(false);
+        }
     }
 
     @Override

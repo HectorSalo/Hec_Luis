@@ -257,10 +257,12 @@ public class FavoritosActivity extends AppCompatActivity
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
             VariablesGenerales.verProductos = true;
+            VariablesGenerales.verResultadosBuscar = false;
         } else if (id == R.id.nav_servicios) {
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
             VariablesGenerales.verProductos = false;
+            VariablesGenerales.verResultadosBuscar = false;
         } else if (id == R.id.nav_supermercados) {
             Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);

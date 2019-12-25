@@ -357,10 +357,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_productos) {
             startActivity(new Intent(this, ProductosActivity.class));
             VariablesGenerales.verProductos = true;
+            VariablesGenerales.verResultadosBuscar = false;
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_servicios) {
             startActivity(new Intent(this, ProductosActivity.class));
             VariablesGenerales.verProductos = false;
+            VariablesGenerales.verResultadosBuscar = false;
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_supermercados) {
             Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
@@ -384,6 +386,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        VariablesGenerales.textBuscar = query.trim();
+        VariablesGenerales.verResultadosBuscar = true;
+
+        startActivity(new Intent(this, ProductosActivity.class));
         return false;
     }
 

@@ -19,4 +19,7 @@ public class VariablesGenerales {
     public static GeoPoint latlongInfoVendedor = null;
 
     public static boolean verProductos = true;
+    public static boolean verResultadosBuscar = false;
+
+    public static String textBuscar = null;
 }

@@ -227,10 +227,12 @@ public class VendedoresActivity extends AppCompatActivity
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
             VariablesGenerales.verProductos = true;
+            VariablesGenerales.verResultadosBuscar = false;
         } else if (id == R.id.nav_servicios) {
             startActivity(new Intent(this, ProductosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
             VariablesGenerales.verProductos = false;
+            VariablesGenerales.verResultadosBuscar = false;
         } else if (id == R.id.nav_supermercados) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
