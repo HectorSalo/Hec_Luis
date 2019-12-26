@@ -8,11 +8,16 @@ import com.bumptech.glide.Glide;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,12 +28,19 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
+import java.util.List;
+
 public class InfoProductoActivity extends AppCompatActivity {
+
+    private boolean temaClaro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +65,7 @@ public class InfoProductoActivity extends AppCompatActivity {
         tvEstado.setText(VariablesGenerales.estadoInfoProducto);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
+        temaClaro = sharedPreferences.getBoolean("temaClaro", true);
         if (!temaClaro) {
 
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -69,7 +81,7 @@ public class InfoProductoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(InfoProductoActivity.this, InfoVendedorActivity.class));
+                crearBottomSheet();
             }
         });
     }
@@ -92,6 +104,76 @@ public class InfoProductoActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void crearBottomSheet () {
+        View viewBottomSheet = LayoutInflater.from(InfoProductoActivity.this).inflate(R.layout.bottom_sheet_vendedor, null);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(InfoProductoActivity.this);
+        bottomSheetDialog.setContentView(viewBottomSheet);
+        bottomSheetDialog.show();
+
+        Button butonVerPerfil = viewBottomSheet.findViewById(R.id.buttonVerVendedor);
+        Button buttonEscribirVendedor = viewBottomSheet.findViewById(R.id.buttonEscribirVendedor);
+
+        butonVerPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(InfoProductoActivity.this, InfoVendedorActivity.class));
+            }
+        });
+
+        buttonEscribirVendedor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iniciarSesion();
+            }
+        });
+    }
+
+    private void iniciarSesion() {
+
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
+// Create and launch sign-in intent
+        if (!temaClaro) {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setTheme(R.style.AppThemeNoche)
+                            .build(),
+                    12);
+        } else {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    12);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 12) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+
+            }
+        }
     }
 
     @Override

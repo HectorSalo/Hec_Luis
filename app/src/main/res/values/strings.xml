@@ -81,6 +81,8 @@
     <string name="cantidad_info_producto">Cantidad a la venta:</string>
     <string name="precio_info_producto">Precio:</string>
     <string name="estado_info_producto">Estado del artículo:</string>
+    <string name="bottom_sheet_escribir_info_producto">Escribir por chat al Vendedor</string>
+    <string name="bottom_sheet_verperfil_info_producto">Ver Perfil del Vendedor</string>
 
 
 </resources>
