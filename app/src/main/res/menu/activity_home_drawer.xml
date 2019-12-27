@@ -38,9 +38,19 @@
     <item android:title="@string/navigation_drawer_subtitle">
         <menu>
             <item
+                android:id="@+id/nav_chat"
+                android:icon="@drawable/ic_chat"
+                android:title="@string/navigation_drawer_chat" />
+
+            <item
                 android:id="@+id/nav_favorito"
                 android:icon="@drawable/ic_favoritos"
                 android:title="@string/navigation_drawer_favoritos" />
+
+            <item
+                android:id="@+id/nav_vender"
+                android:icon="@drawable/ic_vender"
+                android:title="@string/navigation_drawer_vender" />
 
         </menu>
     </item>

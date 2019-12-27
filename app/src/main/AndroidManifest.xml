@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -20,9 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppThemeDiaNoche"></activity>
+        <activity
             android:name=".InfoVendedorActivity"
             android:label="@string/title_activity_info_vendedor"
-            android:theme="@style/AppThemeDiaNoche"></activity>
+            android:theme="@style/AppThemeDiaNoche" />
         <activity
             android:name=".InfoProductoActivity"
             android:label="@string/title_activity_info_producto"
@@ -38,12 +42,13 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="MaestrosNotif" />
 
-        <activity android:name=".AcercadeActivity"
-            android:theme="@style/AppThemeDiaNoche"/>
+        <activity
+            android:name=".AcercadeActivity"
+            android:theme="@style/AppThemeDiaNoche" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppThemeSetting"/>
+            android:theme="@style/AppThemeSetting" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"

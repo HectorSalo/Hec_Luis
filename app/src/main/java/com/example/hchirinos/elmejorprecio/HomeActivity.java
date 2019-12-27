@@ -382,6 +382,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(irFavoritos);
             drawer.closeDrawer(GravityCompat.START);
 
+        } else if (id == R.id.nav_chat) {
+            startActivity(new Intent(HomeActivity.this, ChatActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_vender) {
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
            startActivity(new Intent(this, SettingsActivity.class));
             drawer.closeDrawer(GravityCompat.START);

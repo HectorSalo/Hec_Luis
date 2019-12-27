@@ -14,6 +14,8 @@
     <string name="navigation_drawer_SUP">Vendedores</string>
     <string name="navigation_drawer_subtitle">Personal</string>
     <string name="navigation_drawer_favoritos">Favoritos</string>
+    <string name="navigation_drawer_chat">Chat</string>
+    <string name="navigation_drawer_vender">Vender</string>
     <string name="navigation_drawer_subtitle2">Extras</string>
     <string name="navigation_drawer_configuracion">Configuracion</string>
 
@@ -52,8 +54,7 @@
     <!-- Notificaciones Preferences -->
     <string name="notificaciones_title">Permitir Notificaciones</string>
     <string name="vibracion_title">Vibración</string>
-    <string name="vibracion_summary_on">Vibrar y sonar al recibir la notificación
-    </string>
+    <string name="vibracion_summary_on">Vibrar y sonar al recibir la notificación</string>
     <string name="vibracion_summary_off">Recibir notificación sólo con sonido</string>
 
     <!-- Personal Preferences -->
@@ -83,6 +84,9 @@
     <string name="estado_info_producto">Estado del artículo:</string>
     <string name="bottom_sheet_escribir_info_producto">Escribir por chat al Vendedor</string>
     <string name="bottom_sheet_verperfil_info_producto">Ver Perfil del Vendedor</string>
+    <string name="title_activity_chat">Chat</string>
+    <string name="tab_text_1">Conversaciones</string>
+    <string name="tab_text_2">Usuarios</string>
 
 
 </resources>
