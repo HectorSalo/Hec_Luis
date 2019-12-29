@@ -114,7 +114,7 @@ public class InfoProductoActivity extends AppCompatActivity {
 
     private void crearBottomSheet () {
         View viewBottomSheet = LayoutInflater.from(InfoProductoActivity.this).inflate(R.layout.bottom_sheet_vendedor, null);
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(InfoProductoActivity.this);
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(InfoProductoActivity.this);
         bottomSheetDialog.setContentView(viewBottomSheet);
         bottomSheetDialog.show();
 
@@ -134,7 +134,13 @@ public class InfoProductoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 user = mAuth.getCurrentUser();
                 if (user != null) {
+                    VariablesGenerales.idChatVendedor = VariablesGenerales.idInfoVendedor;
+                    VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;
+                    VariablesGenerales.correoChatVendedor = VariablesGenerales.correoInfoVendedor;
+                    VariablesGenerales.imagenChatVendedor = VariablesGenerales.imagenInfoVendedor;
+                    startActivity(new Intent(InfoProductoActivity.this, MessengerActivity.class));
 
+                    bottomSheetDialog.dismiss();
                 } else {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(InfoProductoActivity.this);
                     dialog.setTitle("¡Aviso!")
@@ -143,11 +149,13 @@ public class InfoProductoActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     iniciarSesion();
+                                    bottomSheetDialog.dismiss();
                                 }
                             }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            bottomSheetDialog.dismiss();
                         }
                     }).show();
                 }
@@ -192,7 +200,12 @@ public class InfoProductoActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                startActivity(new Intent(this, ChatActivity.class));
+                VariablesGenerales.idChatVendedor = VariablesGenerales.idInfoVendedor;
+                VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;
+                VariablesGenerales.correoChatVendedor = VariablesGenerales.correoInfoVendedor;
+                VariablesGenerales.imagenChatVendedor = VariablesGenerales.imagenInfoVendedor;
+
+                startActivity(new Intent(this, MessengerActivity.class));
 
             } else {
                 // Sign in failed. If response is null the user canceled the

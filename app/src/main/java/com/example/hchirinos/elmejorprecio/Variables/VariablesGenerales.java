@@ -22,4 +22,9 @@ public class VariablesGenerales {
     public static boolean verResultadosBuscar = false;
 
     public static String textBuscar = null;
+
+    public static String idChatVendedor = null;
+    public static String nombreChatVendedor = null;
+    public static String correoChatVendedor = null;
+    public static String imagenChatVendedor = null;
 }

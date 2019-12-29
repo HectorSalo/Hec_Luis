@@ -1,6 +1,7 @@
 package com.example.hchirinos.elmejorprecio.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,8 +16,11 @@ import android.widget.Toast;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.MyUsuariosChatRecyclerViewAdapter;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
+import com.example.hchirinos.elmejorprecio.InfoProductoActivity;
+import com.example.hchirinos.elmejorprecio.MessengerActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent.DummyItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -161,7 +165,11 @@ public class UsuariosChatFragment extends Fragment {
         myUsuariosChatRecyclerViewAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getNombreVendedor(), Toast.LENGTH_SHORT).show();
+                VariablesGenerales.idChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getIdVendedor();
+                VariablesGenerales.nombreChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getNombreVendedor();
+                VariablesGenerales.correoChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getCorreoVendedor();
+                VariablesGenerales.imagenChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getImagen();
+                startActivity(new Intent(getContext(), MessengerActivity.class));
             }
         });
     }

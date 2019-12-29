@@ -19,10 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".MessengerActivity"
+            android:theme="@style/AppThemeDiaNoche"></activity>
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"
-            android:theme="@style/AppThemeDiaNoche"></activity>
+            android:theme="@style/AppThemeDiaNoche" />
         <activity
             android:name=".InfoVendedorActivity"
             android:label="@string/title_activity_info_vendedor"
