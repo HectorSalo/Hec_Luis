@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,11 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.hchirinos.elmejorprecio.ChatActivity;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.R;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent;
 import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent.DummyItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +36,10 @@ import java.util.List;
  * interface.
  */
 public class UsuariosChatFragment extends Fragment {
+
+    private ArrayList<ConstructorVendedores> listUsuarios;
+    private MyUsuariosChatRecyclerViewAdapter myUsuariosChatRecyclerViewAdapter;
+    private RecyclerView recyclerViewUsuarios;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -63,17 +78,10 @@ public class UsuariosChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_usuarioschat_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyUsuariosChatRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+        recyclerViewUsuarios = view.findViewById(R.id.recyclerViewUsuariosChat);
+
+        cargarUsuariosChat();
+
         return view;
     }
 
@@ -108,5 +116,46 @@ public class UsuariosChatFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(DummyItem item);
+    }
+
+    private void cargarUsuariosChat() {
+        listUsuarios = new ArrayList<>();
+        //progressBar.setVisibility(View.VISIBLE);
+        myUsuariosChatRecyclerViewAdapter = new MyUsuariosChatRecyclerViewAdapter(listUsuarios, getContext());
+        recyclerViewUsuarios.setHasFixedSize(true);
+        recyclerViewUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerViewUsuarios.setAdapter(myUsuariosChatRecyclerViewAdapter);
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collectionGroup(VariablesEstaticas.BD_DETALLES_VENDEDOR).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        ConstructorVendedores vendedor = new ConstructorVendedores();
+                        vendedor.setIdVendedor(doc.getString(VariablesEstaticas.BD_ID_VENDEDOR));
+                        vendedor.setNombreVendedor(doc.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR));
+                        vendedor.setCorreoVendedor(doc.getString(VariablesEstaticas.BD_CORREO_VENDEDOR));
+                        vendedor.setTelefonoVendedor(doc.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR));
+                        vendedor.setImagen(doc.getString(VariablesEstaticas.BD_IMAGEN_VENDEDOR));
+                        vendedor.setUbicacionPreferida(doc.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA));
+                        vendedor.setLatlong(doc.getGeoPoint(VariablesEstaticas.BD_LATITUD_LONGITUD));
+
+                        listUsuarios.add(vendedor);
+
+                    }
+                    myUsuariosChatRecyclerViewAdapter.updateList(listUsuarios);
+
+                    //progressBar.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(getContext(), "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    //progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+
     }
 }

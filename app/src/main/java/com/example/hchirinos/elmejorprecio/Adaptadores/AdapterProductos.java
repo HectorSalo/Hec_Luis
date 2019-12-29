@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.InfoProductoActivity;
 import com.example.hchirinos.elmejorprecio.R;

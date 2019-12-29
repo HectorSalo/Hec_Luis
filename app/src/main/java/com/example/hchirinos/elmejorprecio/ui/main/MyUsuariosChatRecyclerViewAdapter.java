@@ -2,16 +2,21 @@ package com.example.hchirinos.elmejorprecio.ui.main;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.ui.main.UsuariosChatFragment.OnListFragmentInteractionListener;
 import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,44 +24,46 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUsuariosChatRecyclerViewAdapter.ViewHolder> {
+public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUsuariosChatRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private ArrayList<ConstructorVendedores> listUsuarios;
+    private View.OnClickListener listener;
+    private Context mContext;
 
-    public MyUsuariosChatRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public MyUsuariosChatRecyclerViewAdapter(ArrayList<ConstructorVendedores> listUsuarios, Context mContext) {
+        this.listUsuarios = listUsuarios;
+        this.mContext = mContext;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_usuarioschat, parent, false);
+        view.setOnClickListener(this);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.nombreUsuario.setText(mValues.get(position).id);
-        holder.emailUsuario.setText(mValues.get(position).content);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
+        holder.nombreUsuario.setText(listUsuarios.get(position).getNombreVendedor());
+        holder.emailUsuario.setText(listUsuarios.get(position).getCorreoVendedor());
+
+        Glide.with(mContext).load(listUsuarios.get(position).getImagen()).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+
+
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return listUsuarios.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (listener != null) {
+            listener.onClick(v);
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,7 +71,6 @@ public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUs
         public final ImageView imagenUsuario;
         public final TextView nombreUsuario;
         public final TextView emailUsuario;
-        public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -74,9 +80,16 @@ public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUs
             emailUsuario = (TextView) view.findViewById(R.id.email_usuario_chat);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + emailUsuario.getText() + "'";
-        }
+    }
+
+    public void updateList (ArrayList<ConstructorVendedores> newList){
+
+        listUsuarios = new ArrayList<>();
+        listUsuarios.addAll(newList);
+        notifyDataSetChanged();
+    }
+
+    public void setOnClickListener (View.OnClickListener listener) {
+        this.listener = listener;
     }
 }
