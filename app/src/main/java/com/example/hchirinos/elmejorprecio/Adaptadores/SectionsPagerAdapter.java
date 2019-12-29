@@ -1,4 +1,4 @@
-package com.example.hchirinos.elmejorprecio.ui.main;
+package com.example.hchirinos.elmejorprecio.Adaptadores;
 
 import android.content.Context;
 
@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.hchirinos.elmejorprecio.R;
+import com.example.hchirinos.elmejorprecio.ui.main.ConversacionesChatFragment;
+import com.example.hchirinos.elmejorprecio.ui.main.UsuariosChatFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

@@ -235,6 +235,9 @@ public class VendedoresActivity extends AppCompatActivity
             VariablesGenerales.verResultadosBuscar = false;
         } else if (id == R.id.nav_supermercados) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_chat) {
+            startActivity(new Intent(this, ChatActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             startActivity(new Intent(this, FavoritosActivity.class));
             drawer.closeDrawer(GravityCompat.START);

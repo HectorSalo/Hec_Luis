@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,11 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.hchirinos.elmejorprecio.ChatActivity;
+import com.example.hchirinos.elmejorprecio.Adaptadores.MyUsuariosChatRecyclerViewAdapter;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
-import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent;
 import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent.DummyItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +25,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -81,6 +78,7 @@ public class UsuariosChatFragment extends Fragment {
         recyclerViewUsuarios = view.findViewById(R.id.recyclerViewUsuariosChat);
 
         cargarUsuariosChat();
+        selecUsuarioChat();
 
         return view;
     }
@@ -157,5 +155,14 @@ public class UsuariosChatFragment extends Fragment {
             }
         });
 
+    }
+
+    private void selecUsuarioChat() {
+        myUsuariosChatRecyclerViewAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getNombreVendedor(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

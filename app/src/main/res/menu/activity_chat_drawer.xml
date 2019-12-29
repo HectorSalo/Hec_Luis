@@ -5,6 +5,7 @@
 
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_inicio"
             android:icon="@drawable/ic_home"
@@ -18,7 +19,8 @@
             android:id="@+id/nav_productos"
             android:icon="@drawable/ic_productos"
             android:title="@string/navigation_drawer_PLU"
-            android:visible="false"/>
+            android:visible="false"
+            />
         <item
             android:id="@+id/nav_servicios"
             android:icon="@drawable/ic_servicios"
@@ -29,7 +31,9 @@
             android:id="@+id/nav_supermercados"
             android:icon="@drawable/ic_vendedor"
             android:title="@string/navigation_drawer_SUP" />
+
     </group>
+
 
     <item android:title="@string/navigation_drawer_subtitle">
         <menu>

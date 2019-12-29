@@ -1,4 +1,4 @@
-package com.example.hchirinos.elmejorprecio.ui.main;
+package com.example.hchirinos.elmejorprecio.Adaptadores;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +17,6 @@ import com.example.hchirinos.elmejorprecio.ui.main.UsuariosChatFragment.OnListFr
 import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the

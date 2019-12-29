@@ -268,6 +268,9 @@ public class FavoritosActivity extends AppCompatActivity
             startActivity(ir_supermercado);
             drawer.closeDrawer(GravityCompat.START);
 
+        } else if (id == R.id.nav_chat) {
+            startActivity(new Intent(this, ChatActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){

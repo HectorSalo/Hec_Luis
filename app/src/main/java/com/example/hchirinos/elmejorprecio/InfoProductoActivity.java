@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -41,6 +43,8 @@ import java.util.List;
 public class InfoProductoActivity extends AppCompatActivity {
 
     private boolean temaClaro;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class InfoProductoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         this.setTitle(VariablesGenerales.descripcionInfoProducto);
+
+        mAuth = FirebaseAuth.getInstance();
 
         ImageView imageView = findViewById(R.id.imagenInfoProducto);
         Glide.with(this).load(VariablesGenerales.imagenInfoProducto).into(imageView);
@@ -112,6 +118,7 @@ public class InfoProductoActivity extends AppCompatActivity {
         bottomSheetDialog.setContentView(viewBottomSheet);
         bottomSheetDialog.show();
 
+
         Button butonVerPerfil = viewBottomSheet.findViewById(R.id.buttonVerVendedor);
         Button buttonEscribirVendedor = viewBottomSheet.findViewById(R.id.buttonEscribirVendedor);
 
@@ -125,7 +132,25 @@ public class InfoProductoActivity extends AppCompatActivity {
         buttonEscribirVendedor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                iniciarSesion();
+                user = mAuth.getCurrentUser();
+                if (user != null) {
+
+                } else {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(InfoProductoActivity.this);
+                    dialog.setTitle("¡Aviso!")
+                            .setMessage("Debe iniciar sesión para enviar mensaje directo\n¿Desea iniciar sesión?")
+                            .setPositiveButton("Iniciar Sesión", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    iniciarSesion();
+                                }
+                            }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                }
             }
         });
     }
@@ -166,6 +191,8 @@ public class InfoProductoActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                startActivity(new Intent(this, ChatActivity.class));
 
             } else {
                 // Sign in failed. If response is null the user canceled the
