@@ -8,8 +8,10 @@
 
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,11 +36,62 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingStart="16dp"
-                android:text="test"
                 android:textSize="18sp" />
 
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_Chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/layout_write_chat"/>
+
+        <LinearLayout
+            android:id="@+id/layout_write_chat"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:background="#AFAFAF">
+
+            <ImageButton
+                android:id="@+id/imageButtonEmoji"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF"
+                app:srcCompat="@drawable/ic_emoji" />
+
+            <EditText
+                android:id="@+id/editTextMsg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/edit_text_msg"
+                android:inputType="textMultiLine" />
+
+            <ImageButton
+                android:id="@+id/imageButtonEnviarMsg"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="#00FFFFFF"
+                app:srcCompat="@drawable/ic_enviar_msg"
+
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

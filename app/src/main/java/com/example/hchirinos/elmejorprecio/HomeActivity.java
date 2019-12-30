@@ -2,6 +2,7 @@ package com.example.hchirinos.elmejorprecio;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -67,6 +69,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<ConstructorProductos> listRecientes, listCambioPrecio, listOferta;
     private ProgressBar progressBarRecientes, progressBarCambioPrecio, progressBarOfertas;
     private NavigationView navigationView;
+    private boolean temaClaro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +114,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean subscripcionInicial = sharedPreferences.getBoolean("subsinicial", true);
-        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
+        temaClaro = sharedPreferences.getBoolean("temaClaro", true);
         if (!temaClaro) {
 
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -383,7 +386,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_chat) {
-            startActivity(new Intent(HomeActivity.this, ChatActivity.class));
+            validarInicSesion();
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_vender) {
             drawer.closeDrawer(GravityCompat.START);
@@ -394,6 +397,77 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
         return true;
+    }
+
+    private void validarInicSesion() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(this, ChatActivity.class));
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(HomeActivity.this);
+            dialog.setTitle("¡Aviso!")
+                    .setMessage("Debe iniciar sesión para enviar mensaje directo\n¿Desea iniciar sesión?")
+                    .setPositiveButton("Iniciar Sesión", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            iniciarSesion();
+                        }
+                    }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }
+    }
+
+
+    private void iniciarSesion() {
+
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
+// Create and launch sign-in intent
+        if (!temaClaro) {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setTheme(R.style.AppThemeNoche)
+                            .build(),
+                    12);
+        } else {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    12);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 12) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                startActivity(new Intent(this, ChatActivity.class));
+
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+
+            }
+        }
     }
 
 

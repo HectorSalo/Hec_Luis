@@ -1,12 +1,14 @@
 package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
@@ -23,6 +25,8 @@ import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterVendedores;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -38,11 +42,15 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class VendedoresActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
@@ -54,6 +62,7 @@ public class VendedoresActivity extends AppCompatActivity
     private AdapterVendedores adapterVendedores;
     private ProgressBar progressBar;
     private NavigationView navigationView;
+    private boolean temaClaro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +94,7 @@ public class VendedoresActivity extends AppCompatActivity
         recyclerVendedores.setAdapter(adapterVendedores);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
+        temaClaro = sharedPreferences.getBoolean("temaClaro", true);
         if (!temaClaro) {
 
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -236,7 +245,7 @@ public class VendedoresActivity extends AppCompatActivity
         } else if (id == R.id.nav_supermercados) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_chat) {
-            startActivity(new Intent(this, ChatActivity.class));
+            validarInicSesion();
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             startActivity(new Intent(this, FavoritosActivity.class));
@@ -309,6 +318,77 @@ public class VendedoresActivity extends AppCompatActivity
                 startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
             }
         });
+    }
+
+
+    private void validarInicSesion() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(this, ChatActivity.class));
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(VendedoresActivity.this);
+            dialog.setTitle("¡Aviso!")
+                    .setMessage("Debe iniciar sesión para enviar mensaje directo\n¿Desea iniciar sesión?")
+                    .setPositiveButton("Iniciar Sesión", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            iniciarSesion();
+                        }
+                    }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }
+    }
+
+    private void iniciarSesion() {
+
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Collections.singletonList(
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
+// Create and launch sign-in intent
+        if (!temaClaro) {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setTheme(R.style.AppThemeNoche)
+                            .build(),
+                    12);
+        } else {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .build(),
+                    12);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 12) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == RESULT_OK) {
+                // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                startActivity(new Intent(this, ChatActivity.class));
+
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+
+            }
+        }
     }
 
     @Override

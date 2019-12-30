@@ -88,5 +88,7 @@
     <string name="tab_text_1">Conversaciones</string>
     <string name="tab_text_2">Usuarios</string>
 
+    <string name="edit_text_msg">Escribir mensaje</string>
+
 
 </resources>

@@ -126,6 +126,7 @@ public class InfoProductoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(InfoProductoActivity.this, InfoVendedorActivity.class));
+                bottomSheetDialog.dismiss();
             }
         });
 
