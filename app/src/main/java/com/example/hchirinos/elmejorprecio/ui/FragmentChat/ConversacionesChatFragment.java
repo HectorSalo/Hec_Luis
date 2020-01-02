@@ -81,7 +81,7 @@ public class ConversacionesChatFragment extends Fragment {
 
         cargarConversaciones();
         selecUsuarioChat();
-        
+
 
         return root;
     }
