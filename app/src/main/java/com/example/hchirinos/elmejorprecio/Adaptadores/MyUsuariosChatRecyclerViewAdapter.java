@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
 import com.example.hchirinos.elmejorprecio.R;
-import com.example.hchirinos.elmejorprecio.ui.main.UsuariosChatFragment.OnListFragmentInteractionListener;
-import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent.DummyItem;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment.OnListFragmentInteractionListener;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 
@@ -25,11 +25,11 @@ import java.util.ArrayList;
  */
 public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUsuariosChatRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
 
-    private ArrayList<ConstructorVendedores> listUsuarios;
+    private ArrayList<ConstructorMessenger> listUsuarios;
     private View.OnClickListener listener;
     private Context mContext;
 
-    public MyUsuariosChatRecyclerViewAdapter(ArrayList<ConstructorVendedores> listUsuarios, Context mContext) {
+    public MyUsuariosChatRecyclerViewAdapter(ArrayList<ConstructorMessenger> listUsuarios, Context mContext) {
         this.listUsuarios = listUsuarios;
         this.mContext = mContext;
     }
@@ -45,8 +45,8 @@ public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUs
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        holder.nombreUsuario.setText(listUsuarios.get(position).getNombreVendedor());
-        holder.emailUsuario.setText(listUsuarios.get(position).getCorreoVendedor());
+        holder.nombreUsuario.setText(listUsuarios.get(position).getNombreReceptor());
+        holder.emailUsuario.setText(listUsuarios.get(position).getEmail());
 
         Glide.with(mContext).load(listUsuarios.get(position).getImagen()).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
 
@@ -81,7 +81,7 @@ public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUs
 
     }
 
-    public void updateList (ArrayList<ConstructorVendedores> newList){
+    public void updateList (ArrayList<ConstructorMessenger> newList){
 
         listUsuarios = new ArrayList<>();
         listUsuarios.addAll(newList);

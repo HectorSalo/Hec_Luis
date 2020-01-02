@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <TextView
 
+    <androidx.emoji.widget.EmojiTextView
         android:id="@+id/textView_showmsg"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/fondo_chat_izquierda"
-        android:text="@string/edit_text_msg"
-        android:textSize="18sp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/fondo_chat_izquierda"
         android:padding="10dp"
-        />
+        android:text="@string/edit_text_msg"
+        android:textSize="18sp"/>
 
 
 </LinearLayout>

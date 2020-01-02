@@ -459,6 +459,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+
                 startActivity(new Intent(this, ChatActivity.class));
 
             } else {

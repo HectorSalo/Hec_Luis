@@ -30,4 +30,18 @@ public class VariablesEstaticas {
     public static final String BD_ID_PRODUCTO_FAVORITO = "idProducto";
     public static final String BD_FAVORITOS = "favoritos";
     public static final int VERSION_SQLITE = 3;
+
+    public static final String BD_ID_EMISOR = "emisor";
+    public static final String BD_ID_MENSAJE = "idMsj";
+    public static final String BD_ID_RECEPTOR = "receptor";
+    public static final String BD_MENSAJE_CHAT = "mensaje";
+    public static final String BD_FECHA_MENSAJE = "fechaEnvioMsj";
+    public static final String BD_CHATS = "Chats";
+    public static final String BD_EMAIL_USUARIO = "emailUsuario";
+    public static final String BD_IMAGEN_USUARIO = "imagenUsuario";
+    public static final String BD_NOMBRE_USUARIO = "nombreUsuario";
+
+    public static final String BD_USUARIOS_CHAT = "UsuariosChat";
+    public static final String BD_CONVERSACIONES_CHAT = "Conversaciones";
+
 }

@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.hchirinos.elmejorprecio.R;
-import com.example.hchirinos.elmejorprecio.ui.main.ConversacionesChatFragment;
-import com.example.hchirinos.elmejorprecio.ui.main.UsuariosChatFragment;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.ConversacionesChatFragment;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

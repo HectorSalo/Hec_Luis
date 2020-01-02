@@ -45,6 +45,7 @@ public class InfoProductoActivity extends AppCompatActivity {
     private boolean temaClaro;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    private String idReceptorChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,7 @@ public class InfoProductoActivity extends AppCompatActivity {
                 VariablesGenerales.nombreInfoVendedor = VariablesGenerales.vendedorInfoProducto;
                 VariablesGenerales.idInfoVendedor = snapshot.getString(VariablesEstaticas.BD_ID_VENDEDOR);
                 VariablesGenerales.ubicacionInfoVendedor = snapshot.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA);
+                idReceptorChat = snapshot.getString("idUsuarioChat");
                 }
 
             }
@@ -135,7 +137,7 @@ public class InfoProductoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 user = mAuth.getCurrentUser();
                 if (user != null) {
-                    VariablesGenerales.idChatVendedor = VariablesGenerales.idInfoVendedor;
+                    VariablesGenerales.idChatVendedor = idReceptorChat;
                     VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;
                     VariablesGenerales.correoChatVendedor = VariablesGenerales.correoInfoVendedor;
                     VariablesGenerales.imagenChatVendedor = VariablesGenerales.imagenInfoVendedor;
@@ -201,7 +203,7 @@ public class InfoProductoActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                VariablesGenerales.idChatVendedor = VariablesGenerales.idInfoVendedor;
+                VariablesGenerales.idChatVendedor = idReceptorChat;
                 VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;
                 VariablesGenerales.correoChatVendedor = VariablesGenerales.correoInfoVendedor;
                 VariablesGenerales.imagenChatVendedor = VariablesGenerales.imagenInfoVendedor;

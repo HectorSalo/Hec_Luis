@@ -4,17 +4,63 @@ import java.util.Date;
 
 public class ConstructorMessenger {
 
-    private String emisor, receptor, mensaje;
+    private String emisor, receptor, mensaje, idMensaje, imagen, email, nombreReceptor;
     private Date fechaEnvio;
+    private boolean conversacionActiva;
 
-    public ConstructorMessenger(String emisor, String receptor, String mensaje, Date fechaEnvio) {
+    public ConstructorMessenger(String emisor, String receptor, String mensaje, Date fechaEnvio, String idMensaje, String imagen, String email, String nombreReceptor, boolean conversacionActiva) {
         this.emisor = emisor;
         this.receptor = receptor;
         this.mensaje = mensaje;
+        this.idMensaje = idMensaje;
+        this.nombreReceptor = nombreReceptor;
+        this.imagen = imagen;
+        this.email = email;
         this.fechaEnvio = fechaEnvio;
+        this.conversacionActiva = conversacionActiva;
     }
 
     public ConstructorMessenger (){}
+
+    public boolean isConversacionActiva() {
+        return conversacionActiva;
+    }
+
+    public void setConversacionActiva(boolean conversacionActiva) {
+        this.conversacionActiva = conversacionActiva;
+    }
+
+    public String getNombreReceptor() {
+        return nombreReceptor;
+    }
+
+    public void setNombreReceptor(String nombreReceptor) {
+        this.nombreReceptor = nombreReceptor;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getIdMensaje() {
+        return idMensaje;
+    }
+
+    public void setIdMensaje(String idMensaje) {
+        this.idMensaje = idMensaje;
+    }
 
     public String getEmisor() {
         return emisor;

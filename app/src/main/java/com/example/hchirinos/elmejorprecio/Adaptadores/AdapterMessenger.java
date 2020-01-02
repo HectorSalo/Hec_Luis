@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.emoji.widget.EmojiTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,7 +24,7 @@ public class AdapterMessenger extends RecyclerView.Adapter<AdapterMessenger.View
     private ArrayList<ConstructorMessenger> listMensajes;
     private static final int MSG_DERECHA = 0;
     private static final int MSG_IZQUIERDA = 1;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public AdapterMessenger(Context mctx, ArrayList<ConstructorMessenger> listMensajes) {
         this.mctx = mctx;
@@ -56,7 +58,7 @@ public class AdapterMessenger extends RecyclerView.Adapter<AdapterMessenger.View
 
     public class ViewHolderMessenger extends RecyclerView.ViewHolder {
 
-        TextView mostrarMsg;
+        EmojiTextView mostrarMsg;
         public ViewHolderMessenger(@NonNull View itemView) {
             super(itemView);
 
@@ -71,5 +73,12 @@ public class AdapterMessenger extends RecyclerView.Adapter<AdapterMessenger.View
         } else {
             return MSG_IZQUIERDA;
         }
+    }
+
+    public void updateList (ArrayList<ConstructorMessenger> newList){
+
+        listMensajes = new ArrayList<>();
+        listMensajes.addAll(newList);
+        notifyDataSetChanged();
     }
 }

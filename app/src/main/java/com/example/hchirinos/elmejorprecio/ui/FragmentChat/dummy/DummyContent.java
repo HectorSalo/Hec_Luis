@@ -1,4 +1,4 @@
-package com.example.hchirinos.elmejorprecio.ui.main.dummy;
+package com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

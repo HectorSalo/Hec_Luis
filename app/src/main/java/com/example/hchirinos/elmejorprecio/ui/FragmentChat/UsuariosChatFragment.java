@@ -1,4 +1,4 @@
-package com.example.hchirinos.elmejorprecio.ui.main;
+package com.example.hchirinos.elmejorprecio.ui.FragmentChat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,18 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.MyUsuariosChatRecyclerViewAdapter;
-import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
-import com.example.hchirinos.elmejorprecio.InfoProductoActivity;
+import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
 import com.example.hchirinos.elmejorprecio.MessengerActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
-import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent.DummyItem;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent.DummyItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,9 +40,10 @@ import java.util.ArrayList;
  */
 public class UsuariosChatFragment extends Fragment {
 
-    private ArrayList<ConstructorVendedores> listUsuarios;
+    private ArrayList<ConstructorMessenger> listUsuarios;
     private MyUsuariosChatRecyclerViewAdapter myUsuariosChatRecyclerViewAdapter;
     private RecyclerView recyclerViewUsuarios;
+    private ProgressBar progressBar;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -80,6 +83,7 @@ public class UsuariosChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_usuarioschat_list, container, false);
 
         recyclerViewUsuarios = view.findViewById(R.id.recyclerViewUsuariosChat);
+        progressBar = view.findViewById(R.id.progressBarUsuariosChat);
 
         cargarUsuariosChat();
         selecUsuarioChat();
@@ -122,39 +126,42 @@ public class UsuariosChatFragment extends Fragment {
 
     private void cargarUsuariosChat() {
         listUsuarios = new ArrayList<>();
-        //progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         myUsuariosChatRecyclerViewAdapter = new MyUsuariosChatRecyclerViewAdapter(listUsuarios, getContext());
         recyclerViewUsuarios.setHasFixedSize(true);
         recyclerViewUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerViewUsuarios.setAdapter(myUsuariosChatRecyclerViewAdapter);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String usuarioActual = user.getUid();
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_DETALLES_VENDEDOR).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        ConstructorVendedores vendedor = new ConstructorVendedores();
-                        vendedor.setIdVendedor(doc.getString(VariablesEstaticas.BD_ID_VENDEDOR));
-                        vendedor.setNombreVendedor(doc.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR));
-                        vendedor.setCorreoVendedor(doc.getString(VariablesEstaticas.BD_CORREO_VENDEDOR));
-                        vendedor.setTelefonoVendedor(doc.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR));
-                        vendedor.setImagen(doc.getString(VariablesEstaticas.BD_IMAGEN_VENDEDOR));
-                        vendedor.setUbicacionPreferida(doc.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA));
-                        vendedor.setLatlong(doc.getGeoPoint(VariablesEstaticas.BD_LATITUD_LONGITUD));
+                        ConstructorMessenger usuario = new ConstructorMessenger();
+                        usuario.setReceptor(doc.getId());
+                        usuario.setNombreReceptor(doc.getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
+                        usuario.setEmail(doc.getString(VariablesEstaticas.BD_EMAIL_USUARIO));
+                        usuario.setImagen(doc.getString(VariablesEstaticas.BD_IMAGEN_USUARIO));
 
-                        listUsuarios.add(vendedor);
+                        if (!usuario.getReceptor().equals(usuarioActual)) {
+                            listUsuarios.add(usuario);
+                        }
 
                     }
                     myUsuariosChatRecyclerViewAdapter.updateList(listUsuarios);
 
-                    //progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                 } else {
-                    Toast.makeText(getContext(), "Error al cargar lista", Toast.LENGTH_SHORT).show();
-                    //progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "" +
+                            "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });
@@ -165,9 +172,9 @@ public class UsuariosChatFragment extends Fragment {
         myUsuariosChatRecyclerViewAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VariablesGenerales.idChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getIdVendedor();
-                VariablesGenerales.nombreChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getNombreVendedor();
-                VariablesGenerales.correoChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getCorreoVendedor();
+                VariablesGenerales.idChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getReceptor();
+                VariablesGenerales.nombreChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getNombreReceptor();
+                VariablesGenerales.correoChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getEmail();
                 VariablesGenerales.imagenChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getImagen();
                 startActivity(new Intent(getContext(), MessengerActivity.class));
             }

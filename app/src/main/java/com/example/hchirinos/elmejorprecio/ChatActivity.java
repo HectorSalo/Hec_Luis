@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
-import com.example.hchirinos.elmejorprecio.ui.main.UsuariosChatFragment;
-import com.example.hchirinos.elmejorprecio.ui.main.dummy.DummyContent;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
