@@ -6,9 +6,9 @@ public class ConstructorMessenger {
 
     private String emisor, receptor, mensaje, idMensaje, imagen, email, nombreReceptor;
     private Date fechaEnvio;
-    private boolean conversacionActiva;
+    private boolean onLine;
 
-    public ConstructorMessenger(String emisor, String receptor, String mensaje, Date fechaEnvio, String idMensaje, String imagen, String email, String nombreReceptor, boolean conversacionActiva) {
+    public ConstructorMessenger(String emisor, String receptor, String mensaje, Date fechaEnvio, String idMensaje, String imagen, String email, String nombreReceptor, boolean onLine) {
         this.emisor = emisor;
         this.receptor = receptor;
         this.mensaje = mensaje;
@@ -17,17 +17,18 @@ public class ConstructorMessenger {
         this.imagen = imagen;
         this.email = email;
         this.fechaEnvio = fechaEnvio;
-        this.conversacionActiva = conversacionActiva;
+        this.onLine = onLine;
     }
+
 
     public ConstructorMessenger (){}
 
-    public boolean isConversacionActiva() {
-        return conversacionActiva;
+    public boolean isOnLine() {
+        return onLine;
     }
 
-    public void setConversacionActiva(boolean conversacionActiva) {
-        this.conversacionActiva = conversacionActiva;
+    public void setOnLine(boolean onLine) {
+        this.onLine = onLine;
     }
 
     public String getNombreReceptor() {

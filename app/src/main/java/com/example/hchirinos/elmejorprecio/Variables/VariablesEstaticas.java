@@ -40,6 +40,9 @@ public class VariablesEstaticas {
     public static final String BD_EMAIL_USUARIO = "emailUsuario";
     public static final String BD_IMAGEN_USUARIO = "imagenUsuario";
     public static final String BD_NOMBRE_USUARIO = "nombreUsuario";
+    public static final String BD_CONVERSACION_ACTIVA_USUARIO = "conversacionActiva";
+    public static final String BD_STATUS_ONLINE_USUARIO = "onLine";
+    public static final String BD_ULTIMA_CONEXION_USUARIO = "fechaUltimaConexion";
 
     public static final String BD_USUARIOS_CHAT = "UsuariosChat";
     public static final String BD_CONVERSACIONES_CHAT = "Conversaciones";

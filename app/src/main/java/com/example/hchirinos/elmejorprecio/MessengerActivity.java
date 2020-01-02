@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterMessenger;
+import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
@@ -48,6 +49,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,6 +68,9 @@ public class MessengerActivity extends AppCompatActivity {
     private ArrayList<ConstructorMessenger> listMsg;
     private FirebaseFirestore db;
     private LinearLayoutManager linearLayoutManager;
+    private UsuarioEnLinea usuarioEnLinea;
+    private ImageView imagenUsuario;
+    private TextView nombreUsuario, statusUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +87,9 @@ public class MessengerActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ImageView imageView = findViewById(R.id.imageConversacion);
-        TextView textView = findViewById(R.id.textViewConversacion);
+        imagenUsuario = findViewById(R.id.imageConversacion);
+        nombreUsuario = findViewById(R.id.textViewNombreUsuario);
+        statusUsuario = findViewById(R.id.textViewStatusUsuario);
         editTextMsg = findViewById(R.id.editTextMsg);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -95,11 +101,9 @@ public class MessengerActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        usuarioEnLinea = new UsuarioEnLinea();
 
         db = FirebaseFirestore.getInstance();
-
-        Glide.with(this).load(VariablesGenerales.imagenChatVendedor).apply(RequestOptions.circleCropTransform()).into(imageView);
-        textView.setText(VariablesGenerales.nombreChatVendedor);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
@@ -120,6 +124,7 @@ public class MessengerActivity extends AppCompatActivity {
             }
         });
 
+        cargarPerfilUsuario();
         leerMsg();
     }
 
@@ -200,7 +205,7 @@ public class MessengerActivity extends AppCompatActivity {
                                     if((constructorMessenger.getEmisor().equals(emisor) && constructorMessenger.getReceptor().equals(receptor)) || (constructorMessenger.getEmisor().equals(receptor) && constructorMessenger.getReceptor().equals(emisor))) {
                                         listMsg.add(constructorMessenger);
                                     }
-
+                                    activarConversacion();
                                     Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                                     break;
                                 case MODIFIED:
@@ -256,20 +261,71 @@ public class MessengerActivity extends AppCompatActivity {
     }
 
     private void activarConversacion() {
-        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(receptor).update("conversacionActiva", true)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        ConversacionesChatFragment conversacionesChatFragment = new ConversacionesChatFragment();
-                        //conversacionesChatFragment.onCreateView()
-                        Log.d("Msg", "DocumentSnapshot successfully updated!");
+        if (listMsg.isEmpty()) {
+            db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(receptor).update(VariablesEstaticas.BD_CONVERSACION_ACTIVA_USUARIO, true)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Msg", "DocumentSnapshot successfully updated!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("Msg", "Error updating document", e);
+                        }
+                    });
+        }
+    }
+
+    private void cargarPerfilUsuario() {
+        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(VariablesGenerales.idChatVendedor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("Msg", "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    String imagen = snapshot.getString(VariablesEstaticas.BD_IMAGEN_USUARIO);
+                    String nombre = snapshot.getString(VariablesEstaticas.BD_NOMBRE_USUARIO);
+                    boolean onLine = snapshot.getBoolean(VariablesEstaticas.BD_STATUS_ONLINE_USUARIO);
+                    Date fechaConexion = snapshot.getDate(VariablesEstaticas.BD_ULTIMA_CONEXION_USUARIO);
+                    String fechaS = new SimpleDateFormat("EEE d MMM h:mm a").format(fechaConexion);
+
+                    Glide.with(getApplicationContext()).load(imagen).apply(RequestOptions.circleCropTransform()).into(imagenUsuario);
+                    nombreUsuario.setText(nombre);
+
+                    if (onLine) {
+                        statusUsuario.setText("En línea");
+                    } else {
+                        statusUsuario.setText(fechaS);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Msg", "Error updating document", e);
-                    }
-                });
+
+
+                    Log.d("Msg", "Current data: " + snapshot.getData());
+                } else {
+                    Log.d("Msg", "Current data: null");
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calendario = Calendar.getInstance();
+        Date date = calendario.getTime();
+        usuarioEnLinea.modificarStatus(true, date, emisor);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        calendario = Calendar.getInstance();
+        Date date = calendario.getTime();
+        usuarioEnLinea.modificarStatus(false, date, emisor);
     }
 }

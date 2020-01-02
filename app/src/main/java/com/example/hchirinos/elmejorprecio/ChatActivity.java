@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent;
@@ -26,10 +27,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.SectionsPagerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UsuariosChatFragment.OnListFragmentInteractionListener {
 
     private NavigationView navigationView;
+    private UsuarioEnLinea usuarioEnLinea;
+    private String usuario;
+    private Calendar calendario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,9 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
+        usuarioEnLinea = new UsuarioEnLinea();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        usuario = user.getUid();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean temaClaro = sharedPreferences.getBoolean("temaClaro", true);
@@ -66,7 +78,6 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         }
-
 
     }
 
@@ -129,5 +140,21 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calendario = Calendar.getInstance();
+        Date date = calendario.getTime();
+        usuarioEnLinea.modificarStatus(true, date, usuario);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        calendario = Calendar.getInstance();
+        Date date = calendario.getTime();
+        usuarioEnLinea.modificarStatus(false, date, usuario);
     }
 }

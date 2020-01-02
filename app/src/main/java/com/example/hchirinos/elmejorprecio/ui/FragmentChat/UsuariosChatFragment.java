@@ -173,9 +173,6 @@ public class UsuariosChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 VariablesGenerales.idChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getReceptor();
-                VariablesGenerales.nombreChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getNombreReceptor();
-                VariablesGenerales.correoChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getEmail();
-                VariablesGenerales.imagenChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getImagen();
                 startActivity(new Intent(getContext(), MessengerActivity.class));
             }
         });

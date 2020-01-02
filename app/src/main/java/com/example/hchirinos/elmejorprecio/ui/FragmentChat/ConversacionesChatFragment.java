@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterConversacionesChat;
 import com.example.hchirinos.elmejorprecio.Adaptadores.MyUsuariosChatRecyclerViewAdapter;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
 import com.example.hchirinos.elmejorprecio.MessengerActivity;
@@ -45,10 +47,9 @@ public class ConversacionesChatFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private ArrayList<ConstructorMessenger> listUsuarios;
-    private MyUsuariosChatRecyclerViewAdapter myUsuariosChatRecyclerViewAdapter;
+    private AdapterConversacionesChat adapterConversacionesChat;
     private RecyclerView recyclerViewUsuarios;
     private ProgressBar progressBar;
-
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -90,11 +91,11 @@ public class ConversacionesChatFragment extends Fragment {
     public void cargarConversaciones() {
         listUsuarios = new ArrayList<>();
         //progressBar.setVisibility(View.VISIBLE);
-        myUsuariosChatRecyclerViewAdapter = new MyUsuariosChatRecyclerViewAdapter(listUsuarios, getContext());
+        adapterConversacionesChat = new AdapterConversacionesChat(listUsuarios, getContext());
         recyclerViewUsuarios.setHasFixedSize(true);
         recyclerViewUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerViewUsuarios.setAdapter(myUsuariosChatRecyclerViewAdapter);
+        recyclerViewUsuarios.setAdapter(adapterConversacionesChat);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String usuarioActual = user.getUid();
@@ -102,7 +103,7 @@ public class ConversacionesChatFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection("Test").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -119,12 +120,13 @@ public class ConversacionesChatFragment extends Fragment {
                             usuario.setNombreReceptor(dc.getDocument().getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
                             usuario.setEmail(dc.getDocument().getString(VariablesEstaticas.BD_EMAIL_USUARIO));
                             usuario.setImagen(dc.getDocument().getString(VariablesEstaticas.BD_IMAGEN_USUARIO));
-                            usuario.setConversacionActiva(dc.getDocument().getBoolean("conversacionActiva"));
+                            usuario.setOnLine(dc.getDocument().getBoolean(VariablesEstaticas.BD_STATUS_ONLINE_USUARIO));
 
                             if (!usuario.getReceptor().equals(usuarioActual)) {
-                                if (usuario.isConversacionActiva()) {
+
+
                                     listUsuarios.add(usuario);
-                                }
+
                             }
                             Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                             break;
@@ -134,7 +136,7 @@ public class ConversacionesChatFragment extends Fragment {
                             usuario.setNombreReceptor(dc.getDocument().getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
                             usuario.setEmail(dc.getDocument().getString(VariablesEstaticas.BD_EMAIL_USUARIO));
                             usuario.setImagen(dc.getDocument().getString(VariablesEstaticas.BD_IMAGEN_USUARIO));
-                            usuario.setConversacionActiva(dc.getDocument().getBoolean("conversacionActiva"));
+                            usuario.setOnLine(dc.getDocument().getBoolean(VariablesEstaticas.BD_STATUS_ONLINE_USUARIO));
 
                             for (int i = 0; i < listUsuarios.size(); i++) {
                                 if (listUsuarios.get(i).getReceptor().equals(dc.getDocument().getId())) {
@@ -143,11 +145,7 @@ public class ConversacionesChatFragment extends Fragment {
                             }
 
                             if (!usuario.getReceptor().equals(usuarioActual)) {
-                                if (usuario.isConversacionActiva()) {
-                                    listUsuarios.add(usuario);
-                                } else {
-                                    listUsuarios.remove(position);
-                                }
+
                             }
                             Log.d("Msg", "Modified mensaje: " + dc.getDocument().getData());
                             break;
@@ -156,19 +154,16 @@ public class ConversacionesChatFragment extends Fragment {
                             break;
                     }
                 }
-                myUsuariosChatRecyclerViewAdapter.updateList(listUsuarios);
+                adapterConversacionesChat.updateList(listUsuarios);
             }
         });
     }
 
     private void selecUsuarioChat() {
-        myUsuariosChatRecyclerViewAdapter.setOnClickListener(new View.OnClickListener() {
+        adapterConversacionesChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VariablesGenerales.idChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getReceptor();
-                VariablesGenerales.nombreChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getNombreReceptor();
-                VariablesGenerales.correoChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getEmail();
-                VariablesGenerales.imagenChatVendedor = listUsuarios.get(recyclerViewUsuarios.getChildAdapterPosition(v)).getImagen();
                 startActivity(new Intent(getContext(), MessengerActivity.class));
             }
         });
