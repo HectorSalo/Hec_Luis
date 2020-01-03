@@ -80,6 +80,13 @@ public class ConversacionesChatFragment extends Fragment {
         recyclerViewUsuarios = root.findViewById(R.id.recyclerViewConversacionesChat);
         progressBar = root.findViewById(R.id.progressBarConversacionesChat);
 
+        listUsuarios = new ArrayList<>();
+        adapterConversacionesChat = new AdapterConversacionesChat(listUsuarios, getContext());
+        recyclerViewUsuarios.setHasFixedSize(true);
+        recyclerViewUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerViewUsuarios.setAdapter(adapterConversacionesChat);
+
         cargarConversaciones();
         selecUsuarioChat();
 
@@ -89,14 +96,6 @@ public class ConversacionesChatFragment extends Fragment {
 
 
     public void cargarConversaciones() {
-        listUsuarios = new ArrayList<>();
-        //progressBar.setVisibility(View.VISIBLE);
-        adapterConversacionesChat = new AdapterConversacionesChat(listUsuarios, getContext());
-        recyclerViewUsuarios.setHasFixedSize(true);
-        recyclerViewUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerViewUsuarios.setAdapter(adapterConversacionesChat);
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String usuarioActual = user.getUid();
 
@@ -113,25 +112,24 @@ public class ConversacionesChatFragment extends Fragment {
 
                 for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
                     ConstructorMessenger usuario = new ConstructorMessenger();
+                    String emisorBD;
+                    String receptorBD;
 
                     switch (dc.getType()) {
                         case ADDED:
-                            usuario.setReceptor(dc.getDocument().getId());
-                            usuario.setNombreReceptor(dc.getDocument().getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
-                            usuario.setEmail(dc.getDocument().getString(VariablesEstaticas.BD_EMAIL_USUARIO));
-                            usuario.setImagen(dc.getDocument().getString(VariablesEstaticas.BD_IMAGEN_USUARIO));
-                            usuario.setOnLine(dc.getDocument().getBoolean(VariablesEstaticas.BD_STATUS_ONLINE_USUARIO));
+                            String conversacionCon;
+                            emisorBD = dc.getDocument().getString(VariablesEstaticas.BD_ID_EMISOR);
+                            receptorBD = dc.getDocument().getString(VariablesEstaticas.BD_ID_RECEPTOR);
 
-                            if (!usuario.getReceptor().equals(usuarioActual)) {
-
-
-                                    listUsuarios.add(usuario);
-
+                            if (emisorBD.equals(usuarioActual)) {
+                                conversacionCon = receptorBD;
+                            } else if (receptorBD.equals(usuarioActual)) {
+                                conversacionCon = emisorBD;
                             }
                             Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                             break;
                         case MODIFIED:
-                            int position = 0;
+                            /*int position = 0;
                             usuario.setReceptor(dc.getDocument().getId());
                             usuario.setNombreReceptor(dc.getDocument().getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
                             usuario.setEmail(dc.getDocument().getString(VariablesEstaticas.BD_EMAIL_USUARIO));
@@ -146,7 +144,7 @@ public class ConversacionesChatFragment extends Fragment {
 
                             if (!usuario.getReceptor().equals(usuarioActual)) {
 
-                            }
+                            }*/
                             Log.d("Msg", "Modified mensaje: " + dc.getDocument().getData());
                             break;
                         case REMOVED:
@@ -154,7 +152,6 @@ public class ConversacionesChatFragment extends Fragment {
                             break;
                     }
                 }
-                adapterConversacionesChat.updateList(listUsuarios);
             }
         });
     }

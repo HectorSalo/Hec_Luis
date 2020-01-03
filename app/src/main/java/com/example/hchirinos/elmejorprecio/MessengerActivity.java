@@ -160,7 +160,6 @@ public class MessengerActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     editTextMsg.setText("");
-                    activarConversacion();
                     Log.d("Msg", "DocumentSnapshot written with ID: " + documentReference.getId());
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -205,7 +204,6 @@ public class MessengerActivity extends AppCompatActivity {
                                     if((constructorMessenger.getEmisor().equals(emisor) && constructorMessenger.getReceptor().equals(receptor)) || (constructorMessenger.getEmisor().equals(receptor) && constructorMessenger.getReceptor().equals(emisor))) {
                                         listMsg.add(constructorMessenger);
                                     }
-                                    activarConversacion();
                                     Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                                     break;
                                 case MODIFIED:
@@ -260,23 +258,6 @@ public class MessengerActivity extends AppCompatActivity {
                 });
     }
 
-    private void activarConversacion() {
-        if (listMsg.isEmpty()) {
-            db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(receptor).update(VariablesEstaticas.BD_CONVERSACION_ACTIVA_USUARIO, true)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("Msg", "DocumentSnapshot successfully updated!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("Msg", "Error updating document", e);
-                        }
-                    });
-        }
-    }
 
     private void cargarPerfilUsuario() {
         db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(VariablesGenerales.idChatVendedor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
