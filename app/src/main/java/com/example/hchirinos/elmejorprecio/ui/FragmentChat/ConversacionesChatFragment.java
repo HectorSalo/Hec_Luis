@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,21 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterConversacionesChat;
-import com.example.hchirinos.elmejorprecio.Adaptadores.MyUsuariosChatRecyclerViewAdapter;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
 import com.example.hchirinos.elmejorprecio.MessengerActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.errorprone.annotations.Var;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -49,6 +45,9 @@ public class ConversacionesChatFragment extends Fragment {
     private ArrayList<ConstructorMessenger> listUsuarios;
     private AdapterConversacionesChat adapterConversacionesChat;
     private RecyclerView recyclerViewUsuarios;
+    private FirebaseFirestore db;
+    private String usuarioActual;
+    private ArrayList<String> listaConversaciones;
     private ProgressBar progressBar;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -87,7 +86,12 @@ public class ConversacionesChatFragment extends Fragment {
         recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerViewUsuarios.setAdapter(adapterConversacionesChat);
 
+        db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        usuarioActual = user.getUid();
+
         cargarConversaciones();
+        cargarUsuariosConversaciones();
         selecUsuarioChat();
 
 
@@ -96,13 +100,32 @@ public class ConversacionesChatFragment extends Fragment {
 
 
     public void cargarConversaciones() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String usuarioActual = user.getUid();
+
+        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(usuarioActual).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot snapshot,
+                                @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("Msg", "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+
+                    listaConversaciones = (ArrayList<String>) snapshot.get(VariablesEstaticas.BD_CONVERSACION_ACTIVA_USUARIO);
 
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Log.d("Msg", "Current data: " + listaConversaciones);
+                } else {
+                    Log.d("Msg", "Current data: null");
+                }
+            }
+        });
+    }
 
-        db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection("Test").addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+    public void cargarUsuariosConversaciones() {
+        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -111,41 +134,55 @@ public class ConversacionesChatFragment extends Fragment {
                 }
 
                 for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+
                     ConstructorMessenger usuario = new ConstructorMessenger();
-                    String emisorBD;
-                    String receptorBD;
 
                     switch (dc.getType()) {
                         case ADDED:
-                            String conversacionCon;
-                            emisorBD = dc.getDocument().getString(VariablesEstaticas.BD_ID_EMISOR);
-                            receptorBD = dc.getDocument().getString(VariablesEstaticas.BD_ID_RECEPTOR);
+                            usuario.setReceptor(dc.getDocument().getId());
 
-                            if (emisorBD.equals(usuarioActual)) {
-                                conversacionCon = receptorBD;
-                            } else if (receptorBD.equals(usuarioActual)) {
-                                conversacionCon = emisorBD;
-                            }
-                            Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
+                                if (listaConversaciones.contains(usuario.getReceptor())) {
+                                    usuario.setNombreReceptor(dc.getDocument().getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
+                                    usuario.setImagen(dc.getDocument().getString(VariablesEstaticas.BD_IMAGEN_USUARIO));
+                                    usuario.setOnLine(dc.getDocument().getBoolean(VariablesEstaticas.BD_STATUS_ONLINE_USUARIO));
+                                    usuario.setUltimaConexion(dc.getDocument().getDate(VariablesEstaticas.BD_ULTIMA_CONEXION_USUARIO));
+                                }
+                                listUsuarios.add(usuario);
+
+
+                            adapterConversacionesChat.updateList(listUsuarios);
+
+                            //Log.d("Msg", "New mensaje: " + listUsuarios.get(1));
                             break;
                         case MODIFIED:
-                            /*int position = 0;
+                            int position = 0;
                             usuario.setReceptor(dc.getDocument().getId());
-                            usuario.setNombreReceptor(dc.getDocument().getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
-                            usuario.setEmail(dc.getDocument().getString(VariablesEstaticas.BD_EMAIL_USUARIO));
-                            usuario.setImagen(dc.getDocument().getString(VariablesEstaticas.BD_IMAGEN_USUARIO));
-                            usuario.setOnLine(dc.getDocument().getBoolean(VariablesEstaticas.BD_STATUS_ONLINE_USUARIO));
-
-                            for (int i = 0; i < listUsuarios.size(); i++) {
-                                if (listUsuarios.get(i).getReceptor().equals(dc.getDocument().getId())) {
-                                    position = i;
-                                }
-                            }
-
                             if (!usuario.getReceptor().equals(usuarioActual)) {
+                                for (int i = 0; i < listaConversaciones.size(); i++) {
+                                    if (listaConversaciones.get(i).equals(usuario.getReceptor())) {
 
-                            }*/
-                            Log.d("Msg", "Modified mensaje: " + dc.getDocument().getData());
+                                        for (int j = 0; j < listUsuarios.size(); j++) {
+                                            if (listUsuarios.get(j).getReceptor().equals(dc.getDocument().getId())) {
+                                                position = j;
+                                            }
+
+                                        usuario.setNombreReceptor(dc.getDocument().getString(VariablesEstaticas.BD_NOMBRE_USUARIO));
+                                        usuario.setImagen(dc.getDocument().getString(VariablesEstaticas.BD_IMAGEN_USUARIO));
+                                        usuario.setOnLine(dc.getDocument().getBoolean(VariablesEstaticas.BD_STATUS_ONLINE_USUARIO));
+                                        usuario.setUltimaConexion(dc.getDocument().getDate(VariablesEstaticas.BD_ULTIMA_CONEXION_USUARIO));
+
+
+
+                                                listUsuarios.set(position, usuario);
+                                            }
+
+                                    }
+                                }
+
+                                adapterConversacionesChat.updateList(listUsuarios);
+
+                                Log.d("Msg", "Modified mensaje: " + dc.getDocument().getData());
+                            }
                             break;
                         case REMOVED:
                             Log.d("Msg", "Removed mensaje: " + dc.getDocument().getData());

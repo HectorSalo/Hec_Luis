@@ -1,11 +1,12 @@
 package com.example.hchirinos.elmejorprecio.Constructores;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ConstructorMessenger {
 
     private String emisor, receptor, mensaje, idMensaje, imagen, email, nombreReceptor;
-    private Date fechaEnvio;
+    private Date fechaEnvio, ultimaConexion;
     private boolean onLine;
 
     public ConstructorMessenger(String emisor, String receptor, String mensaje, Date fechaEnvio, String idMensaje, String imagen, String email, String nombreReceptor, boolean onLine) {
@@ -22,6 +23,14 @@ public class ConstructorMessenger {
 
 
     public ConstructorMessenger (){}
+
+    public Date getUltimaConexion() {
+        return ultimaConexion;
+    }
+
+    public void setUltimaConexion(Date ultimaConexion) {
+        this.ultimaConexion = ultimaConexion;
+    }
 
     public boolean isOnLine() {
         return onLine;

@@ -37,12 +37,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.errorprone.annotations.Var;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -203,6 +205,7 @@ public class MessengerActivity extends AppCompatActivity {
 
                                     if((constructorMessenger.getEmisor().equals(emisor) && constructorMessenger.getReceptor().equals(receptor)) || (constructorMessenger.getEmisor().equals(receptor) && constructorMessenger.getReceptor().equals(emisor))) {
                                         listMsg.add(constructorMessenger);
+                                        activarConversacion();
                                     }
                                     Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                                     break;
@@ -292,6 +295,12 @@ public class MessengerActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void activarConversacion() {
+        if(listMsg.size() == 1) {
+            db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(emisor).update("ConversacionesCon", FieldValue.arrayUnion(receptor));
+        }
     }
 
     @Override
