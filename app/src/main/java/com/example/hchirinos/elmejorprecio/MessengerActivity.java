@@ -158,7 +158,22 @@ public class MessengerActivity extends AppCompatActivity {
         data.put(VariablesEstaticas.BD_FECHA_MENSAJE, date);
 
         if (!mensaje.isEmpty()) {
-            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection("Test").add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(emisor).add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    editTextMsg.setText("");
+                    Log.d("Msg", "DocumentSnapshot written with ID: " + documentReference.getId());
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("Msg", "Error adding document", e);
+                }
+            });
+        }
+
+        if (!mensaje.isEmpty()) {
+            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(receptor).add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     editTextMsg.setText("");
@@ -179,7 +194,7 @@ public class MessengerActivity extends AppCompatActivity {
         adapterMessenger = new AdapterMessenger(this, listMsg);
         recyclerView.setAdapter(adapterMessenger);
 
-        db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection("Test")
+        db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(emisor)
                 .orderBy(VariablesEstaticas.BD_FECHA_MENSAJE, Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -205,7 +220,7 @@ public class MessengerActivity extends AppCompatActivity {
 
                                     if((constructorMessenger.getEmisor().equals(emisor) && constructorMessenger.getReceptor().equals(receptor)) || (constructorMessenger.getEmisor().equals(receptor) && constructorMessenger.getReceptor().equals(emisor))) {
                                         listMsg.add(constructorMessenger);
-                                        activarConversacion();
+
                                     }
                                     Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                                     break;
@@ -295,12 +310,6 @@ public class MessengerActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    public void activarConversacion() {
-        if(listMsg.size() == 1) {
-            db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(emisor).update("ConversacionesCon", FieldValue.arrayUnion(receptor));
-        }
     }
 
     @Override

@@ -41,7 +41,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/email_conversaciones_chat"
+            android:id="@+id/ultima_conexion_conversaciones_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
