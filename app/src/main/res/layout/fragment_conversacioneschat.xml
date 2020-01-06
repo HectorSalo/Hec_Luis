@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="64dp"
@@ -12,46 +12,57 @@
         android:id="@+id/textViewOnLine"
         android:layout_width="15dp"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:text="@string/texto_vacio" />
 
     <ImageView
         android:id="@+id/imageConversacionesChat"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_toEndOf="@id/textViewOnLine"
         android:contentDescription="@string/texto_vacio"
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/fui_ic_facebook_white_22dp" />
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/nombre_conversaciones_chat"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ultima_conexion_conversaciones_chat"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/checkBoxSelectUsuarioChat"
+        android:layout_toEndOf="@id/imageConversacionesChat"
+        android:gravity="center_vertical"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/ultima_conexion_conversaciones_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/checkBoxSelectUsuarioChat"
+        android:layout_toEndOf="@id/imageConversacionesChat"
+        android:gravity="top"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="12sp" />
+
+
+    <CheckBox
+        android:id="@+id/checkBoxSelectUsuarioChat"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/nombre_conversaciones_chat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:gravity="bottom"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/ultima_conexion_conversaciones_chat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="12sp" />
-
-    </LinearLayout>
+        android:layout_alignParentEnd="true"
+        android:button="@drawable/checkbox_circular"
+        android:gravity="center"
+        android:text="@string/texto_vacio"
+        android:visibility="visible" />
 
 
-</LinearLayout>
+</RelativeLayout>

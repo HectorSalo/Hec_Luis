@@ -27,4 +27,6 @@ public class VariablesGenerales {
     public static String nombreChatVendedor = null;
     public static String correoChatVendedor = null;
     public static String imagenChatVendedor = null;
+
+    public static  boolean verCheckBoxes = false;
 }

@@ -1,5 +1,7 @@
 package com.example.hchirinos.elmejorprecio.ui.FragmentChat;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ConversacionesChatFragment extends Fragment implements OnLongClickRecyclerView {
+public class ConversacionesChatFragment extends Fragment implements InterfaceRecyclerViewConversaciones {
 
     public ConversacionesChatFragment() {}
 
@@ -50,6 +51,8 @@ public class ConversacionesChatFragment extends Fragment implements OnLongClickR
     private ArrayList<String> listaConversaciones;
     private ProgressBar progressBar;
     private int firstTime;
+    private InterfaceConversacionesFragment interfaceConversacionesFragment;
+    private Activity activity;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -61,6 +64,16 @@ public class ConversacionesChatFragment extends Fragment implements OnLongClickR
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+            interfaceConversacionesFragment = (InterfaceConversacionesFragment) activity;
+        }
     }
 
     @Override
@@ -238,6 +251,11 @@ public class ConversacionesChatFragment extends Fragment implements OnLongClickR
 
     @Override
     public void onLongItemClick(int position) {
-        Toast.makeText(getContext(), "Test" + listUsuarios.get(position).getReceptor(), Toast.LENGTH_LONG).show();
+        interfaceConversacionesFragment.activarChoiceMode();
+    }
+
+    @Override
+    public void selectedChat(int position) {
+
     }
 }

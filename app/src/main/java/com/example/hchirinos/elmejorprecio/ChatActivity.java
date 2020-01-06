@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterConversacionesChat;
 import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.InterfaceConversacionesFragment;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.InterfaceRecyclerViewConversaciones;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent;
 import com.google.android.material.navigation.NavigationView;
@@ -23,8 +26,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.SectionsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,12 +41,14 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UsuariosChatFragment.OnListFragmentInteractionListener {
+public class ChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UsuariosChatFragment.OnListFragmentInteractionListener, InterfaceConversacionesFragment {
 
     private NavigationView navigationView;
     private UsuarioEnLinea usuarioEnLinea;
     private String usuario;
     private Calendar calendario;
+    private ActionMode actionMode;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +60,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -63,6 +73,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+
 
         usuarioEnLinea = new UsuarioEnLinea();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -85,6 +96,29 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.bar_borrar_chats) {
+            return true;
+        }
+
+        if (id == R.id.bar_clear_chats) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -157,4 +191,43 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         Date date = calendario.getTime();
         usuarioEnLinea.modificarStatus(false, date, usuario);
     }
+
+
+
+    @Override
+    public boolean activarChoiceMode() {
+        if (actionMode != null) {
+           return false;
+        }
+
+        actionMode = this.startActionMode(callback);
+        toolbar.setVisibility(View.GONE);
+        Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_LONG).show();
+        return true;
+    }
+
+    private ActionMode.Callback callback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.chat, menu);
+            return true;
+
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+    };
 }

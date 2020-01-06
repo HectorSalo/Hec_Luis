@@ -4,8 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -14,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
-import com.example.hchirinos.elmejorprecio.ui.FragmentChat.OnLongClickRecyclerView;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.InterfaceRecyclerViewConversaciones;
 import com.example.hchirinos.elmejorprecio.R;
 
 import java.text.SimpleDateFormat;
@@ -24,13 +28,13 @@ import java.util.Date;
 public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConversacionesChat.ViewHolder> implements View.OnClickListener{
     private ArrayList<ConstructorMessenger> listConversaciones;
     private View.OnClickListener listener;
-    private OnLongClickRecyclerView onLongClickRecyclerView;
+    private InterfaceRecyclerViewConversaciones interfaceRecyclerViewConversaciones;
     private Context mContext;
 
-    public AdapterConversacionesChat(ArrayList<ConstructorMessenger> listConversaciones, Context mContext, OnLongClickRecyclerView onLongClickRecyclerView) {
+    public AdapterConversacionesChat(ArrayList<ConstructorMessenger> listConversaciones, Context mContext, InterfaceRecyclerViewConversaciones interfaceRecyclerViewConversaciones) {
         this.listConversaciones = listConversaciones;
         this.mContext = mContext;
-        this.onLongClickRecyclerView = onLongClickRecyclerView;
+        this.interfaceRecyclerViewConversaciones = interfaceRecyclerViewConversaciones;
     }
 
     @Override
@@ -61,11 +65,30 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterConversacionesChat.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterConversacionesChat.ViewHolder holder, final int position) {
         Date fechaConexion = new Date();
         fechaConexion = listConversaciones.get(position).getUltimaConexion();
 
+
+
+
         holder.nombreUsuario.setText(listConversaciones.get(position).getNombreReceptor());
+
+        if(VariablesGenerales.verCheckBoxes) {
+            holder.checkBox.setVisibility(View.VISIBLE);
+            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        Toast.makeText(mContext, "Seleccionado: "  + listConversaciones.get(position), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, "Quitado: "  + listConversaciones.get(position), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            holder.checkBox.setVisibility(View.GONE);
+        }
 
         if(listConversaciones.get(position).isOnLine()) {
             holder.ultimaConexionUsuario.setText("Conectado");
@@ -96,6 +119,8 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
         public final TextView nombreUsuario;
         public final TextView ultimaConexionUsuario;
         public final TextView onLine;
+        public final CheckBox checkBox;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
@@ -103,11 +128,16 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
             nombreUsuario = (TextView) itemView.findViewById(R.id.nombre_conversaciones_chat);
             ultimaConexionUsuario = (TextView) itemView.findViewById(R.id.ultima_conexion_conversaciones_chat);
             onLine = (TextView) itemView.findViewById(R.id.textViewOnLine);
+            checkBox = (CheckBox) itemView.findViewById(R.id.checkBoxSelectUsuarioChat);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    onLongClickRecyclerView.onLongItemClick(getAdapterPosition());
+                    interfaceRecyclerViewConversaciones.onLongItemClick(getAdapterPosition());
+                    VariablesGenerales.verCheckBoxes = true;
+                    checkBox.setChecked(true);
+                    updateList(listConversaciones);
+
                     return true;
                 }
             });

@@ -1,5 +1,7 @@
 package com.example.hchirinos.elmejorprecio.ui.FragmentChat;
 
-public interface OnLongClickRecyclerView {
+public interface InterfaceRecyclerViewConversaciones {
     void onLongItemClick(int position);
+
+    void selectedChat(int position);
 }
