@@ -70,8 +70,6 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
         fechaConexion = listConversaciones.get(position).getUltimaConexion();
 
 
-
-
         holder.nombreUsuario.setText(listConversaciones.get(position).getNombreReceptor());
 
         if(VariablesGenerales.verCheckBoxes) {
@@ -80,9 +78,9 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        Toast.makeText(mContext, "Seleccionado: "  + listConversaciones.get(position), Toast.LENGTH_SHORT).show();
+                        interfaceRecyclerViewConversaciones.selectedChat(position);
                     } else {
-                        Toast.makeText(mContext, "Quitado: "  + listConversaciones.get(position), Toast.LENGTH_SHORT).show();
+                        interfaceRecyclerViewConversaciones.unSelectedChat(position);
                     }
                 }
             });
@@ -130,17 +128,20 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
             onLine = (TextView) itemView.findViewById(R.id.textViewOnLine);
             checkBox = (CheckBox) itemView.findViewById(R.id.checkBoxSelectUsuarioChat);
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    interfaceRecyclerViewConversaciones.onLongItemClick(getAdapterPosition());
-                    VariablesGenerales.verCheckBoxes = true;
-                    checkBox.setChecked(true);
-                    updateList(listConversaciones);
+                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        if (!VariablesGenerales.verCheckBoxes) {
+                            interfaceRecyclerViewConversaciones.onLongItemClick(getAdapterPosition());
+                            VariablesGenerales.verCheckBoxes = true;
+                            updateList(listConversaciones);
+                            checkBox.setChecked(true);
+                        }
 
-                    return true;
-                }
-            });
+                        return true;
+                    }
+                });
+
         }
     }
 }

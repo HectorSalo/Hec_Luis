@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,11 +52,12 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
     private RecyclerView recyclerViewUsuarios;
     private FirebaseFirestore db;
     private String usuarioActual;
-    private ArrayList<String> listaConversaciones;
+    private ArrayList<String> listaConversaciones, listaConversacionesBorrar;
     private ProgressBar progressBar;
     private int firstTime;
     private Activity activity;
     private View root;
+    private Snackbar snackbar;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -96,6 +98,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
         progressBar = root.findViewById(R.id.progressBarConversacionesChat);
 
         listUsuarios = new ArrayList<>();
+        listaConversacionesBorrar = new ArrayList<>();
         listaConversaciones = new ArrayList<>();
         adapterConversacionesChat = new AdapterConversacionesChat(listUsuarios, getContext(), this);
         recyclerViewUsuarios.setHasFixedSize(true);
@@ -110,7 +113,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
         cargarConversaciones();
         selecUsuarioChat();
-        borrarConversaciones();
 
         return root;
     }
@@ -248,31 +250,70 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
     private void borrarConversaciones() {
 
+        if (listaConversacionesBorrar.isEmpty()) {
+            snackbar.dismiss();
+            VariablesGenerales.verCheckBoxes = false;
+            adapterConversacionesChat.updateList(listUsuarios);
+        } else if (listaConversacionesBorrar.size() == 1) {
+            snackbar = Snackbar.make(root, "Borrar " + listaConversacionesBorrar.size() + " conversación", Snackbar.LENGTH_INDEFINITE).setAction("Borrar", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            snackbar.show();
+        } else {
+            snackbar = Snackbar.make(root, "Borrar " + listaConversacionesBorrar.size() + " conversaciones", Snackbar.LENGTH_INDEFINITE).setAction("Borrar", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            snackbar.show();
+        }
 
     }
 
     @Override
     public void onLongItemClick(int position) {
+        listaConversacionesBorrar = new ArrayList<>();
+        String idConversacionCon = listUsuarios.get(position).getReceptor();
 
+        listaConversacionesBorrar.add(idConversacionCon);
+
+        borrarConversaciones();
     }
 
     @Override
     public void selectedChat(int position) {
+            String idConversacionCon = listUsuarios.get(position).getReceptor();
+
+            for (int i = 0; i < listaConversacionesBorrar.size(); i++) {
+                if (!listaConversacionesBorrar.contains(idConversacionCon)) {
+                    listaConversacionesBorrar.add(idConversacionCon);
+                    borrarConversaciones();
+                }
+            }
 
     }
 
     @Override
     public void unSelectedChat(int position) {
+        String idConversacionCon = listUsuarios.get(position).getReceptor();
 
+        for (int i = 0; i < listaConversacionesBorrar.size(); i++) {
+            if (listaConversacionesBorrar.get(i).equals(idConversacionCon)) {
+                position = i;
+            }
+        }
+        listaConversacionesBorrar.remove(position);
+
+        borrarConversaciones();
     }
 
-    public void deleteChats() {
-        Snackbar snackbar = Snackbar.make(root, "Borrar " + listaConversaciones.size() + " conversaciones", Snackbar.LENGTH_INDEFINITE).setAction("Borrar", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        snackbar.show();
+    @Override
+    public void borrarSelecciones() {
+        listaConversacionesBorrar.clear();
+        borrarConversaciones();
     }
 }

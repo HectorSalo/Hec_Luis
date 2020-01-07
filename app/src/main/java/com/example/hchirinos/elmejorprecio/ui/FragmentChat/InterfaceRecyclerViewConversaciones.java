@@ -6,4 +6,6 @@ public interface InterfaceRecyclerViewConversaciones {
     void selectedChat(int position);
 
     void unSelectedChat(int position);
+
+    void borrarSelecciones();
 }

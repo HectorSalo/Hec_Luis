@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.example.hchirinos.elmejorprecio.ui.FragmentChat.InterfaceRecyclerViewConversaciones;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent;
 import com.google.android.material.navigation.NavigationView;
@@ -39,6 +40,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     private UsuarioEnLinea usuarioEnLinea;
     private String usuario;
     private Calendar calendario;
+    private InterfaceRecyclerViewConversaciones interfaceRecyclerViewConversaciones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,6 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
-
         usuarioEnLinea = new UsuarioEnLinea();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         usuario = user.getUid();
@@ -88,28 +89,6 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.bar_borrar_chats) {
-            return true;
-        }
-
-        if (id == R.id.bar_clear_chats) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -182,4 +161,12 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         usuarioEnLinea.modificarStatus(false, date, usuario);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (VariablesGenerales.verCheckBoxes) {
+            interfaceRecyclerViewConversaciones.borrarSelecciones();
+        }
+    }
 }
