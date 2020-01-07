@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:name="com.example.hchirinos.elmejorprecio.ui.main.ConversacionesChatFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/relative_conversaciones_chat">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewConversacionesChat"
         android:layout_width="match_parent"

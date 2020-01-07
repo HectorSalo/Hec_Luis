@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterConversacionesChat;
 import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
-import com.example.hchirinos.elmejorprecio.ui.FragmentChat.InterfaceConversacionesFragment;
-import com.example.hchirinos.elmejorprecio.ui.FragmentChat.InterfaceRecyclerViewConversaciones;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent;
 import com.google.android.material.navigation.NavigationView;
@@ -26,13 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.SectionsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,14 +33,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UsuariosChatFragment.OnListFragmentInteractionListener, InterfaceConversacionesFragment {
+public class ChatActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, UsuariosChatFragment.OnListFragmentInteractionListener {
 
     private NavigationView navigationView;
     private UsuarioEnLinea usuarioEnLinea;
     private String usuario;
     private Calendar calendario;
-    private ActionMode actionMode;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +50,7 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -192,42 +182,4 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         usuarioEnLinea.modificarStatus(false, date, usuario);
     }
 
-
-
-    @Override
-    public boolean activarChoiceMode() {
-        if (actionMode != null) {
-           return false;
-        }
-
-        actionMode = this.startActionMode(callback);
-        toolbar.setVisibility(View.GONE);
-        Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_LONG).show();
-        return true;
-    }
-
-    private ActionMode.Callback callback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.chat, menu);
-            return true;
-
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-    };
 }

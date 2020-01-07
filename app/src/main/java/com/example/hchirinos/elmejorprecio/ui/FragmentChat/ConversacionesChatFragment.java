@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,8 @@ import com.example.hchirinos.elmejorprecio.MessengerActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
@@ -51,8 +54,8 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
     private ArrayList<String> listaConversaciones;
     private ProgressBar progressBar;
     private int firstTime;
-    private InterfaceConversacionesFragment interfaceConversacionesFragment;
     private Activity activity;
+    private View root;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -72,7 +75,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
         if (context instanceof Activity) {
             activity = (Activity) context;
-            interfaceConversacionesFragment = (InterfaceConversacionesFragment) activity;
         }
     }
 
@@ -88,7 +90,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_conversaciones_chat, container, false);
+        root = inflater.inflate(R.layout.fragment_conversaciones_chat, container, false);
 
         recyclerViewUsuarios = root.findViewById(R.id.recyclerViewConversacionesChat);
         progressBar = root.findViewById(R.id.progressBarConversacionesChat);
@@ -251,11 +253,26 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
     @Override
     public void onLongItemClick(int position) {
-        interfaceConversacionesFragment.activarChoiceMode();
+
     }
 
     @Override
     public void selectedChat(int position) {
 
+    }
+
+    @Override
+    public void unSelectedChat(int position) {
+
+    }
+
+    public void deleteChats() {
+        Snackbar snackbar = Snackbar.make(root, "Borrar " + listaConversaciones.size() + " conversaciones", Snackbar.LENGTH_INDEFINITE).setAction("Borrar", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        snackbar.show();
     }
 }
