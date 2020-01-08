@@ -123,7 +123,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
     public void cargarConversaciones() {
         db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual)
-                .orderBy(VariablesEstaticas.BD_FECHA_MENSAJE, Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -147,12 +146,12 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                                     if(emisorBD.equals(usuarioActual)) {
                                        if (!listaConversaciones.contains(receptorBD)) {
                                            listaConversaciones.add(receptorBD);
-                                           Log.d("Emisor", "Position: " + listaConversaciones.get(0));
+                                           Log.d("Emisor", "Position: " + listaConversaciones);
                                        }
                                     } else if (receptorBD.equals(usuarioActual)) {
                                         if (!listaConversaciones.contains(emisorBD)) {
                                             listaConversaciones.add(emisorBD);
-                                            Log.d("Receptor", "Position: " + listaConversaciones.get(0));
+                                            Log.d("Receptor", "Position: " + listaConversaciones);
                                         }
                                     }
                                     Log.d("Msg", "New mensaje agregado al chat: " + listaConversaciones.size());
@@ -176,6 +175,12 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
     public void cargarUsuariosConversaciones() {
         listUsuarios = new ArrayList<>();
+        adapterConversacionesChat = new AdapterConversacionesChat(listUsuarios, getContext(), this);
+        recyclerViewUsuarios.setHasFixedSize(true);
+        recyclerViewUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerViewUsuarios.setAdapter(adapterConversacionesChat);
+
         db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -203,7 +208,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                             }
                             adapterConversacionesChat.updateList(listUsuarios);
 
-                            Log.d("Msg", "New mensaje: " + listUsuarios.size());
+                            Log.d("Msg", "New mensaje: " + listUsuarios);
                             break;
                         case MODIFIED:
                             int position = 0;
