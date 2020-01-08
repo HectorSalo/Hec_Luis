@@ -147,12 +147,12 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                                     if(emisorBD.equals(usuarioActual)) {
                                        if (!listaConversaciones.contains(receptorBD)) {
                                            listaConversaciones.add(receptorBD);
-
+                                           Log.d("Emisor", "Position: " + listaConversaciones.get(0));
                                        }
                                     } else if (receptorBD.equals(usuarioActual)) {
                                         if (!listaConversaciones.contains(emisorBD)) {
                                             listaConversaciones.add(emisorBD);
-
+                                            Log.d("Receptor", "Position: " + listaConversaciones.get(0));
                                         }
                                     }
                                     Log.d("Msg", "New mensaje agregado al chat: " + listaConversaciones.size());
@@ -286,9 +286,12 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
+                            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual).document(document.getId())
+                                    .delete();
                             Log.d("Delete", document.getId());
-                            deleteChatsReceptorBD(id);
-                        }
+
+                    }
+                        deleteChatsReceptorBD(id);
                     } else {
                         Log.d("Error", "Error getting documents: ", task.getException());
                     }
@@ -305,6 +308,9 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
+
+                            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual).document(document.getId())
+                                    .delete();
                             Log.d("Delete", document.getId());
                         }
                     } else {
@@ -314,6 +320,8 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
             });
 
     }
+
+
 
     @Override
     public void onLongItemClick(int position) {
