@@ -25,6 +25,8 @@ import com.example.hchirinos.elmejorprecio.MessengerActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +36,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -258,7 +261,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
             snackbar = Snackbar.make(root, "Borrar " + listaConversacionesBorrar.size() + " conversación", Snackbar.LENGTH_INDEFINITE).setAction("Borrar", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    deleteChatsEmisorBD();
                 }
             });
             snackbar.show();
@@ -266,11 +269,49 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
             snackbar = Snackbar.make(root, "Borrar " + listaConversacionesBorrar.size() + " conversaciones", Snackbar.LENGTH_INDEFINITE).setAction("Borrar", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    deleteChatsEmisorBD();
                 }
             });
             snackbar.show();
         }
+
+    }
+
+    private void deleteChatsEmisorBD() {
+        for (int j = 0; j < listaConversacionesBorrar.size(); j++) {
+            final String id = listaConversaciones.get(j);
+            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual)
+                    .whereEqualTo(VariablesEstaticas.BD_ID_EMISOR, id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("Delete", document.getId());
+                            deleteChatsReceptorBD(id);
+                        }
+                    } else {
+                        Log.d("Error", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
+    private void deleteChatsReceptorBD(String id) {
+
+            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual)
+                    .whereEqualTo(VariablesEstaticas.BD_ID_RECEPTOR, id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d("Delete", document.getId());
+                        }
+                    } else {
+                        Log.d("Error", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
 
     }
 
@@ -286,6 +327,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
     @Override
     public void selectedChat(int position) {
+        if(VariablesGenerales.verCheckBoxes) {
             String idConversacionCon = listUsuarios.get(position).getReceptor();
 
             for (int i = 0; i < listaConversacionesBorrar.size(); i++) {
@@ -294,21 +336,24 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                     borrarConversaciones();
                 }
             }
+        }
 
     }
 
     @Override
     public void unSelectedChat(int position) {
-        String idConversacionCon = listUsuarios.get(position).getReceptor();
+        if(VariablesGenerales.verCheckBoxes) {
+            String idConversacionCon = listUsuarios.get(position).getReceptor();
 
-        for (int i = 0; i < listaConversacionesBorrar.size(); i++) {
-            if (listaConversacionesBorrar.get(i).equals(idConversacionCon)) {
-                position = i;
+            for (int i = 0; i < listaConversacionesBorrar.size(); i++) {
+                if (listaConversacionesBorrar.get(i).equals(idConversacionCon)) {
+                    position = i;
+                }
             }
-        }
-        listaConversacionesBorrar.remove(position);
+            listaConversacionesBorrar.remove(position);
 
-        borrarConversaciones();
+            borrarConversaciones();
+        }
     }
 
     @Override

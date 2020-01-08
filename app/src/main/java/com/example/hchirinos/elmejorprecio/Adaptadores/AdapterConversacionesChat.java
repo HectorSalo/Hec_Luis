@@ -85,6 +85,7 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
                 }
             });
         } else {
+            holder.checkBox.setChecked(false);
             holder.checkBox.setVisibility(View.GONE);
         }
 

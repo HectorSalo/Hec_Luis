@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -146,6 +148,15 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if (fragment instanceof InterfaceRecyclerViewConversaciones) {
+            interfaceRecyclerViewConversaciones = (InterfaceRecyclerViewConversaciones) fragment;
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         calendario = Calendar.getInstance();
@@ -163,10 +174,14 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
 
         if (VariablesGenerales.verCheckBoxes) {
-            interfaceRecyclerViewConversaciones.borrarSelecciones();
+            if (interfaceRecyclerViewConversaciones != null) {
+                interfaceRecyclerViewConversaciones.borrarSelecciones();
+            }
+        } else {
+            super.onBackPressed();
         }
     }
+
 }
