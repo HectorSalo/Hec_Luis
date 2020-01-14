@@ -89,6 +89,7 @@
     <string name="tab_text_2">Usuarios</string>
 
     <string name="edit_text_msg">Escribir mensaje</string>
+    <string name="textview_sin_chats">No tiene conversaciones activas. Para iniciar una, diríjase a Usuarios y encuentre al contacto deseado.</string>
 
 
 </resources>

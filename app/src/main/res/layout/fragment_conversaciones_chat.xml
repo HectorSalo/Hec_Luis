@@ -24,4 +24,21 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/textViewSinChats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:text="@string/textview_sin_chats"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
 </RelativeLayout>

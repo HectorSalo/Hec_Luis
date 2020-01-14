@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -61,6 +62,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
     private Activity activity;
     private View root;
     private Snackbar snackbar;
+    private TextView textViewSinChats;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -109,10 +111,11 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
         recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerViewUsuarios.setAdapter(adapterConversacionesChat);
 
+        textViewSinChats = root.findViewById(R.id.textViewSinChats);
+
         db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         usuarioActual = user.getUid();
-
 
         cargarConversaciones();
         selecUsuarioChat();
@@ -164,6 +167,15 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                                     break;
                             }
                         }
+                        if (listaConversaciones.isEmpty()) {
+                            recyclerViewUsuarios.setVisibility(View.GONE);
+                            textViewSinChats.setVisibility(View.VISIBLE);
+
+                        } else {
+                            textViewSinChats.setVisibility(View.GONE);
+                            recyclerViewUsuarios.setVisibility(View.VISIBLE);
+
+                        }
                         if (firstTime == 1) {
                             cargarUsuariosConversaciones();
                         }
@@ -174,6 +186,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
 
     public void cargarUsuariosConversaciones() {
+
         listUsuarios = new ArrayList<>();
 
         db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -229,17 +242,20 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
 
 
-                                Log.d("Msg", "Modified mensaje: " + dc.getDocument().getData());
+                                Log.d("Msg", "Modified usuario: " + dc.getDocument().getData());
 
                             break;
                         case REMOVED:
-                            Log.d("Msg", "Removed mensaje: " + dc.getDocument().getData());
+                            Log.d("Msg", "Removed usuario: " + dc.getDocument().getData());
                             break;
                     }
                 }
                 adapterConversacionesChat.updateList(listUsuarios);
+
             }
         });
+
+
     }
 
     private void selecUsuarioChat() {
@@ -279,6 +295,7 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
     }
 
     private void deleteChatsEmisorBD() {
+        int position = 0;
         for (int j = 0; j < listaConversacionesBorrar.size(); j++) {
             final String id = listaConversacionesBorrar.get(j);
             db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual)
@@ -292,16 +309,43 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                             Log.d("Delete", document.getId());
 
                     }
+
                         deleteChatsReceptorBD(id);
                     } else {
                         Log.d("Error", "Error getting documents: ", task.getException());
                     }
                 }
             });
+
+            for (int k = 0; k < listUsuarios.size(); k++) {
+                if (listUsuarios.get(k).getReceptor().equals(id)) {
+                    position = k;
+                }
+            }
+
+            listUsuarios.remove(position);
+        }
+
+        listaConversacionesBorrar.clear();
+        snackbar.dismiss();
+        VariablesGenerales.verCheckBoxes = false;
+        adapterConversacionesChat.updateList(listUsuarios);
+
+        if (listUsuarios.isEmpty()) {
+            recyclerViewUsuarios.setVisibility(View.GONE);
+            textViewSinChats.setVisibility(View.VISIBLE);
+            Log.d("Msg", "lista usuario: ");
+
+        } else {
+            textViewSinChats.setVisibility(View.GONE);
+            recyclerViewUsuarios.setVisibility(View.VISIBLE);
+            Log.d("Msg", "lista no usuario");
+
         }
     }
 
     private void deleteChatsReceptorBD(String id) {
+
 
             db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual)
                     .whereEqualTo(VariablesEstaticas.BD_ID_RECEPTOR, id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -313,7 +357,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                             db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual).document(document.getId())
                                     .delete();
 
-
                             Log.d("Delete", document.getId());
                         }
                     } else {
@@ -321,11 +364,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                     }
                 }
             });
-
-            listaConversacionesBorrar.clear();
-            snackbar.dismiss();
-            VariablesGenerales.verCheckBoxes = false;
-            adapterConversacionesChat.updateList(listUsuarios);
 
     }
 
@@ -355,7 +393,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                 }
             }
         }
-
     }
 
     @Override
