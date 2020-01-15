@@ -42,6 +42,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        String sented = remoteMessage.getData().get("sented");
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean activarVibrar = sharedPreferences.getBoolean("activarVibrar", false);
 
@@ -56,6 +59,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     }
                 }
 
+                if (firebaseUser != null && sented.equals(firebaseUser.getUid())) {
+                    showNotificationMessenger(remoteMessage);
+                }
+
+    }
+
+    private void showNotificationMessenger(RemoteMessage remoteMessage) {
     }
 
     private void showNotification(String title, String body) {
