@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.FontRequest;
 import android.util.Log;
@@ -57,6 +59,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -73,6 +76,7 @@ public class MessengerActivity extends AppCompatActivity {
     private UsuarioEnLinea usuarioEnLinea;
     private ImageView imagenUsuario;
     private TextView nombreUsuario, statusUsuario;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +108,9 @@ public class MessengerActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         usuarioEnLinea = new UsuarioEnLinea();
+
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
+        mediaPlayer = new MediaPlayer();
 
         db = FirebaseFirestore.getInstance();
 
@@ -221,7 +228,7 @@ public class MessengerActivity extends AppCompatActivity {
 
                                     if((constructorMessenger.getEmisor().equals(emisor) && constructorMessenger.getReceptor().equals(receptor)) || (constructorMessenger.getEmisor().equals(receptor) && constructorMessenger.getReceptor().equals(emisor))) {
                                         listMsg.add(constructorMessenger);
-
+                                        sonarAlarma();
                                     }
                                     Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                                     break;
@@ -328,5 +335,10 @@ public class MessengerActivity extends AppCompatActivity {
         calendario = Calendar.getInstance();
         Date date = calendario.getTime();
         usuarioEnLinea.modificarStatus(false, date, emisor);
+    }
+
+    public void sonarAlarma(){
+        mediaPlayer = MediaPlayer.create(this, R.raw.msgrecibido);
+        mediaPlayer.start();
     }
 }

@@ -13,15 +13,26 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
 import com.example.hchirinos.elmejorprecio.HomeActivity;
+import com.example.hchirinos.elmejorprecio.NotificacionesChat.Token;
 import com.example.hchirinos.elmejorprecio.R;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static android.graphics.Color.rgb;
@@ -137,10 +148,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onNewToken(String token) {
+    public void onNewToken(@NonNull String token) {
 
 
         Log.d("Token", "Refreshed token: " + token);
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            // Add a new document with a generated id.
+
+            Token token1 = new Token(token);
+
+            db.collection("Tokens")
+                    .add(token1)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d("Token", "DocumentSnapshot written with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("Token", "Error adding document", e);
+                        }
+                    });
+        }
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
