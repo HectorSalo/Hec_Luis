@@ -217,6 +217,7 @@ public class MessengerActivity extends AppCompatActivity {
                                     constructorMessenger.setEmisor(dc.getDocument().getString(VariablesEstaticas.BD_ID_EMISOR));
                                     constructorMessenger.setReceptor(dc.getDocument().getString(VariablesEstaticas.BD_ID_RECEPTOR));
                                     constructorMessenger.setMensaje(dc.getDocument().getString(VariablesEstaticas.BD_MENSAJE_CHAT));
+                                    constructorMessenger.setFechaEnvio(dc.getDocument().getDate(VariablesEstaticas.BD_FECHA_MENSAJE));
 
                                     if((constructorMessenger.getEmisor().equals(emisor) && constructorMessenger.getReceptor().equals(receptor)) || (constructorMessenger.getEmisor().equals(receptor) && constructorMessenger.getReceptor().equals(emisor))) {
                                         listMsg.add(constructorMessenger);
@@ -242,6 +243,7 @@ public class MessengerActivity extends AppCompatActivity {
                                         constructorMessenger.setEmisor(dc.getDocument().getString(VariablesEstaticas.BD_ID_EMISOR));
                                         constructorMessenger.setReceptor(dc.getDocument().getString(VariablesEstaticas.BD_ID_RECEPTOR));
                                         constructorMessenger.setMensaje(dc.getDocument().getString(VariablesEstaticas.BD_MENSAJE_CHAT));
+                                        constructorMessenger.setFechaEnvio(dc.getDocument().getDate(VariablesEstaticas.BD_FECHA_MENSAJE));
 
                                         listMsg.set(position, constructorMessenger);
                                     }

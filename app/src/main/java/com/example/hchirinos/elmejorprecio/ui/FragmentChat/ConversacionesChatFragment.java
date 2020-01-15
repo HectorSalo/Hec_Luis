@@ -3,7 +3,9 @@ package com.example.hchirinos.elmejorprecio.ui.FragmentChat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +45,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -111,17 +117,74 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
         recyclerViewUsuarios.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerViewUsuarios.setAdapter(adapterConversacionesChat);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemSwipe);
+        itemTouchHelper.attachToRecyclerView(recyclerViewUsuarios);
+
         textViewSinChats = root.findViewById(R.id.textViewSinChats);
 
         db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         usuarioActual = user.getUid();
 
+
         cargarConversaciones();
         selecUsuarioChat();
 
         return root;
     }
+
+
+    private ItemTouchHelper.SimpleCallback itemSwipe = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            final int position = viewHolder.getAdapterPosition();
+
+            ConstructorMessenger usuarioSwipe = new ConstructorMessenger();
+
+            usuarioSwipe = listUsuarios.get(position);
+            listUsuarios.remove(position);
+            adapterConversacionesChat.updateList(listUsuarios);
+
+            final ConstructorMessenger finalUsuarioSwipe = usuarioSwipe;
+
+            final Snackbar snackbar = Snackbar.make(root, usuarioSwipe.getNombreReceptor() + " borrado", Snackbar.LENGTH_LONG).setAction("Deshacer", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listUsuarios.add(position, finalUsuarioSwipe);
+                    adapterConversacionesChat.updateList(listUsuarios);
+                }
+            });
+            snackbar.show();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!listUsuarios.contains(finalUsuarioSwipe)) {
+                        deleteChatSwipe(finalUsuarioSwipe.getReceptor());
+                    }
+                }
+            }, 6000);
+
+
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addBackgroundColor(ContextCompat.getColor(getContext(), R.color.md_red_A700))
+                    .addActionIcon(R.drawable.ic_delete)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
 
 
     public void cargarConversaciones() {
@@ -163,6 +226,15 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                                     firstTime = 2;
                                     break;
                                 case REMOVED:
+                                    emisorBD = dc.getDocument().getString(VariablesEstaticas.BD_ID_EMISOR);
+                                    receptorBD = dc.getDocument().getString(VariablesEstaticas.BD_ID_RECEPTOR);
+
+                                    if(emisorBD.equals(usuarioActual)) {
+                                        listaConversaciones.remove(receptorBD);
+                                    } else if (receptorBD.equals(usuarioActual)) {
+                                        listaConversaciones.remove(emisorBD);
+                                    }
+                                    Log.d("Msg", "New mensaje removido del chat: " + listaConversaciones.size());
                                     firstTime = 3;
                                     break;
                             }
@@ -331,17 +403,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
         VariablesGenerales.verCheckBoxes = false;
         adapterConversacionesChat.updateList(listUsuarios);
 
-        if (listUsuarios.isEmpty()) {
-            recyclerViewUsuarios.setVisibility(View.GONE);
-            textViewSinChats.setVisibility(View.VISIBLE);
-            Log.d("Msg", "lista usuario: ");
-
-        } else {
-            textViewSinChats.setVisibility(View.GONE);
-            recyclerViewUsuarios.setVisibility(View.VISIBLE);
-            Log.d("Msg", "lista no usuario");
-
-        }
     }
 
     private void deleteChatsReceptorBD(String id) {
@@ -365,6 +426,28 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
                 }
             });
 
+    }
+
+    private void deleteChatSwipe(final String id) {
+        db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual)
+                .whereEqualTo(VariablesEstaticas.BD_ID_EMISOR, id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                        db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(usuarioActual).document(document.getId())
+                                .delete();
+
+                        Log.d("Delete", document.getId());
+                    }
+
+                    deleteChatsReceptorBD(id);
+                } else {
+                    Log.d("Error", "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 
 

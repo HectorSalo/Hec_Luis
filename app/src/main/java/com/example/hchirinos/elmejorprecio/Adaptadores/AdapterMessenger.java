@@ -16,7 +16,9 @@ import com.example.hchirinos.elmejorprecio.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AdapterMessenger extends RecyclerView.Adapter<AdapterMessenger.ViewHolderMessenger> {
 
@@ -48,7 +50,11 @@ public class AdapterMessenger extends RecyclerView.Adapter<AdapterMessenger.View
     @Override
     public void onBindViewHolder(@NonNull AdapterMessenger.ViewHolderMessenger holder, int position) {
 
+        Date fechaMsg;
+        fechaMsg = listMensajes.get(position).getFechaEnvio();
+
         holder.mostrarMsg.setText(listMensajes.get(position).getMensaje());
+        holder.fechaMsg.setText(new SimpleDateFormat("EEE d MMM h:mm a").format(fechaMsg));
     }
 
     @Override
@@ -59,10 +65,12 @@ public class AdapterMessenger extends RecyclerView.Adapter<AdapterMessenger.View
     public class ViewHolderMessenger extends RecyclerView.ViewHolder {
 
         EmojiTextView mostrarMsg;
+        TextView fechaMsg;
         public ViewHolderMessenger(@NonNull View itemView) {
             super(itemView);
 
             mostrarMsg = itemView.findViewById(R.id.textView_showmsg);
+            fechaMsg = itemView.findViewById(R.id.text_fecha_msg);
         }
     }
 

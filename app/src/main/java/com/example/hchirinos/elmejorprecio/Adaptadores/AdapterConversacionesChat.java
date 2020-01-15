@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -66,7 +67,7 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
 
     @Override
     public void onBindViewHolder(@NonNull AdapterConversacionesChat.ViewHolder holder, final int position) {
-        Date fechaConexion = new Date();
+        Date fechaConexion;
         fechaConexion = listConversaciones.get(position).getUltimaConexion();
 
 
