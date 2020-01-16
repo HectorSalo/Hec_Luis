@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
 import com.example.hchirinos.elmejorprecio.HomeActivity;
+import com.example.hchirinos.elmejorprecio.MessengerActivity;
 import com.example.hchirinos.elmejorprecio.NotificacionesChat.Token;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
@@ -66,6 +68,60 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotificationMessenger(RemoteMessage remoteMessage) {
+        String user = remoteMessage.getData().get("user");
+        String body = remoteMessage.getData().get("body");
+        String title = remoteMessage.getData().get("title");
+        String icon = remoteMessage.getData().get("icon");
+
+        RemoteMessage.Notification notification = remoteMessage.getNotification();
+        int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
+
+        Intent intent = new Intent(this, MessengerActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("userID", user);
+        intent.putExtras(bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //
+        String NOTIFICATION_CHANNEL_ID = "MensajesChat";
+
+
+        NotificationCompat.Builder notificationBuilder =  new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        notificationBuilder
+                .setSmallIcon(Integer.parseInt(icon))
+                .setColor(rgb(0, 60, 255))
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setVibrate(new long[]{0, 1000, 500, 1000})
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+
+                .setContentInfo("info");
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,"Messenger", NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription("Descripcion");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+            notificationChannel.enableLights(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+
+        int i = 0;
+        if (j > 0) {
+            i = j;
+        }
+        notificationManager.notify(i, notificationBuilder.build());
     }
 
     private void showNotification(String title, String body) {

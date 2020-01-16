@@ -32,6 +32,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterMessenger;
 import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
+import com.example.hchirinos.elmejorprecio.NotificacionesChat.APIServices;
+import com.example.hchirinos.elmejorprecio.NotificacionesChat.Client;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.ConversacionesChatFragment;
@@ -77,6 +79,8 @@ public class MessengerActivity extends AppCompatActivity {
     private ImageView imagenUsuario;
     private TextView nombreUsuario, statusUsuario;
     private MediaPlayer mediaPlayer;
+    private APIServices apiServices;
+    private boolean notify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,8 @@ public class MessengerActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         usuarioEnLinea = new UsuarioEnLinea();
+
+        apiServices = Client.getClient("https://fcm.googleapis.com").create(APIServices.class);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
         mediaPlayer = new MediaPlayer();
@@ -154,6 +160,7 @@ public class MessengerActivity extends AppCompatActivity {
     }
 
     private void enviarMsg() {
+        notify = true;
         String mensaje = editTextMsg.getText().toString();
         calendario = Calendar.getInstance();
         Date date = calendario.getTime();
