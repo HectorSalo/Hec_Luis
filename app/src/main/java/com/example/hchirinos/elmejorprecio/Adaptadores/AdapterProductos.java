@@ -58,7 +58,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         final int position = i;
 
         //Comunica el adaptador con la clase ViewHolderProductos
-        viewHolderProductos.textView_nombre_producto.setText(listProductos.get(i).getDescripcionProducto());
+        viewHolderProductos.textView_nombre_producto.setText(listProductos.get(i).getNombreProducto());
         viewHolderProductos.textView_precio_producto.setText("$" + listProductos.get(i).getPrecioProducto());
 
         if (listProductos.get(i).getImagenProducto()!=null) {
@@ -67,17 +67,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         }
 
-        viewHolderProductos.likeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-                agregarFavoritos(listProductos.get(position));
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                quitarFavoritos(listProductos.get(position));
-            }
-        });
 
         viewHolderProductos.imageButtonCompartir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,8 +112,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         TextView textView_nombre_producto;
         TextView textView_precio_producto;
         ImageView imageView_producto;
-        ImageButton imageButtonCompartir, imageButtonInfo;
-        LikeButton likeButton;
+        ImageButton imageButtonCompartir, imageButtonInfo, imageButtonAdd;
 
 
         public ViewHolderProductos(@NonNull View itemView) {
@@ -135,7 +123,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
             imageView_producto = itemView.findViewById(R.id.imageView_producto);
             imageButtonCompartir = itemView.findViewById(R.id.imageButtonCompartir);
             imageButtonInfo = itemView.findViewById(R.id.imageButtonInfoProducto);
-            likeButton = itemView.findViewById(R.id.likeButton);
+            imageButtonAdd = itemView.findViewById(R.id.imageButtonAdd);
 
         }
     }

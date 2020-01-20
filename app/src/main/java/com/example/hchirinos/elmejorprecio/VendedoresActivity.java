@@ -64,6 +64,7 @@ public class VendedoresActivity extends AppCompatActivity
     private ProgressBar progressBar;
     private NavigationView navigationView;
     private boolean temaClaro;
+    private int acceso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +148,7 @@ public class VendedoresActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_DETALLES_VENDEDOR).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_DETALLES_VENDEDOR).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -253,13 +254,13 @@ public class VendedoresActivity extends AppCompatActivity
         } else if (id == R.id.nav_supermercados) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_chat) {
-            validarInicSesion();
+            validarInicSesion(1);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_vender) {
-            startActivity(new Intent(this, VentasActivity.class));
+            validarInicSesion(3);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
-            startActivity(new Intent(this, FavoritosActivity.class));
+            validarInicSesion(2);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
@@ -332,17 +333,28 @@ public class VendedoresActivity extends AppCompatActivity
     }
 
 
-    private void validarInicSesion() {
+    private void validarInicSesion(int i) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            startActivity(new Intent(this, ChatActivity.class));
+            switch (i) {
+                case 1:
+                    startActivity(new Intent(this, ChatActivity.class));
+                    break;
+                case 2:
+                    startActivity(new Intent(this, FavoritosActivity.class));
+                    break;
+                case 3:
+                    startActivity(new Intent(this, VentasActivity.class));
+                    break;
+            }
         } else {
             AlertDialog.Builder dialog = new AlertDialog.Builder(VendedoresActivity.this);
             dialog.setTitle("¡Aviso!")
-                    .setMessage("Debe iniciar sesión para enviar mensaje directo\n¿Desea iniciar sesión?")
+                    .setMessage("Debe iniciar sesión para esta opción\n¿Desea iniciar sesión?")
                     .setPositiveButton("Iniciar Sesión", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            acceso = i;
                             iniciarSesion();
                         }
                     }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -391,7 +403,17 @@ public class VendedoresActivity extends AppCompatActivity
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                startActivity(new Intent(this, ChatActivity.class));
+                switch (acceso) {
+                    case 1:
+                        startActivity(new Intent(this, ChatActivity.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(this, FavoritosActivity.class));
+                        break;
+                    case 3:
+                        startActivity(new Intent(this, VentasActivity.class));
+                        break;
+                }
 
             } else {
                 // Sign in failed. If response is null the user canceled the

@@ -54,12 +54,13 @@
                         android:layout_marginStart="10dp"
                         android:orientation="vertical">
 
-                        <com.like.LikeButton
-                            android:id="@+id/likeButtonFavorito"
+                        <ImageButton
+                            android:id="@+id/imageButtonQuitarFavorito"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
-                            app:icon_type="heart" />
+                            android:background="#00FFFFFF"
+                            app:srcCompat="@drawable/ic_remove_favoritos" />
 
                         <ImageButton
                             android:id="@+id/imageButtonCompartirFavorito"

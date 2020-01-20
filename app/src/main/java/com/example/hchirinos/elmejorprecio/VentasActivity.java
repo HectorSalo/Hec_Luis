@@ -127,7 +127,7 @@ public class VentasActivity extends AppCompatActivity
 
         listProductsVentas = new ArrayList<>();
 
-        adapterVentas = new AdapterVentas(listProductsVentas, this);
+        adapterVentas = new AdapterVentas(listProductsVentas, this, temaClaro);
         recyclerVentas.setAdapter(adapterVentas);
 
 
@@ -189,6 +189,9 @@ public class VentasActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.ventas, menu);
+        MenuItem menuItem = menu.findItem(R.id.bar_buscar);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -200,13 +203,8 @@ public class VentasActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.bar_refresh) {
-
-            Toast.makeText(this, "Lista actualizada", Toast.LENGTH_SHORT).show();
+        if (id == R.id.bar_buscar) {
             return true;
-        } else if (id == R.id.bar_Productos) {
-            Intent myIntent = new Intent(this, ProductosActivity.class);
-            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -283,6 +281,23 @@ public class VentasActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        if (listProductsVentas.isEmpty()) {
+            Toast.makeText(this, "No hay lista cargada", Toast.LENGTH_SHORT).show();
+        } else {
+            String userInput = newText.toLowerCase();
+            ArrayList<ConstructorProductos> newList = new ArrayList<>();
+
+            for (ConstructorProductos name : listProductsVentas) {
+
+                if (name.getDescripcionProducto().toLowerCase().contains(userInput)) {
+
+                    newList.add(name);
+                }
+            }
+
+            adapterVentas.updateList(newList);
+
+        }
         return false;
     }
 

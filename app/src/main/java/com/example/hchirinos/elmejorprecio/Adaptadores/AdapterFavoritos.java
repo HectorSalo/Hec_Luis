@@ -55,18 +55,6 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
             Glide.with(mContext).load(listFavoritos.get(position).getImagenProducto()).into(viewHolderFavoritos.imagen);
         }
 
-        viewHolderFavoritos.likeButton.setLiked(true);
-        viewHolderFavoritos.likeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                quitarFavoritos(listFavoritos.get(position));
-            }
-        });
 
         viewHolderFavoritos.imageButtonCompartir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,8 +94,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
         TextView tvDescripcion;
         TextView tvPrecio;
         ImageView imagen;
-        ImageButton imageButtonCompartir, imageButtonInfo;
-        LikeButton likeButton;
+        ImageButton imageButtonCompartir, imageButtonInfo, imageButtonQuitar;
 
         public ViewHolderFavoritos(@NonNull View itemView) {
             super(itemView);
@@ -116,7 +103,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
             imagen = itemView.findViewById(R.id.imageViewProductoFavorito);
             imageButtonCompartir = itemView.findViewById(R.id.imageButtonCompartirFavorito);
             imageButtonInfo = itemView.findViewById(R.id.imageButtonInfoProductoFavorito);
-            likeButton = itemView.findViewById(R.id.likeButtonFavorito);
+            imageButtonQuitar = itemView.findViewById(R.id.imageButtonQuitarFavorito);
         }
     }
 

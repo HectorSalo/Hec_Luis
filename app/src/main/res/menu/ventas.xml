@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/bar_refresh"
-        android:icon="@drawable/ic_refresh"
+        android:id="@+id/bar_buscar"
+        android:icon="@drawable/ic_search"
         android:title="@string/app_bar_buscar"
         app:showAsAction="always"
-
+        app:actionViewClass="android.widget.SearchView"
         />
 
-    <item
-        android:id="@+id/bar_Productos"
-        android:title="@string/go_PLU"
-        />
 
 
 </menu>

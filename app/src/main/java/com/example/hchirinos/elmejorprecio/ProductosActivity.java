@@ -667,13 +667,14 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_CATEGORIA, VariablesEstaticas.BD_CATEGORIA_PRODUCTO).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Almacen").whereEqualTo(VariablesEstaticas.BD_CATEGORIA, VariablesEstaticas.BD_CATEGORIA_PRODUCTO).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
                         productos.setIdProducto(doc.getId());
+                        productos.setNombreProducto(doc.getString(VariablesEstaticas.BD_NOMBRE_PRODUCTO));
                         productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
                         productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
                         productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
@@ -717,7 +718,7 @@ public class ProductosActivity extends AppCompatActivity
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_CATEGORIA, VariablesEstaticas.BD_CATEGORIA_SERVICIO).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Almacen").whereEqualTo(VariablesEstaticas.BD_CATEGORIA, VariablesEstaticas.BD_CATEGORIA_SERVICIO).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

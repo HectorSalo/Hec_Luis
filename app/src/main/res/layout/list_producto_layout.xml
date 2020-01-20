@@ -55,12 +55,13 @@
                         android:layout_marginStart="10dp"
                         android:orientation="vertical">
 
-                        <com.like.LikeButton
-                            android:id="@+id/likeButton"
+                        <ImageButton
+                            android:id="@+id/imageButtonAdd"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
-                            app:icon_type="heart" />
+                            android:background="#00FFFFFF"
+                            app:srcCompat="@drawable/ic_add_favoritos" />
 
                         <ImageButton
                             android:id="@+id/imageButtonCompartir"

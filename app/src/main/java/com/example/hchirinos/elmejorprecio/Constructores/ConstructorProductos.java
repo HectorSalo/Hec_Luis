@@ -17,11 +17,12 @@ public class ConstructorProductos {
     private String unidadProducto;
     private Date fechaIngreso;
     private String estadoProducto;
+    private String nombreProducto;
 
 
     public ConstructorProductos() {}
 
-    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto, String vendedor, String unidadProducto, Date fechaIngreso) {
+    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto, String vendedor, String unidadProducto, Date fechaIngreso, String nombreProducto) {
         this.idProducto = idProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioProducto = precioProducto;
@@ -30,6 +31,15 @@ public class ConstructorProductos {
         this.vendedor = vendedor;
         this.unidadProducto = unidadProducto;
         this.fechaIngreso = fechaIngreso;
+        this.nombreProducto = nombreProducto;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public String getIdProducto() {

@@ -92,4 +92,9 @@
     <string name="textview_sin_chats">No tiene conversaciones activas. Para iniciar una, diríjase a Usuarios y encuentre al contacto deseado.</string>
 
 
+    <string name="menu_ventas_editar">Editar</string>
+    <string name="menu_ventas_pausar">Pausar Publicación</string>
+    <string name="menu_ventas_quitar">Quitar Artículo</string>
+
+
 </resources>
