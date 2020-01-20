@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,7 +15,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.SpannableString;
@@ -90,10 +90,17 @@ public class ProductosActivity extends AppCompatActivity
 
         recyclerProductos = (RecyclerView)findViewById(R.id.recyclerView_Productos);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
         listProductos = new ArrayList<>();
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
-        recyclerProductos.setAdapter(adapterProductos);
+
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         swRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
 
@@ -231,6 +238,9 @@ public class ProductosActivity extends AppCompatActivity
         } else if (id == R.id.nav_chat) {
             validarInicSesion();
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_vender) {
+            startActivity(new Intent(this, VentasActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             startActivity(new Intent(this, FavoritosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
@@ -260,8 +270,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -302,8 +318,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -345,8 +367,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -387,8 +415,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -429,8 +463,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -471,8 +511,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -513,8 +559,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -555,8 +607,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -598,8 +656,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -642,8 +706,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -684,8 +754,14 @@ public class ProductosActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
         recyclerProductos.setHasFixedSize(true);
-        recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerProductos.setAdapter(adapterProductos);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerProductos.setAdapter(adapterProductos);
+        } else {
+            recyclerProductos.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerProductos.setAdapter(adapterProductos);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 

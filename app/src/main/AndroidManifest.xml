@@ -87,9 +87,9 @@
             android:name=".MapsInfoVendedor"
             android:label="@string/title_activity_maps_buscar" />
         <activity
-            android:name=".lista_compras"
-            android:label="@string/title_activity_lista_compras"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".VentasActivity"
+            android:label="@string/title_activity_ventas"
+            android:theme="@style/AppThemeDiaNoche" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppThemeDiaNoche">

@@ -1,6 +1,5 @@
 package com.example.hchirinos.elmejorprecio;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -133,6 +132,9 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this, VendedoresActivity.class));
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_chat) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_vender) {
+            startActivity(new Intent(this, VentasActivity.class));
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             startActivity(new Intent(this, FavoritosActivity.class));

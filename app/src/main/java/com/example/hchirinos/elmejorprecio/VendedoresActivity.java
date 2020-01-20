@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -87,10 +88,11 @@ public class VendedoresActivity extends AppCompatActivity
 
         recyclerVendedores = (RecyclerView)findViewById(R.id.recyclerViewVendedores);
         recyclerVendedores.setHasFixedSize(true);
-        recyclerVendedores.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
-
         listVendedores = new ArrayList<>();
         adapterVendedores = new AdapterVendedores(listVendedores, this);
+
+
+        recyclerVendedores.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
         recyclerVendedores.setAdapter(adapterVendedores);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -134,8 +136,14 @@ public class VendedoresActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         adapterVendedores = new AdapterVendedores(listVendedores, this);
         recyclerVendedores.setHasFixedSize(true);
-        recyclerVendedores.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerVendedores.setAdapter(adapterVendedores);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recyclerVendedores.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerVendedores.setAdapter(adapterVendedores);
+        } else {
+            recyclerVendedores.setLayoutManager(new GridLayoutManager(this, 3));
+            recyclerVendedores.setAdapter(adapterVendedores);
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -246,6 +254,9 @@ public class VendedoresActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_chat) {
             validarInicSesion();
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_vender) {
+            startActivity(new Intent(this, VentasActivity.class));
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             startActivity(new Intent(this, FavoritosActivity.class));

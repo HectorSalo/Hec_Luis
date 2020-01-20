@@ -5,26 +5,52 @@
 
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_inicio"
             android:icon="@drawable/ic_home"
-            android:title="@string/navigation_drawer_inicio" />
+            android:title="@string/navigation_drawer_inicio"
+            />
+        <item
+            android:id="@+id/nav_catalogos"
+            android:icon="@drawable/ic_catalogo"
+            android:title="@string/navigation_drawer_catalogo" />
         <item
             android:id="@+id/nav_productos"
             android:icon="@drawable/ic_productos"
-            android:title="@string/navigation_drawer_PLU" />
+            android:title="@string/navigation_drawer_PLU"
+            android:visible="false"
+            />
+        <item
+            android:id="@+id/nav_servicios"
+            android:icon="@drawable/ic_servicios"
+            android:title="@string/navigation_drawer_servicio"
+            android:visible="false"
+            />
         <item
             android:id="@+id/nav_supermercados"
             android:icon="@drawable/ic_vendedor"
             android:title="@string/navigation_drawer_SUP" />
+
     </group>
+
 
     <item android:title="@string/navigation_drawer_subtitle">
         <menu>
             <item
+                android:id="@+id/nav_chat"
+                android:icon="@drawable/ic_chat"
+                android:title="@string/navigation_drawer_chat" />
+
+            <item
                 android:id="@+id/nav_favorito"
-                android:icon="@android:drawable/btn_star_big_on"
+                android:icon="@drawable/ic_favoritos"
                 android:title="@string/navigation_drawer_favoritos" />
+
+            <item
+                android:id="@+id/nav_vender"
+                android:icon="@drawable/ic_vender"
+                android:title="@string/navigation_drawer_vender" />
 
         </menu>
     </item>
