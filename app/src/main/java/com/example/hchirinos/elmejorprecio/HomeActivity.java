@@ -63,6 +63,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ProgressBar progressBarRecientes, progressBarCambioPrecio, progressBarOfertas;
     private NavigationView navigationView;
     private boolean temaClaro;
+    private int acceso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,13 +176,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereEqualTo(VariablesEstaticas.BD_CAMBIO_PRECIO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereEqualTo(VariablesEstaticas.BD_CAMBIO_PRECIO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
                         productos.setIdProducto(doc.getId());
+                        productos.setNombreProducto(doc.getString(VariablesEstaticas.BD_NOMBRE_PRODUCTO));
                         productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
                         productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
                         productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
@@ -216,13 +218,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereEqualTo(VariablesEstaticas.BD_OFERTA_SEMANA, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereEqualTo(VariablesEstaticas.BD_OFERTA_SEMANA, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
                         productos.setIdProducto(doc.getId());
+                        productos.setNombreProducto(doc.getString(VariablesEstaticas.BD_NOMBRE_PRODUCTO));
                         productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
                         productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
                         productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
@@ -257,13 +260,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.DESCENDING).limit(6).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.DESCENDING).limit(6).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
                         productos.setIdProducto(doc.getId());
+                        productos.setNombreProducto(doc.getString(VariablesEstaticas.BD_NOMBRE_PRODUCTO));
                         productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
                         productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
                         productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
@@ -374,15 +378,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_favorito) {
-            Intent irFavoritos = new Intent(this, FavoritosActivity.class);
-            startActivity(irFavoritos);
+            validarInicSesion(2);
             drawer.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_chat) {
-            validarInicSesion();
+            validarInicSesion(1);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_vender) {
-            startActivity(new Intent(this, VentasActivity.class));
+            validarInicSesion(3);
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
            startActivity(new Intent(this, SettingsActivity.class));
@@ -393,17 +396,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void validarInicSesion() {
+    private void validarInicSesion(int i) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            startActivity(new Intent(this, ChatActivity.class));
+            switch (i) {
+                case 1:
+                    startActivity(new Intent(this, ChatActivity.class));
+                    break;
+                case 2:
+                    startActivity(new Intent(this, FavoritosActivity.class));
+                    break;
+                case 3:
+                    startActivity(new Intent(this, VentasActivity.class));
+                    break;
+            }
         } else {
             AlertDialog.Builder dialog = new AlertDialog.Builder(HomeActivity.this);
             dialog.setTitle("¡Aviso!")
-                    .setMessage("Debe iniciar sesión para enviar mensaje directo\n¿Desea iniciar sesión?")
+                    .setMessage("Debe iniciar sesión para esta opción\n¿Desea iniciar sesión?")
                     .setPositiveButton("Iniciar Sesión", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            acceso = i;
                             iniciarSesion();
                         }
                     }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -453,8 +467,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-
-                startActivity(new Intent(this, ChatActivity.class));
+                switch (acceso) {
+                    case 1:
+                        startActivity(new Intent(this, ChatActivity.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(this, FavoritosActivity.class));
+                        break;
+                    case 3:
+                        startActivity(new Intent(this, VentasActivity.class));
+                        break;
+                }
 
             } else {
                 // Sign in failed. If response is null the user canceled the

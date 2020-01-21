@@ -2,6 +2,7 @@ package com.example.hchirinos.elmejorprecio.Variables;
 
 public class VariablesEstaticas {
     public static final String BD_VENDEDORES = "Vendedores";
+    public static final String BD_ALMACEN = "Almacen";
     public static final String BD_PRODUCTOS = "Productos";
     public static final String BD_DETALLES_VENDEDOR = "DetallesVendedor";
     public static final String BD_NOMBRE_PRODUCTO = "Nombre";
@@ -47,5 +48,7 @@ public class VariablesEstaticas {
 
     public static final String BD_USUARIOS_CHAT = "UsuariosChat";
     public static final String BD_CONVERSACIONES_CHAT = "Conversaciones";
+
+    public static final String BD_ID_USUARIO = "idUsuario";
 
 }

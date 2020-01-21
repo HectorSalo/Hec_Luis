@@ -50,7 +50,7 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVentas viewHolderVentas, int i) {
 
-        viewHolderVentas.tvNombreProducto.setText(listProductos.get(i).getDescripcionProducto());
+        viewHolderVentas.tvNombreProducto.setText(listProductos.get(i).getNombreProducto());
         viewHolderVentas.tvPrecioProducto.setText("$ " + listProductos.get(i).getPrecioProducto());
 
         Glide.with(mContext).load(listProductos.get(i).getImagenProducto()).apply(RequestOptions.circleCropTransform()).into(viewHolderVentas.image);

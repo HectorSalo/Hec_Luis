@@ -137,19 +137,21 @@ public class VentasActivity extends AppCompatActivity
 
 
     public void cargarProductosVentas() {
+        String idUsuario = user.getUid();
         listProductsVentas = new ArrayList<>();
         progressBar.setVisibility(View.VISIBLE);
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_VENDEDOR_ASOCIADO, "Rafaela Ambrosio").orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_ID_USUARIO, idUsuario).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
                         productos.setIdProducto(doc.getId());
+                        productos.setNombreProducto(doc.getString(VariablesEstaticas.BD_NOMBRE_PRODUCTO));
                         productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
                         productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
                         productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
@@ -258,9 +260,8 @@ public class VentasActivity extends AppCompatActivity
             Intent irFavoritos = new Intent(this, FavoritosActivity.class);
             startActivity(irFavoritos);
             drawer.closeDrawer(GravityCompat.START);
-
         } else if (id == R.id.nav_chat) {
-            //validarInicSesion();
+            startActivity(new Intent(this, ChatActivity.class));
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_vender) {
             drawer.closeDrawer(GravityCompat.START);
