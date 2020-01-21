@@ -62,6 +62,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<ConstructorProductos> listRecientes, listCambioPrecio, listOferta;
     private ProgressBar progressBarRecientes, progressBarCambioPrecio, progressBarOfertas;
     private NavigationView navigationView;
+    private FirebaseUser user;
     private boolean temaClaro;
     private int acceso;
 
@@ -74,6 +75,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -82,6 +85,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+        Menu menu = navigationView.getMenu();
+        MenuItem itemCerrarSesion = menu.findItem(R.id.nav_cerrar_sesion);
+        if (user != null) {
+            itemCerrarSesion.setVisible(true);
+        } else {
+            itemCerrarSesion.setVisible(false);
+        }
 
         progressBarCambioPrecio = findViewById(R.id.progressBarCambioPrecio);
         progressBarOfertas = findViewById(R.id.progressBarOfertas);
@@ -105,6 +115,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         recyclerRecientes.setAdapter(adapterRecientes);
         recyclerOfertas.setAdapter(adapterOferta);
         recyclerCambioPrecio.setAdapter(adapterCambioPrecio);
+
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean subscripcionInicial = sharedPreferences.getBoolean("subsinicial", true);
@@ -190,6 +201,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -232,6 +244,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -274,6 +287,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -314,6 +328,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         searchView.setBackgroundResource(R.drawable.fondo_searchview_home);
 
         searchView.setOnQueryTextListener(this);
+
         return true;
 
     }
@@ -341,6 +356,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu();
 
         int id = item.getItemId();
+
 
         if (id == R.id.nav_catalogos) {
             MenuItem itemServicios = menu.findItem(R.id.nav_servicios);
@@ -387,6 +403,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_vender) {
             validarInicSesion(3);
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_cerrar_sesion) {
+            cerrarSesion();
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
            startActivity(new Intent(this, SettingsActivity.class));
             drawer.closeDrawer(GravityCompat.START);
@@ -397,7 +416,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void validarInicSesion(int i) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             switch (i) {
                 case 1:
@@ -465,7 +483,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 switch (acceso) {
                     case 1:
@@ -486,6 +503,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             }
         }
+    }
+
+    private void cerrarSesion() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(HomeActivity.this);
+        dialog.setTitle("¡Aviso!")
+                .setMessage("¿Desea cerrar sesión?")
+                .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
 
 

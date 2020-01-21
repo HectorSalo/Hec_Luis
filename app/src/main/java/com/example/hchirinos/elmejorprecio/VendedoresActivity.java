@@ -63,6 +63,7 @@ public class VendedoresActivity extends AppCompatActivity
     private AdapterVendedores adapterVendedores;
     private ProgressBar progressBar;
     private NavigationView navigationView;
+    private FirebaseUser user;
     private boolean temaClaro;
     private int acceso;
 
@@ -73,6 +74,7 @@ public class VendedoresActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,6 +85,13 @@ public class VendedoresActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+        Menu menu = navigationView.getMenu();
+        MenuItem itemCerrarSesion = menu.findItem(R.id.nav_cerrar_sesion);
+        if (user != null) {
+            itemCerrarSesion.setVisible(true);
+        } else {
+            itemCerrarSesion.setVisible(false);
+        }
 
         progressBar = findViewById(R.id.progressBarVendedores);
         ConstraintLayout constraintLayout = findViewById(R.id.constraintVendedores);
@@ -95,6 +104,8 @@ public class VendedoresActivity extends AppCompatActivity
 
         recyclerVendedores.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
         recyclerVendedores.setAdapter(adapterVendedores);
+
+
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         temaClaro = sharedPreferences.getBoolean("temaClaro", true);
@@ -221,6 +232,7 @@ public class VendedoresActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
+
         if (id == R.id.nav_catalogos) {
             MenuItem itemServicios = menu.findItem(R.id.nav_servicios);
             MenuItem itemProductos = menu.findItem(R.id.nav_productos);
@@ -261,6 +273,9 @@ public class VendedoresActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             validarInicSesion(2);
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_cerrar_sesion) {
+            cerrarSesion();
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
@@ -422,6 +437,25 @@ public class VendedoresActivity extends AppCompatActivity
 
             }
         }
+    }
+
+    private void cerrarSesion() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(VendedoresActivity.this);
+        dialog.setTitle("¡Aviso!")
+                .setMessage("¿Desea cerrar sesión?")
+                .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), VendedoresActivity.class));
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
 
     @Override

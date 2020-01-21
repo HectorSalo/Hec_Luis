@@ -65,6 +65,7 @@ public class ProductosActivity extends AppCompatActivity
     private ProgressBar progressBar;
     private NavigationView navigationView;
     private ConstraintLayout constraintLayout;
+    private FirebaseUser user;
     private boolean temaClaro;
     private  int acceso;
 
@@ -76,6 +77,7 @@ public class ProductosActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -85,6 +87,13 @@ public class ProductosActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+        Menu menu = navigationView.getMenu();
+        MenuItem itemCerrarSesion = menu.findItem(R.id.nav_cerrar_sesion);
+        if (user != null) {
+            itemCerrarSesion.setVisible(true);
+        } else {
+            itemCerrarSesion.setVisible(false);
+        }
 
         constraintLayout = findViewById(R.id.layoutProductos);
         progressBar = findViewById(R.id.progressBarProductos);
@@ -93,6 +102,7 @@ public class ProductosActivity extends AppCompatActivity
         recyclerProductos.setHasFixedSize(true);
         listProductos = new ArrayList<>();
         adapterProductos = new AdapterProductos(listProductos, ProductosActivity.this);
+
 
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -203,6 +213,7 @@ public class ProductosActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
+
         if (id == R.id.nav_catalogos) {
             MenuItem itemServicios = menu.findItem(R.id.nav_servicios);
             MenuItem itemProductos = menu.findItem(R.id.nav_productos);
@@ -244,6 +255,9 @@ public class ProductosActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
             validarInicSesion(2);
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_cerrar_sesion) {
+            cerrarSesion();
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
@@ -296,6 +310,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -345,6 +360,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -395,6 +411,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -444,6 +461,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -493,6 +511,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -542,6 +561,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -591,6 +611,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -640,6 +661,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -691,6 +713,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -742,6 +765,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -791,6 +815,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -904,7 +929,7 @@ public class ProductosActivity extends AppCompatActivity
     }
 
     private void validarInicSesion(int i) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user != null) {
             switch (i) {
                 case 1:
@@ -972,7 +997,6 @@ public class ProductosActivity extends AppCompatActivity
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 switch (acceso) {
                     case 1:
@@ -993,5 +1017,24 @@ public class ProductosActivity extends AppCompatActivity
 
             }
         }
+    }
+
+    private void cerrarSesion() {
+        androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(ProductosActivity.this);
+        dialog.setTitle("¡Aviso!")
+                .setMessage("¿Desea cerrar sesión?")
+                .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), ProductosActivity.class));
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
 }

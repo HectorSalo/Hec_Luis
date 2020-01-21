@@ -20,11 +20,17 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.hchirinos.elmejorprecio.SQLite.ConectSQLiteHelper;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
@@ -34,6 +40,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
     private ArrayList<ConstructorProductos> listProductos;
     private Context mContext;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public AdapterProductos (ArrayList<ConstructorProductos> listProductos, Context mContext){
         this.listProductos = listProductos;
@@ -67,11 +74,37 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         }
 
+        if (user != null) {
+            viewHolderProductos.imageButtonAdd.setVisibility(View.VISIBLE);
+
+            if (listProductos.get(i).getListUsuariosFavoritos() != null) {
+                if (listProductos.get(i).getListUsuariosFavoritos().contains(user.getUid())) {
+                    viewHolderProductos.imageButtonAdd.setChecked(true);
+                }
+            }
+        } else {
+            viewHolderProductos.imageButtonAdd.setVisibility(View.GONE);
+        }
+
+
+        viewHolderProductos.imageButtonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    if (viewHolderProductos.imageButtonAdd.isChecked()) {
+                        agregarFavoritosFirestore(listProductos.get(i).getIdProducto());
+                    } else {
+                        quitarFavoritosFirestore(listProductos.get(i).getIdProducto());
+                    }
+
+            }
+        });
+
 
         viewHolderProductos.imageButtonCompartir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selection = listProductos.get(position).getDescripcionProducto() + "\n$" + listProductos.get(position).getPrecioProducto() + "\nVende: " + listProductos.get(position).getVendedor();
+                String selection = listProductos.get(position).getNombreProducto() + "\n$" + listProductos.get(position).getPrecioProducto() + "\nVende: " + listProductos.get(position).getVendedor();
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, selection);
@@ -112,7 +145,8 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         TextView textView_nombre_producto;
         TextView textView_precio_producto;
         ImageView imageView_producto;
-        ImageButton imageButtonCompartir, imageButtonInfo, imageButtonAdd;
+        ImageButton imageButtonCompartir, imageButtonInfo;
+        ToggleButton imageButtonAdd;
 
 
         public ViewHolderProductos(@NonNull View itemView) {
@@ -135,21 +169,36 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         notifyDataSetChanged();
     }
 
-    private void agregarFavoritos (ConstructorProductos i) {
+
+    private void agregarFavoritosFirestore(String idProducto) {
+        String idUsuario = user.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(VariablesEstaticas.BD_ALMACEN).document(idProducto).update(VariablesEstaticas.BD_USUARIOS_FAVORITOS, FieldValue.arrayUnion(idUsuario));
+    }
+
+    private void quitarFavoritosFirestore(String idProducto) {
+        String idUsuario = user.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(VariablesEstaticas.BD_ALMACEN).document(idProducto).update(VariablesEstaticas.BD_USUARIOS_FAVORITOS, FieldValue.arrayRemove(idUsuario));
+    }
+
+    private void agregarFavoritosSQLite (ConstructorProductos i) {
         String id = i.getIdProducto();
-        String descripcion = i.getDescripcionProducto();
+        String nombreProducto = i.getNombreProducto();
         ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(mContext, VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
         SQLiteDatabase db = conectSQLiteHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(VariablesEstaticas.BD_ID_PRODUCTO_FAVORITO, id);
-        values.put(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, descripcion);
+        values.put(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, nombreProducto);
 
         db.insert(VariablesEstaticas.BD_FAVORITOS, null, values);
         db.close();
     }
 
-    private void quitarFavoritos (ConstructorProductos i) {
+    private void quitarFavoritosSQLite (ConstructorProductos i) {
         String id = i.getIdProducto();
         ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(mContext, VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
         SQLiteDatabase db = conectSQLiteHelper.getWritableDatabase();
@@ -157,5 +206,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         db.delete(VariablesEstaticas.BD_FAVORITOS, "idProducto= '" + id + "'", null);
         db.close();
     }
+
 
 }

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ConstructorProductos {
@@ -18,11 +19,13 @@ public class ConstructorProductos {
     private Date fechaIngreso;
     private String estadoProducto;
     private String nombreProducto;
+    private ArrayList<String> listUsuariosFavoritos;
 
 
     public ConstructorProductos() {}
 
-    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto, String vendedor, String unidadProducto, Date fechaIngreso, String nombreProducto) {
+    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto,
+                                String vendedor, String unidadProducto, Date fechaIngreso, String nombreProducto, ArrayList<String> listUsuariosFavoritos) {
         this.idProducto = idProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioProducto = precioProducto;
@@ -32,6 +35,16 @@ public class ConstructorProductos {
         this.unidadProducto = unidadProducto;
         this.fechaIngreso = fechaIngreso;
         this.nombreProducto = nombreProducto;
+        this.listUsuariosFavoritos = listUsuariosFavoritos;
+    }
+
+
+    public ArrayList<String> getListUsuariosFavoritos() {
+        return listUsuariosFavoritos;
+    }
+
+    public void setListUsuariosFavoritos(ArrayList<String> listUsuariosFavoritos) {
+        this.listUsuariosFavoritos = listUsuariosFavoritos;
     }
 
     public String getNombreProducto() {

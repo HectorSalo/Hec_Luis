@@ -62,6 +62,8 @@
     <string name="tema_title">Temas</string>
     <string name="summary_tema">Escoja el tema de su preferencia</string>
 
+    <string name="cerrar_sesion_title">Cerrar Sesión</string>
+
     <!-- Acerca de Preferences -->
     <string name="acerca_title">Desarrollado por&#8230;</string>
 

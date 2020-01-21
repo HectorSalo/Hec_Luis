@@ -55,13 +55,14 @@
                         android:layout_marginStart="10dp"
                         android:orientation="vertical">
 
-                        <ImageButton
+                        <ToggleButton
                             android:id="@+id/imageButtonAdd"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
-                            android:background="#00FFFFFF"
-                            app:srcCompat="@drawable/ic_add_favoritos" />
+                            android:background="@drawable/selector_favorito"
+                            android:textOff="@string/texto_vacio"
+                            android:textOn="@string/texto_vacio" />
 
                         <ImageButton
                             android:id="@+id/imageButtonCompartir"
@@ -88,7 +89,6 @@
                     android:id="@+id/textView_precio_producto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:text="TextView"
                     android:textSize="20sp"
                     android:textStyle="bold" />

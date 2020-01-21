@@ -122,7 +122,7 @@ public class FavoritosActivity extends AppCompatActivity
         networkInfo = conexion.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            llenarLista();
+            cargarFavoritos();
         } else {
             Snackbar snackbar = Snackbar.make(constraintLayout, "Sin conexión", Snackbar.LENGTH_INDEFINITE).setAction("Reintentar", new View.OnClickListener() {
                 @Override
@@ -131,73 +131,59 @@ public class FavoritosActivity extends AppCompatActivity
                 }
             });
             snackbar.show();
-            llenarLista();
+            cargarFavoritos();
         }
 
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    public void llenarLista() {
-        progressBar.setVisibility(View.VISIBLE);
 
-        listaEnviarFavoritos = new ArrayList<>();
-
-        ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(getApplicationContext(), VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
-        SQLiteDatabase db = conectSQLiteHelper.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * from " + VariablesEstaticas.BD_FAVORITOS , null);
-
-        while (cursor.moveToNext()) {
-            listaEnviarFavoritos.add(cursor.getString(0));
-        }
-
-        if (!listaEnviarFavoritos.isEmpty()) {
-            for (int i = 0; i < listaEnviarFavoritos.size(); i++) {
-                cargarFavoritos(listaEnviarFavoritos.get(i));
-            }
-
-        } else {
-            progressBar.setVisibility(View.GONE);
-            Snackbar snackbar = Snackbar.make(constraintLayout, "No tiene Favoritos", Snackbar.LENGTH_INDEFINITE).setAction("Agregar", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    VariablesGenerales.verProductos = true;
-                    startActivity(new Intent(FavoritosActivity.this, ProductosActivity.class));
-                }
-            });
-            snackbar.show();
-        }
-
-
-    }
-
-    private void cargarFavoritos(String id) {
+    private void cargarFavoritos() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_PRODUCTOS).whereEqualTo(VariablesEstaticas.BD_ID_PRODUCTO_FAVORITO, id).orderBy(VariablesEstaticas.BD_PRECIO_PRODUCTO, Query.Direction.ASCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            public void onComplete(Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorProductos productos = new ConstructorProductos();
                         productos.setIdProducto(doc.getId());
+                        productos.setNombreProducto(doc.getString(VariablesEstaticas.BD_NOMBRE_PRODUCTO));
+                        productos.setNombreProducto(doc.getString(VariablesEstaticas.BD_NOMBRE_PRODUCTO));
                         productos.setDescripcionProducto(doc.getString(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO));
                         productos.setPrecioProducto(doc.getDouble(VariablesEstaticas.BD_PRECIO_PRODUCTO));
                         productos.setImagenProducto(doc.getString(VariablesEstaticas.BD_IMAGEN_PRODUCTO));
                         productos.setVendedor(doc.getString(VariablesEstaticas.BD_VENDEDOR_ASOCIADO));
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
+                        productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
                         productos.setCantidadProducto(cantidadInt);
 
-                        listFavoritos.add(productos);
+
+                        if (productos.getListUsuariosFavoritos() != null) {
+                            if (productos.getListUsuariosFavoritos().contains(user.getUid())) {
+                                listFavoritos.add(productos);
+                            }
+                        }
                     }
+
+                    if (listFavoritos.isEmpty()) {
+                        Snackbar.make(constraintLayout, "No tiene Favoritos", Snackbar.LENGTH_INDEFINITE).setAction("Agregar", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startActivity(new Intent(getApplicationContext(), ProductosActivity.class));
+                            }
+                        });
+                    }
+
                     adapterFavoritos.updateList(listFavoritos);
                     progressBar.setVisibility(View.GONE);
                 } else {
-                    Toast.makeText(FavoritosActivity.this, "Error al cargar lista", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error al cargar lista", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
             }
@@ -283,14 +269,16 @@ public class FavoritosActivity extends AppCompatActivity
             Intent ir_supermercado = new Intent(this, VendedoresActivity.class);
             startActivity(ir_supermercado);
             drawer.closeDrawer(GravityCompat.START);
-
         } else if (id == R.id.nav_chat) {
-            validarInicSesion();
+            startActivity(new Intent(this, ChatActivity.class));
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_vender) {
             startActivity(new Intent(this, VentasActivity.class));
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_favorito) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_cerrar_sesion) {
+            cerrarSesion();
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
@@ -332,79 +320,30 @@ public class FavoritosActivity extends AppCompatActivity
         return false;
     }
 
-    private void validarInicSesion() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            startActivity(new Intent(this, ChatActivity.class));
-        } else {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(FavoritosActivity.this);
-            dialog.setTitle("¡Aviso!")
-                    .setMessage("Debe iniciar sesión para enviar mensaje directo\n¿Desea iniciar sesión?")
-                    .setPositiveButton("Iniciar Sesión", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            iniciarSesion();
-                        }
-                    }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).show();
-        }
+    private void cerrarSesion() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(FavoritosActivity.this);
+        dialog.setTitle("¡Aviso!")
+                .setMessage("¿Desea cerrar sesión?")
+                .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
+
 
     @Override
     public void onRefresh() {
-        llenarLista();
+        cargarFavoritos();
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    private void iniciarSesion() {
-
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Collections.singletonList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
-
-// Create and launch sign-in intent
-        if (!temaClaro) {
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(providers)
-                            .setTheme(R.style.AppThemeNoche)
-                            .build(),
-                    12);
-        } else {
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(providers)
-                            .build(),
-                    12);
-        }
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 12) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                startActivity(new Intent(this, ChatActivity.class));
-
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-
-            }
-        }
-    }
 }

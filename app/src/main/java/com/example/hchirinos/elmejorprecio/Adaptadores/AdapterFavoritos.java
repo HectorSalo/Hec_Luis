@@ -12,14 +12,21 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.hchirinos.elmejorprecio.AdminSQLiteHelper;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.InfoProductoActivity;
+import com.example.hchirinos.elmejorprecio.ProductosActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
@@ -41,6 +48,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
     public ViewHolderFavoritos onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.favoritos_list, null, false);
+
         return new ViewHolderFavoritos(view);
     }
 
@@ -48,8 +56,18 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
     public void onBindViewHolder(@NonNull final AdapterFavoritos.ViewHolderFavoritos viewHolderFavoritos, int i) {
         final int position = i;
 
-        viewHolderFavoritos.tvDescripcion.setText(listFavoritos.get(position).getDescripcionProducto());
+        viewHolderFavoritos.tvDescripcion.setText(listFavoritos.get(position).getNombreProducto());
         viewHolderFavoritos.tvPrecio.setText("$" + listFavoritos.get(position).getPrecioProducto());
+        viewHolderFavoritos.imageButtonQuitar.setChecked(true);
+
+        viewHolderFavoritos.imageButtonQuitar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!viewHolderFavoritos.imageButtonQuitar.isChecked()) {
+                    quitarFavoritos(listFavoritos.get(position));
+                }
+            }
+        });
 
         if (listFavoritos.get(position).getImagenProducto() != null) {
             Glide.with(mContext).load(listFavoritos.get(position).getImagenProducto()).into(viewHolderFavoritos.imagen);
@@ -94,7 +112,8 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
         TextView tvDescripcion;
         TextView tvPrecio;
         ImageView imagen;
-        ImageButton imageButtonCompartir, imageButtonInfo, imageButtonQuitar;
+        ImageButton imageButtonCompartir, imageButtonInfo;
+        ToggleButton imageButtonQuitar;
 
         public ViewHolderFavoritos(@NonNull View itemView) {
             super(itemView);
@@ -104,6 +123,7 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
             imageButtonCompartir = itemView.findViewById(R.id.imageButtonCompartirFavorito);
             imageButtonInfo = itemView.findViewById(R.id.imageButtonInfoProductoFavorito);
             imageButtonQuitar = itemView.findViewById(R.id.imageButtonQuitarFavorito);
+
         }
     }
 
@@ -115,15 +135,15 @@ public class AdapterFavoritos extends RecyclerView.Adapter<AdapterFavoritos.View
     }
 
     public void quitarFavoritos(ConstructorProductos i) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String id = i.getIdProducto();
-        AdminSQLiteHelper adminSQLiteHelper = new AdminSQLiteHelper(mContext, VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
-        SQLiteDatabase db = adminSQLiteHelper.getWritableDatabase();
 
-        db.delete(VariablesEstaticas.BD_FAVORITOS, "idProducto= '" + id + "'", null);
-        db.close();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(VariablesEstaticas.BD_ALMACEN).document(id).update(VariablesEstaticas.BD_USUARIOS_FAVORITOS, FieldValue.arrayRemove(user.getUid()));
 
         listFavoritos.remove(i);
-        notifyDataSetChanged();
+        updateList(listFavoritos);
     }
 
 }

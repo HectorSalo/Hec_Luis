@@ -12,8 +12,8 @@
         android:gravity="center">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -27,9 +27,10 @@
 
             <LinearLayout
                 android:id="@+id/linearLayoutProducto"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -43,8 +44,8 @@
 
                     <ImageView
                         android:id="@+id/imageViewProductoFavorito"
-                        android:layout_width="175dp"
-                        android:layout_height="175dp"
+                        android:layout_width="112dp"
+                        android:layout_height="match_parent"
                         android:visibility="visible"
                         app:srcCompat="@drawable/ic_menu_camera" />
 
@@ -54,13 +55,15 @@
                         android:layout_marginStart="10dp"
                         android:orientation="vertical">
 
-                        <ImageButton
+                        <ToggleButton
                             android:id="@+id/imageButtonQuitarFavorito"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
-                            android:background="#00FFFFFF"
-                            app:srcCompat="@drawable/ic_remove_favoritos" />
+                            android:background="@drawable/selector_favorito"
+                            android:textOff="@string/texto_vacio"
+                            android:textOn="@string/texto_vacio"
+                            />
 
                         <ImageButton
                             android:id="@+id/imageButtonCompartirFavorito"
@@ -78,21 +81,21 @@
                             android:background="#00FFFFFF"
                             app:srcCompat="@android:drawable/ic_menu_info_details" />
 
-                        <TextView
-                            android:id="@+id/textViewPrecioFavorito"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="TextView"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/textViewPrecioFavorito"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/tvDescripcionProductoFavorito"
-                    android:layout_width="match_parent"
+                    android:layout_width="172dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="TextView"

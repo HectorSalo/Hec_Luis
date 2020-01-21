@@ -1,6 +1,7 @@
 package com.example.hchirinos.elmejorprecio;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -9,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
@@ -265,6 +267,9 @@ public class VentasActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_vender) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_cerrar_sesion) {
+            cerrarSesion();
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
             drawer.closeDrawer(GravityCompat.START);
@@ -300,6 +305,25 @@ public class VentasActivity extends AppCompatActivity
 
         }
         return false;
+    }
+
+    private void cerrarSesion() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(VentasActivity.this);
+        dialog.setTitle("¡Aviso!")
+                .setMessage("¿Desea cerrar sesión?")
+                .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
 
 

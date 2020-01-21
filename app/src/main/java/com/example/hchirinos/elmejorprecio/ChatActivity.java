@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -27,6 +29,7 @@ import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.SectionsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -139,6 +142,9 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_favorito) {
             startActivity(new Intent(this, FavoritosActivity.class));
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_cerrar_sesion) {
+            cerrarSesion();
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_configuracion){
             startActivity(new Intent(this, SettingsActivity.class));
             drawer.closeDrawer(GravityCompat.START);
@@ -156,6 +162,25 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
         if (fragment instanceof InterfaceRecyclerViewConversaciones) {
             interfaceRecyclerViewConversaciones = (InterfaceRecyclerViewConversaciones) fragment;
         }
+    }
+
+    private void cerrarSesion() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(ChatActivity.this);
+        dialog.setTitle("¡Aviso!")
+                .setMessage("¿Desea cerrar sesión?")
+                .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
 
     @Override

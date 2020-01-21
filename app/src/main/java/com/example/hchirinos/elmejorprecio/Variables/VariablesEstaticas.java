@@ -20,6 +20,7 @@ public class VariablesEstaticas {
     public static final String BD_CATEGORIA_PRODUCTO = "Producto";
     public static final String BD_CATEGORIA_SERVICIO = "Servicio";
     public static final String BD_ESTADO_PRODUCTO = "Estado";
+    public static final String BD_USUARIOS_FAVORITOS = "UsuariosFavoritos";
 
     public static final String BD_ID_VENDEDOR = "idVendedor";
     public static final String BD_NOMBRE_VENDEDOR = "NombreVendedor";
