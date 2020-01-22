@@ -80,6 +80,7 @@
     <string name="correo_vendedor">Correo:</string>
     <string name="otros_productos">Productos de este vendedor:</string>
 
+    <string name="descripcion_info_producto">Descripción:</string>
     <string name="vendedor_info_producto">Vendedor:</string>
     <string name="cantidad_info_producto">Cantidad a la venta:</string>
     <string name="precio_info_producto">Precio:</string>
@@ -95,8 +96,10 @@
 
 
     <string name="menu_ventas_editar">Editar</string>
+    <string name="menu_ventas_oferta">Colocar en Oferta</string>
     <string name="menu_ventas_pausar">Pausar Publicación</string>
     <string name="menu_ventas_quitar">Quitar Artículo</string>
+    <string name="title_activity_editar_articulo">Editar Artículo</string>
 
 
 </resources>

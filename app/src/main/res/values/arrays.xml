@@ -5,8 +5,42 @@
         <item>Tema Oscuro</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="unidades">
+        <item>Seleccione unidad</item>
+        <item>Amperio</item>
+        <item>Byte</item>
+        <item>Caja</item>
+        <item>Calorías por gramo</item>
+        <item>Decibel</item>
+        <item>Docena</item>
+        <item>Envase</item>
+        <item>Galón</item>
+        <item>Grado Celsius</item>
+        <item>Grado Fahrenheit</item>
+        <item>Gramo</item>
+        <item>Gramo por centímetro cúbico</item>
+        <item>Gramo por centímetro cuadrado</item>
+        <item>Gramo por mol</item>
+        <item>Kilobyte</item>
+        <item>Kilogramo</item>
+        <item>Kilogramo por metro cuadrado</item>
+        <item>Litro</item>
+        <item>Libra</item>
+        <item>Lote</item>
+        <item>Malla</item>
+        <item>Megabyte</item>
+        <item>Metro</item>
+        <item>Milipulgada</item>
+        <item>Miliamperio</item>
+        <item>Mililitro</item>
+        <item>Milla</item>
+        <item>Onza</item>
+        <item>Paquete</item>
+        <item>Pie</item>
+        <item>Pie cuadrado</item>
+        <item>Pie cúbico</item>
+        <item>Pulgada</item>
+        <item>Unidad</item>
+        <item>Yarda</item>
     </string-array>
 </resources>

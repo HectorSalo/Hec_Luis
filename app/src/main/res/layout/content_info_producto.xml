@@ -18,11 +18,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/vendedor_info_producto"
+            android:text="@string/descripcion_info_producto"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/tvVendedorInfoProducto"
+            android:id="@+id/tvDescripcionInfoProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

@@ -9,7 +9,6 @@ public class VariablesEstaticas {
     public static final String BD_DESCRIPCION_PRODUCTO = "Descripcion";
     public static final String BD_PRECIO_PRODUCTO = "Precio";
     public static final String BD_IMAGEN_PRODUCTO = "Imagen";
-    public static final String BD_VENDEDOR_ASOCIADO = "Vendedor";
     public static final String BD_UNIDAD_PRODUCTO = "Unidad";
     public static final String BD_CANTIDAD_PRODUCTO = "Cantidad";
     public static final String BD_FECHA_INGRESO = "FechaIngreso";

@@ -19,17 +19,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -54,19 +57,19 @@ public class InfoProductoActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        this.setTitle(VariablesGenerales.descripcionInfoProducto);
+        this.setTitle(VariablesGenerales.nombreInfoProducto);
 
         mAuth = FirebaseAuth.getInstance();
 
         ImageView imageView = findViewById(R.id.imagenInfoProducto);
         Glide.with(this).load(VariablesGenerales.imagenInfoProducto).into(imageView);
 
-        TextView tvVendedor = findViewById(R.id.tvVendedorInfoProducto);
+        TextView tvDescripcion = findViewById(R.id.tvDescripcionInfoProducto);
         TextView tvCantidad = findViewById(R.id.tvCantidadInfoProducto);
         TextView tvPrecio = findViewById(R.id.tvPrecioInfoProducto);
         TextView tvEstado = findViewById(R.id.tvEstadoProducto);
 
-        tvVendedor.setText(VariablesGenerales.vendedorInfoProducto);
+        tvDescripcion.setText(VariablesGenerales.descripcionInfoProducto);
         tvCantidad.setText(VariablesGenerales.cantidadesInfoProducto);
         tvPrecio.setText(VariablesGenerales.precioInfoProducto);
         tvEstado.setText(VariablesGenerales.estadoInfoProducto);
@@ -96,22 +99,29 @@ public class InfoProductoActivity extends AppCompatActivity {
     public void cargarVendedor() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection(VariablesEstaticas.BD_VENDEDORES).whereEqualTo(VariablesEstaticas.BD_NOMBRE_VENDEDOR, VariablesGenerales.vendedorInfoProducto).orderBy(VariablesEstaticas.BD_ID_VENDEDOR, Query.Direction.ASCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_VENDEDORES).document(VariablesGenerales.vendedorInfoProducto).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-
-                VariablesGenerales.imagenInfoVendedor = snapshot.getString(VariablesEstaticas.BD_IMAGEN_VENDEDOR);
-                VariablesGenerales.telefonoInfoVendedor = snapshot.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR);
-                VariablesGenerales.correoInfoVendedor = snapshot.getString(VariablesEstaticas.BD_CORREO_VENDEDOR);
-                VariablesGenerales.nombreInfoVendedor = VariablesGenerales.vendedorInfoProducto;
-                VariablesGenerales.idInfoVendedor = snapshot.getString(VariablesEstaticas.BD_ID_VENDEDOR);
-                VariablesGenerales.ubicacionInfoVendedor = snapshot.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA);
-                idReceptorChat = snapshot.getString("idUsuarioChat");
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        VariablesGenerales.imagenInfoVendedor = document.getString(VariablesEstaticas.BD_IMAGEN_VENDEDOR);
+                        VariablesGenerales.telefonoInfoVendedor = document.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR);
+                        VariablesGenerales.correoInfoVendedor = document.getString(VariablesEstaticas.BD_CORREO_VENDEDOR);
+                        VariablesGenerales.nombreInfoVendedor = document.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR);
+                        VariablesGenerales.idInfoVendedor = VariablesGenerales.vendedorInfoProducto;
+                        VariablesGenerales.ubicacionInfoVendedor = document.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA);
+                        idReceptorChat = VariablesGenerales.vendedorInfoProducto;
+                        Log.d("MSG", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("MSG", "No such document");
+                    }
+                } else {
+                    Log.d("MSG", "get failed with ", task.getException());
                 }
-
             }
         });
+
     }
 
     private void crearBottomSheet () {

@@ -3,6 +3,7 @@ package com.example.hchirinos.elmejorprecio.Variables;
 import com.google.firebase.firestore.GeoPoint;
 
 public class VariablesGenerales {
+    public static String nombreInfoProducto = null;
     public static String descripcionInfoProducto = null;
     public static String cantidadesInfoProducto = null;
     public static String vendedorInfoProducto = null;
@@ -29,4 +30,7 @@ public class VariablesGenerales {
     public static String imagenChatVendedor = null;
 
     public static  boolean verCheckBoxes = false;
+
+    public static String idProductoEditar = null;
+    public static  boolean productoActivo = true;
 }

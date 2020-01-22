@@ -19,8 +19,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MessengerActivity"
-            android:theme="@style/AppThemeDiaNoche"></activity>
+        <activity
+            android:name=".EditarArticuloActivity"
+            android:label="@string/title_activity_editar_articulo"
+            android:parentActivityName=".VentasActivity"
+            android:theme="@style/AppThemeDiaNoche">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.hchirinos.elmejorprecio.VentasActivity" />
+        </activity>
+        <activity
+            android:name=".MessengerActivity"
+            android:theme="@style/AppThemeDiaNoche" />
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"

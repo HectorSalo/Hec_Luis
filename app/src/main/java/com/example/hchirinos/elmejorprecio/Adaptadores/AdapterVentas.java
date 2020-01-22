@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,11 +18,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
+import com.example.hchirinos.elmejorprecio.EditarArticuloActivity;
 import com.example.hchirinos.elmejorprecio.R;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.example.hchirinos.elmejorprecio.VentasActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -30,6 +39,7 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
     private ArrayList<ConstructorProductos> listProductos;
     private Context mContext;
     private boolean tema;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public AdapterVentas(ArrayList<ConstructorProductos> listProductos, Context mContext, boolean tema) {
         this.listProductos = listProductos;
@@ -49,6 +59,7 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderVentas viewHolderVentas, int i) {
+        int position = i;
 
         viewHolderVentas.tvNombreProducto.setText(listProductos.get(i).getNombreProducto());
         viewHolderVentas.tvPrecioProducto.setText("$ " + listProductos.get(i).getPrecioProducto());
@@ -65,15 +76,30 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
             @Override
             public void onClick(View view) {
                 PopupMenu popupMenu = new PopupMenu(mContext, viewHolderVentas.menu);
-                popupMenu.inflate(R.menu.menu_items_ventas);
+
+                if (VariablesGenerales.productoActivo) {
+                    popupMenu.inflate(R.menu.menu_items_ventas);
+                } else {
+                    //popupMenu.inflate(R.menu.menu_items_ventas_);
+                }
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.menu_ventas_editar:
+                                VariablesGenerales.idProductoEditar = listProductos.get(position).getIdProducto();
+                                mContext.startActivity(new Intent(mContext, EditarArticuloActivity.class));
+                                break;
+
+                            case R.id.menu_ventas_oferta:
                                 break;
 
                             case R.id.menu_ventas_pausar:
+                                if (VariablesGenerales.productoActivo) {
+                                    pausarPublicacion(listProductos.get(position).getIdProducto(), false);
+                                } else {
+                                    pausarPublicacion(listProductos.get(position).getIdProducto(), true);
+                                }
                                 break;
 
                             case R.id.menu_ventas_quitar:
@@ -105,6 +131,15 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
         });
 
      }
+
+    private void pausarPublicacion(String idProducto, boolean activo) {
+        db.collection(VariablesEstaticas.BD_ALMACEN).document(idProducto).update(VariablesEstaticas.BD_PRODUCTO_ACTIVO, activo).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                updateList(listProductos);
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {

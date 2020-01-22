@@ -116,6 +116,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         viewHolderProductos.imageButtonInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                VariablesGenerales.nombreInfoProducto = listProductos.get(position).getNombreProducto();
                 VariablesGenerales.descripcionInfoProducto = listProductos.get(position).getDescripcionProducto();
                 VariablesGenerales.cantidadesInfoProducto = listProductos.get(position).getCantidadProducto() + " " + listProductos.get(position).getUnidadProducto();
                 VariablesGenerales.vendedorInfoProducto = listProductos.get(position).getVendedor();
