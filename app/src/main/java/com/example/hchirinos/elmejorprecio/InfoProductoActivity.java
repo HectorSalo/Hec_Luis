@@ -96,7 +96,7 @@ public class InfoProductoActivity extends AppCompatActivity {
     public void cargarVendedor() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collectionGroup(VariablesEstaticas.BD_DETALLES_VENDEDOR).whereEqualTo(VariablesEstaticas.BD_NOMBRE_VENDEDOR, VariablesGenerales.vendedorInfoProducto).orderBy(VariablesEstaticas.BD_ID_VENDEDOR, Query.Direction.ASCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection(VariablesEstaticas.BD_VENDEDORES).whereEqualTo(VariablesEstaticas.BD_NOMBRE_VENDEDOR, VariablesGenerales.vendedorInfoProducto).orderBy(VariablesEstaticas.BD_ID_VENDEDOR, Query.Direction.ASCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {

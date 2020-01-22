@@ -177,7 +177,7 @@ public class FavoritosActivity extends AppCompatActivity
                             public void onClick(View view) {
                                 startActivity(new Intent(getApplicationContext(), ProductosActivity.class));
                             }
-                        });
+                        }).show();
                     }
 
                     adapterFavoritos.updateList(listFavoritos);

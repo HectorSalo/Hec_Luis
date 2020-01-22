@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterVendedores;
@@ -165,7 +166,7 @@ public class VendedoresActivity extends AppCompatActivity
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
                         ConstructorVendedores vendedor = new ConstructorVendedores();
-                        vendedor.setIdVendedor(doc.getString(VariablesEstaticas.BD_ID_VENDEDOR));
+                        vendedor.setIdVendedor(doc.getId());
                         vendedor.setNombreVendedor(doc.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR));
                         vendedor.setCorreoVendedor(doc.getString(VariablesEstaticas.BD_CORREO_VENDEDOR));
                         vendedor.setTelefonoVendedor(doc.getString(VariablesEstaticas.BD_TELEFONO_VENDEDOR));
@@ -342,7 +343,7 @@ public class VendedoresActivity extends AppCompatActivity
                 VariablesGenerales.ubicacionInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getUbicacionPreferida();
                 VariablesGenerales.latlongInfoVendedor = listVendedores.get(recyclerVendedores.getChildAdapterPosition(v)).getLatlong();
 
-                startActivity(new Intent(VendedoresActivity.this, InfoVendedorActivity.class));
+                startActivity(new Intent(getApplicationContext(), InfoVendedorActivity.class));
             }
         });
     }
