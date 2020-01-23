@@ -43,4 +43,11 @@
         <item>Unidad</item>
         <item>Yarda</item>
     </string-array>
+
+    <string-array name="tiempo_en_oferta">
+        <item>1 día</item>
+        <item>3 días</item>
+        <item>5 días</item>
+        <item>7 días</item>
+    </string-array>
 </resources>

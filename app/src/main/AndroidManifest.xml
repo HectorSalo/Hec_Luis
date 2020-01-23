@@ -121,6 +121,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <receiver android:name=".Clases.AlarmReceivre"/>
     </application>
 
 </manifest>

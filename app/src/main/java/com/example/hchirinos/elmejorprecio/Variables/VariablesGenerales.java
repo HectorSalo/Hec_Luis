@@ -32,5 +32,4 @@ public class VariablesGenerales {
     public static  boolean verCheckBoxes = false;
 
     public static String idProductoEditar = null;
-    public static  boolean productoActivo = true;
 }
