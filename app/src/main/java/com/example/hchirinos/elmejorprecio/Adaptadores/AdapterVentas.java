@@ -77,10 +77,10 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
             public void onClick(View view) {
                 PopupMenu popupMenu = new PopupMenu(mContext, viewHolderVentas.menu);
 
-                if (VariablesGenerales.productoActivo) {
+                if (listProductos.get(position).isProductoActivo()) {
                     popupMenu.inflate(R.menu.menu_items_ventas);
                 } else {
-                    //popupMenu.inflate(R.menu.menu_items_ventas_);
+                    popupMenu.inflate(R.menu.menu_items_ventas_enpause);
                 }
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -95,7 +95,7 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
                                 break;
 
                             case R.id.menu_ventas_pausar:
-                                if (VariablesGenerales.productoActivo) {
+                                if (listProductos.get(position).isProductoActivo()) {
                                     pausarPublicacion(listProductos.get(position).getIdProducto(), false);
                                 } else {
                                     pausarPublicacion(listProductos.get(position).getIdProducto(), true);
