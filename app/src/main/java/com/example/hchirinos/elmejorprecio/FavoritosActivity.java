@@ -307,7 +307,7 @@ public class FavoritosActivity extends AppCompatActivity
 
             for (ConstructorProductos name : listFavoritos) {
 
-                if (name.getDescripcionProducto().toLowerCase().contains(userInput)) {
+                if (name.getNombreProducto().toLowerCase().contains(userInput)) {
 
                     newList.add(name);
                 }

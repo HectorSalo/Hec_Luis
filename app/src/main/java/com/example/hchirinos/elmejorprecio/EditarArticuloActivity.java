@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class EditarArticuloActivity extends AppCompatActivity {
     private Spinner spinner;
     private RadioButton rbProducto, rbServicio, rbNuevo, rbUsado;
     private List<String> listaUnidades;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class EditarArticuloActivity extends AppCompatActivity {
         rbUsado = findViewById(R.id.radioButtonEditarUsadoArticulo);
         rbProducto = findViewById(R.id.radioButtonEditarProductoArticulo);
         rbServicio = findViewById(R.id.radioButtonEditarServicioArticulo);
+        progressBar = findViewById(R.id.progressBarEditarArticulo);
 
         listaUnidades = Arrays.asList(getResources().getStringArray(R.array.unidades));
         ArrayAdapter<String> adapterUnidades = new ArrayAdapter<String>(this, R.layout.spinner_unidades, listaUnidades);
@@ -124,6 +127,7 @@ public class EditarArticuloActivity extends AppCompatActivity {
 
 
     private void cargarArticulo() {
+        progressBar.setVisibility(View.VISIBLE);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection(VariablesEstaticas.BD_ALMACEN).document(VariablesGenerales.idProductoEditar).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -164,14 +168,16 @@ public class EditarArticuloActivity extends AppCompatActivity {
                         }
                         spinner.setSelection(positionUnidad);
 
-
+                        progressBar.setVisibility(View.GONE);
                         Log.d("Editar", "DocumentSnapshot data: " + doc.getData());
 
                     } else {
                         Log.d("Editar", "No such document");
+                        progressBar.setVisibility(View.GONE);
                     }
                 } else {
                     Log.d("Editar", "get failed with ", task.getException());
+                    progressBar.setVisibility(View.GONE);
                 }
             }
         });

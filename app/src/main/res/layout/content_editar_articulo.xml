@@ -27,6 +27,7 @@
         android:layout_marginEnd="8dp"
         android:text="Cambiar Imagen"
         android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEditarNombreArticulo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewEditarArticulo"
         app:layout_constraintTop_toTopOf="parent" />
@@ -123,15 +124,16 @@
     </RadioGroup>
 
     <RadioGroup
+        android:id="@+id/radioGroup2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup">
 
         <RadioButton
             android:id="@+id/radioButtonEditarNuevoArticulo"
@@ -145,5 +147,20 @@
             android:layout_height="wrap_content"
             android:text="Usado" />
     </RadioGroup>
+
+    <ProgressBar
+        android:id="@+id/progressBarEditarArticulo"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

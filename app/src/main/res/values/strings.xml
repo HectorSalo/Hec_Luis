@@ -97,6 +97,7 @@
 
     <string name="menu_ventas_editar">Editar</string>
     <string name="menu_ventas_oferta">Colocar en Oferta</string>
+    <string name="menu_ventas_oferta_cancelar">Cancelar la Oferta</string>
     <string name="menu_ventas_pausar">Pausar Publicación</string>
     <string name="menu_ventas_reanudar">Reanudar Publicación</string>
     <string name="menu_ventas_quitar">Quitar Artículo</string>

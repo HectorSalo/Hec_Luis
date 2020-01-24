@@ -66,6 +66,7 @@ public class VentasActivity extends AppCompatActivity
     private NavigationView navigationView;
     private FirebaseUser user;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ConstraintLayout constraintLayout;
 
 
 
@@ -88,6 +89,8 @@ public class VentasActivity extends AppCompatActivity
 
         progressBar = findViewById(R.id.progressBarVentas);
         swipeRefreshLayout = findViewById(R.id.swipeRefreshVentas);
+
+        constraintLayout = findViewById(R.id.constraintVentas);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -161,6 +164,8 @@ public class VentasActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setProductoActivo(doc.getBoolean(VariablesEstaticas.BD_PRODUCTO_ACTIVO));
+                        productos.setOferta(doc.getBoolean(VariablesEstaticas.BD_OFERTA_SEMANA));
+                        productos.setFechaIngreso(doc.getDate(VariablesEstaticas.BD_FECHA_INGRESO));
 
                         double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
                         int cantidadInt = (int) cantidadD;
@@ -169,6 +174,11 @@ public class VentasActivity extends AppCompatActivity
                         listProductsVentas.add(productos);
 
                     }
+
+                    if (listProductsVentas.isEmpty()) {
+                        Snackbar.make(constraintLayout, "No tiene artículos para vender", Snackbar.LENGTH_INDEFINITE).show();
+                    }
+
                     adapterVentas.updateList(listProductsVentas);
                     progressBar.setVisibility(View.GONE);
                 } else {
@@ -296,7 +306,7 @@ public class VentasActivity extends AppCompatActivity
 
             for (ConstructorProductos name : listProductsVentas) {
 
-                if (name.getDescripcionProducto().toLowerCase().contains(userInput)) {
+                if (name.getNombreProducto().toLowerCase().contains(userInput)) {
 
                     newList.add(name);
                 }

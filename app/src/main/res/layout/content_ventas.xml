@@ -37,6 +37,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
+    <!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_articulo"
         android:layout_width="wrap_content"
@@ -44,7 +45,7 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/fab_add"/>
+        android:src="@drawable/fab_add"/> -->
 
     <ProgressBar
         android:id="@+id/progressBarVentas"

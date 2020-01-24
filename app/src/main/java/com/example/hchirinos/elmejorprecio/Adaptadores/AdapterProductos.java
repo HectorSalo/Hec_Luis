@@ -27,8 +27,11 @@ import com.bumptech.glide.Glide;
 import com.example.hchirinos.elmejorprecio.SQLite.ConectSQLiteHelper;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.like.LikeButton;
@@ -41,6 +44,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     private ArrayList<ConstructorProductos> listProductos;
     private Context mContext;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private String nombreVendedor;
 
     public AdapterProductos (ArrayList<ConstructorProductos> listProductos, Context mContext){
         this.listProductos = listProductos;
@@ -102,9 +106,11 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
 
         viewHolderProductos.imageButtonCompartir.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                String selection = listProductos.get(position).getNombreProducto() + "\n$" + listProductos.get(position).getPrecioProducto() + "\nVende: " + listProductos.get(position).getVendedor();
+                //String nombre = nombreVendedorCompartir(listProductos.get(position).getVendedor());
+                String selection = listProductos.get(position).getNombreProducto() + "\n$" + listProductos.get(position).getPrecioProducto() + "\nVende: " + nombreVendedorCompartir(listProductos.get(position).getVendedor());
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, selection);
@@ -206,6 +212,28 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
         db.delete(VariablesEstaticas.BD_FAVORITOS, "idProducto= '" + id + "'", null);
         db.close();
+    }
+
+
+    private String nombreVendedorCompartir(String idVendedor) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(VariablesEstaticas.BD_VENDEDORES).document(idVendedor).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        nombreVendedor = document.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR);
+                    } else {
+                        nombreVendedor = null;
+                    }
+                } else {
+                    nombreVendedor = null;
+                }
+            }
+
+        });
+        return nombreVendedor;
     }
 
 

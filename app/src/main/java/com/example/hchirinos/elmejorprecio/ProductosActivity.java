@@ -829,7 +829,7 @@ public class ProductosActivity extends AppCompatActivity
 
                         for (ConstructorProductos name : listProductos) {
 
-                            if (name.getDescripcionProducto().toLowerCase().contains(VariablesGenerales.textBuscar.toLowerCase())) {
+                            if (name.getNombreProducto().toLowerCase().contains(VariablesGenerales.textBuscar.toLowerCase())) {
                                 newList.add(name);
                             }
                         }
@@ -876,7 +876,7 @@ public class ProductosActivity extends AppCompatActivity
 
             for (ConstructorProductos name : listProductos) {
 
-                if (name.getDescripcionProducto().toLowerCase().contains(userInput)) {
+                if (name.getNombreProducto().toLowerCase().contains(userInput)) {
 
                     newList.add(name);
                 }

@@ -20,13 +20,13 @@ public class ConstructorProductos {
     private String estadoProducto;
     private String nombreProducto;
     private ArrayList<String> listUsuariosFavoritos;
-    private boolean productoActivo;
+    private boolean productoActivo, oferta;
 
 
     public ConstructorProductos() {}
 
     public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto,
-                                String vendedor, String unidadProducto, Date fechaIngreso, String nombreProducto, ArrayList<String> listUsuariosFavoritos, boolean productoActivo) {
+                                String vendedor, String unidadProducto, Date fechaIngreso, String nombreProducto, ArrayList<String> listUsuariosFavoritos, boolean productoActivo, boolean oferta) {
         this.idProducto = idProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioProducto = precioProducto;
@@ -38,8 +38,17 @@ public class ConstructorProductos {
         this.nombreProducto = nombreProducto;
         this.listUsuariosFavoritos = listUsuariosFavoritos;
         this.productoActivo = productoActivo;
+        this.oferta = oferta;
     }
 
+
+    public boolean isOferta() {
+        return oferta;
+    }
+
+    public void setOferta(boolean oferta) {
+        this.oferta = oferta;
+    }
 
     public boolean isProductoActivo() {
         return productoActivo;
