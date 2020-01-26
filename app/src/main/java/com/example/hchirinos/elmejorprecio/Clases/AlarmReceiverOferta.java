@@ -27,7 +27,7 @@ import java.util.Random;
 
 import static android.graphics.Color.rgb;
 
-public class AlarmReceivre extends BroadcastReceiver {
+public class AlarmReceiverOferta extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

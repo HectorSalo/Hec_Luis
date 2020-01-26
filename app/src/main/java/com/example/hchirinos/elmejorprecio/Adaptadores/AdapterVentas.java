@@ -14,9 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,13 +29,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.hchirinos.elmejorprecio.Clases.AlarmReceivre;
+import com.example.hchirinos.elmejorprecio.Clases.AlarmReceiverOferta;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.EditarArticuloActivity;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
-import com.example.hchirinos.elmejorprecio.VentasActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -204,7 +201,7 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
         int idIntent = (int) fecha.getTime();
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(mContext, AlarmReceivre.class);
+        Intent intent = new Intent(mContext, AlarmReceiverOferta.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,idIntent , intent, 0);
 
         pendingIntent.cancel();
@@ -296,7 +293,7 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
         int idIntent = (int) fecha.getTime();
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(mContext, AlarmReceivre.class);
+        Intent intent = new Intent(mContext, AlarmReceiverOferta.class);
         Bundle bundle = new Bundle();
         bundle.putString("idProducto", idProducto);
         bundle.putDouble("precioViejo", precioViejo);
@@ -305,7 +302,7 @@ public class AdapterVentas extends RecyclerView.Adapter<AdapterVentas.ViewHolder
         intent.putExtras(bundle);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,idIntent , intent, 0);
 
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + (1000 * 60 * 2), pendingIntent);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + (1000 * 60 * 60 * 24 * numeroDiasOferta), pendingIntent);
     }
 
     private void eliminarArticulo(String idProducto, int position) {
