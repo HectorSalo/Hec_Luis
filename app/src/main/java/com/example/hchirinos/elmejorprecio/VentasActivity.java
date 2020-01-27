@@ -26,6 +26,7 @@ import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterVentas;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -124,6 +125,14 @@ public class VentasActivity extends AppCompatActivity
             snackbar.show();
 
         }
+
+        FloatingActionButton fab = findViewById(R.id.add_articulo);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), AddArticuloActivity.class));
+            }
+        });
 
         LinearLayoutManager llM = new LinearLayoutManager(this.getApplicationContext());
         recyclerVentas = (RecyclerView)findViewById(R.id.recyclerView_ventas);

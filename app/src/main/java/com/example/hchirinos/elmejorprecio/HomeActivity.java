@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
+import com.example.hchirinos.elmejorprecio.Clases.GuardarDatosUsuario;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
@@ -321,8 +322,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         MenuItem menuItem = menu.findItem(R.id.bar_buscar);
+        MenuItem menuItem1 = menu.findItem(R.id.bar_ini_sesion);
+
+        if (user != null) {
+            menuItem1.setVisible(false);
+        } else {
+            menuItem1.setVisible(true);
+        }
+
         SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setIconifiedByDefault(false);
+        //searchView.setIconifiedByDefault(false);
         searchView.setQueryHint(getResources().getString(R.string.searchview_home));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setBackgroundResource(R.drawable.fondo_searchview_home);
@@ -342,8 +351,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.bar_buscar) {
             return true;
-
-            }
+            } else if (id == R.id.bar_ini_sesion) {
+            acceso = 4;
+            iniciarSesion();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -483,6 +495,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userID = user.getUid();
+                String userEmail = user.getEmail();
+                String userNombre = user.getDisplayName();
+
+                GuardarDatosUsuario guardarDatosUsuario = new GuardarDatosUsuario();
+                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail);
 
                 switch (acceso) {
                     case 1:
@@ -494,6 +513,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     case 3:
                         startActivity(new Intent(this, VentasActivity.class));
                         break;
+                    case 4:
+                        startActivity(new Intent(this, HomeActivity.class));
+                        break;
+
                 }
 
             } else {

@@ -8,6 +8,12 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/bar_ini_sesion"
+        android:title="@string/texto_vacio"
+        android:icon="@drawable/ic_ini_sesion"
+        app:showAsAction="always" />
+
 </menu>
 
 

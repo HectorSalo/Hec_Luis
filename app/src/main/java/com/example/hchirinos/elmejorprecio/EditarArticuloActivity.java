@@ -65,7 +65,7 @@ public class EditarArticuloActivity extends AppCompatActivity {
     private Spinner spinner;
     private RadioButton rbProducto, rbServicio, rbNuevo, rbUsado;
     private List<String> listaUnidades;
-    private ProgressBar progressBar, progressBarCargaImagen;
+    private ProgressBar progressBar;
     private Uri imageSelected;
     private double precioViejo;
     private boolean imagenCambiada = false;
@@ -89,7 +89,6 @@ public class EditarArticuloActivity extends AppCompatActivity {
         rbProducto = findViewById(R.id.radioButtonEditarProductoArticulo);
         rbServicio = findViewById(R.id.radioButtonEditarServicioArticulo);
         progressBar = findViewById(R.id.progressBarEditarArticulo);
-        progressBarCargaImagen = findViewById(R.id.progressBarEditarArticuloCargarImagen);
 
         listaUnidades = Arrays.asList(getResources().getStringArray(R.array.unidades));
         ArrayAdapter<String> adapterUnidades = new ArrayAdapter<String>(this, R.layout.spinner_unidades, listaUnidades);
@@ -153,15 +152,30 @@ public class EditarArticuloActivity extends AppCompatActivity {
 
 
     private void uploadImagen() {
-        progressBarCargaImagen.setVisibility(View.VISIBLE);
         String pathImagen = "";
         if (rbProducto.isChecked()) {
             pathImagen = VariablesEstaticas.BD_CATEGORIA_PRODUCTO;
         } else if (rbServicio.isChecked()) {
             pathImagen = VariablesEstaticas.BD_CATEGORIA_SERVICIO;
         }
+
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child(pathImagen);
         StorageReference imageRef = mStorageRef.child(imageSelected.getLastPathSegment());
+
+
+        ProgressBar progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.setPadding(30, 15, 30, 15);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Subiendo imagen...")
+                .setView(progressBar)
+                .setCancelable(false)
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        imageRef.putFile(imageSelected).cancel();
+                    }
+                });
+        dialog.show();
 
 // Register observers to listen for when the download is done or if it fails
         String finalPathImagen = pathImagen;
@@ -180,7 +194,6 @@ public class EditarArticuloActivity extends AppCompatActivity {
                    public void onSuccess(Uri uri) {
                        imagenNueva = uri.toString();
                        actualizarArticuloConImagen(finalPathImagen);
-                       progressBarCargaImagen.setVisibility(View.GONE);
                    }
                });
             }
@@ -189,9 +202,7 @@ public class EditarArticuloActivity extends AppCompatActivity {
             public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                 double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                 int progresInt = (int) progress;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    progressBarCargaImagen.setProgress(progresInt, true);
-                }
+                progressBar.setProgress(progresInt);
             }
         });
     }

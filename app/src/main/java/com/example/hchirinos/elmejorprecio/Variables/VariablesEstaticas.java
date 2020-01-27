@@ -4,7 +4,6 @@ public class VariablesEstaticas {
     public static final String BD_VENDEDORES = "Vendedores";
     public static final String BD_ALMACEN = "Almacen";
     public static final String BD_PRODUCTOS = "Productos";
-    public static final String BD_DETALLES_VENDEDOR = "DetallesVendedor";
     public static final String BD_NOMBRE_PRODUCTO = "Nombre";
     public static final String BD_DESCRIPCION_PRODUCTO = "Descripcion";
     public static final String BD_PRECIO_PRODUCTO = "Precio";
@@ -21,7 +20,6 @@ public class VariablesEstaticas {
     public static final String BD_ESTADO_PRODUCTO = "Estado";
     public static final String BD_USUARIOS_FAVORITOS = "UsuariosFavoritos";
 
-    public static final String BD_ID_VENDEDOR = "idVendedor";
     public static final String BD_NOMBRE_VENDEDOR = "NombreVendedor";
     public static final String BD_TELEFONO_VENDEDOR= "TelefonoVendedor";
     public static final String BD_CORREO_VENDEDOR = "CorreoVendedor";
@@ -29,8 +27,6 @@ public class VariablesEstaticas {
     public static final String BD_UBICACION_PREFERIDA = "UbicacionPreferida";
     public static final String BD_LATITUD_LONGITUD = "LatLong";
 
-    public static final String BD_ID_PRODUCTO_FAVORITO = "idProducto";
-    public static final String BD_FAVORITOS = "favoritos";
     public static final int VERSION_SQLITE = 3;
 
     public static final String BD_ID_EMISOR = "emisor";
@@ -42,7 +38,6 @@ public class VariablesEstaticas {
     public static final String BD_EMAIL_USUARIO = "emailUsuario";
     public static final String BD_IMAGEN_USUARIO = "imagenUsuario";
     public static final String BD_NOMBRE_USUARIO = "nombreUsuario";
-    public static final String BD_CONVERSACION_ACTIVA_USUARIO = "ConversacionesCon";
     public static final String BD_STATUS_ONLINE_USUARIO = "onLine";
     public static final String BD_ULTIMA_CONEXION_USUARIO = "fechaUltimaConexion";
 

@@ -44,7 +44,6 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
     private ArrayList<ConstructorProductos> listProductos;
     private Context mContext;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private String nombreVendedor;
 
     public AdapterProductos (ArrayList<ConstructorProductos> listProductos, Context mContext){
         this.listProductos = listProductos;
@@ -109,12 +108,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
 
             @Override
             public void onClick(View v) {
-                //String nombre = nombreVendedorCompartir(listProductos.get(position).getVendedor());
-                String selection = listProductos.get(position).getNombreProducto() + "\n$" + listProductos.get(position).getPrecioProducto() + "\nVende: " + nombreVendedorCompartir(listProductos.get(position).getVendedor());
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, selection);
-                mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
+                nombreVendedorCompartir(listProductos.get(position).getVendedor(), position);
             }
         });
 
@@ -191,31 +185,7 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
         db.collection(VariablesEstaticas.BD_ALMACEN).document(idProducto).update(VariablesEstaticas.BD_USUARIOS_FAVORITOS, FieldValue.arrayRemove(idUsuario));
     }
 
-    private void agregarFavoritosSQLite (ConstructorProductos i) {
-        String id = i.getIdProducto();
-        String nombreProducto = i.getNombreProducto();
-        ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(mContext, VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
-        SQLiteDatabase db = conectSQLiteHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(VariablesEstaticas.BD_ID_PRODUCTO_FAVORITO, id);
-        values.put(VariablesEstaticas.BD_DESCRIPCION_PRODUCTO, nombreProducto);
-
-        db.insert(VariablesEstaticas.BD_FAVORITOS, null, values);
-        db.close();
-    }
-
-    private void quitarFavoritosSQLite (ConstructorProductos i) {
-        String id = i.getIdProducto();
-        ConectSQLiteHelper conectSQLiteHelper = new ConectSQLiteHelper(mContext, VariablesEstaticas.BD_PRODUCTOS, null, VariablesEstaticas.VERSION_SQLITE);
-        SQLiteDatabase db = conectSQLiteHelper.getWritableDatabase();
-
-        db.delete(VariablesEstaticas.BD_FAVORITOS, "idProducto= '" + id + "'", null);
-        db.close();
-    }
-
-
-    private String nombreVendedorCompartir(String idVendedor) {
+    private void nombreVendedorCompartir(String idVendedor, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(VariablesEstaticas.BD_VENDEDORES).document(idVendedor).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -223,17 +193,25 @@ public class AdapterProductos extends RecyclerView.Adapter<AdapterProductos.View
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        nombreVendedor = document.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR);
+                        String nombreVendedor = document.getString(VariablesEstaticas.BD_NOMBRE_VENDEDOR);
+                        share(position, nombreVendedor);
                     } else {
-                        nombreVendedor = null;
+                        share(position, "N/A");
                     }
                 } else {
-                    nombreVendedor = null;
+                    share(position, "N/A");
                 }
             }
 
         });
-        return nombreVendedor;
+    }
+
+    private void share(int position, String vendedor){
+        String selection = listProductos.get(position).getNombreProducto() + "\n$" + listProductos.get(position).getPrecioProducto() + "\nVende: " + vendedor;
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, selection);
+        mContext.startActivity(Intent.createChooser(intent, "Compartir con"));
     }
 
 

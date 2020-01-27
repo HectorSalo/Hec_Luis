@@ -5,49 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".EditarArticuloActivity"
-    tools:showIn="@layout/activity_editar_articulo">
+    tools:context=".AddArticuloActivity"
+    tools:showIn="@layout/activity_add_articulo">
+
 
     <ImageView
-        android:id="@+id/imageViewEditarArticulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/fui_ic_check_circle_black_128dp" />
-
-    <Button
-        android:id="@+id/buttonCambiarImagenArticulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/imageViewAddArticulo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Cambiar Imagen"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEditarNombreArticulo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageViewEditarArticulo"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_add_image" />
+
 
     <EditText
-        android:id="@+id/editTextEditarNombreArticulo"
+        android:id="@+id/editTextAddNombreArticulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:hint="@string/hint_text_nombre_articulo"
+        android:inputType="textPersonName|textCapSentences"
         android:text="@string/texto_vacio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewEditarArticulo" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewAddArticulo" />
 
     <EditText
-        android:id="@+id/editTextEditarDescripcionArticulo"
+        android:id="@+id/editTextAddDescripcionArticulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -55,21 +46,23 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:gravity="start|top"
-        android:inputType="textMultiLine"
+        android:hint="@string/hint_text_descripcion_articulo"
+        android:inputType="textMultiLine|textCapSentences"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEditarNombreArticulo" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextAddNombreArticulo" />
 
     <EditText
-        android:id="@+id/editTextEditarPrecioArticulo"
+        android:id="@+id/editTextAddPrecioArticulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/hint_text_precio_articulo"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEditarDescripcionArticulo" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextAddDescripcionArticulo" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -81,18 +74,19 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEditarPrecioArticulo">
+        app:layout_constraintTop_toBottomOf="@+id/editTextAddPrecioArticulo">
 
         <EditText
-            android:id="@+id/editTextEditarCantidadArticulo"
+            android:id="@+id/editTextAddCantidadArticulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="@string/hint_text_cantidad_articulo"
             android:inputType="number" />
 
         <Spinner
-            android:id="@+id/spinnerEditarUnidadArticulo"
+            android:id="@+id/spinnerAddUnidadArticulo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -111,13 +105,13 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <RadioButton
-            android:id="@+id/radioButtonEditarProductoArticulo"
+            android:id="@+id/radioButtonAddProductoArticulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/navigation_drawer_PLU" />
 
         <RadioButton
-            android:id="@+id/radioButtonEditarServicioArticulo"
+            android:id="@+id/radioButtonAddServicioArticulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/navigation_drawer_servicio" />
@@ -136,32 +130,16 @@
         app:layout_constraintTop_toBottomOf="@+id/radioGroup">
 
         <RadioButton
-            android:id="@+id/radioButtonEditarNuevoArticulo"
+            android:id="@+id/radioButtonAddNuevoArticulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nuevo" />
 
         <RadioButton
-            android:id="@+id/radioButtonEditarUsadoArticulo"
+            android:id="@+id/radioButtonAddUsadoArticulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Usado" />
     </RadioGroup>
-
-    <ProgressBar
-        android:id="@+id/progressBarEditarArticulo"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

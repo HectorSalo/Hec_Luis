@@ -104,4 +104,11 @@
     <string name="title_activity_editar_articulo">Editar Artículo</string>
 
 
+    <string name="hint_text_nombre_articulo">Nombre del artículo:</string>
+    <string name="hint_text_descripcion_articulo">Descripción:</string>
+    <string name="hint_text_precio_articulo">Precio:</string>
+    <string name="hint_text_cantidad_articulo">Cantidad:</string>
+    <string name="title_activity_add_articulo">Agregar Artículo</string>
+
+
 </resources>
