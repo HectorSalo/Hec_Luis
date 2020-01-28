@@ -48,9 +48,10 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
 
         viewHolderTiendas.textViewNombreVendedor.setText(listVendedores.get(i).getNombreVendedor());
 
-        if (listVendedores.get(i).getImagen()!=null) {
-
-            Glide.with(mContext).load(listVendedores.get(i).getImagen()).into(viewHolderTiendas.imageViewImagenVendedor);
+        if (listVendedores.get(i).getImagen()!= null) {
+            if (!listVendedores.get(i).getImagen().isEmpty()) {
+                Glide.with(mContext).load(listVendedores.get(i).getImagen()).into(viewHolderTiendas.imageViewImagenVendedor);
+            }
 
         }
 

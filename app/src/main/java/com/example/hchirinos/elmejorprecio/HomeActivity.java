@@ -331,9 +331,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         SearchView searchView = (SearchView) menuItem.getActionView();
-        //searchView.setIconifiedByDefault(false);
+        searchView.setIconifiedByDefault(false);
         searchView.setQueryHint(getResources().getString(R.string.searchview_home));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setBackgroundResource(R.drawable.fondo_searchview_home);
 
         searchView.setOnQueryTextListener(this);

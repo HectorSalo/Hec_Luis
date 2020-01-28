@@ -38,7 +38,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:visibility="visible"
-                    app:srcCompat="@drawable/ic_menu_camera" />
+                    app:srcCompat="@mipmap/ic_usuario_sin_imagen" />
 
                 <TextView
                     android:id="@+id/textViewNombreVendedor"

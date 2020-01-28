@@ -310,7 +310,14 @@ public class MessengerActivity extends AppCompatActivity {
                     Date fechaConexion = snapshot.getDate(VariablesEstaticas.BD_ULTIMA_CONEXION_USUARIO);
                     String fechaS = new SimpleDateFormat("EEE d MMM h:mm a").format(fechaConexion);
 
-                    Glide.with(getApplicationContext()).load(imagen).apply(RequestOptions.circleCropTransform()).into(imagenUsuario);
+                    if (imagen != null){
+                        if (!imagen.isEmpty()) {
+                            Glide.with(getApplicationContext()).load(imagen).apply(RequestOptions.circleCropTransform()).into(imagenUsuario);
+                        } else {
+                            Glide.with(getApplicationContext()).load(R.mipmap.ic_usuario_sin_imagen).apply(RequestOptions.circleCropTransform()).into(imagenUsuario);
+                        }
+                    }
+
                     nombreUsuario.setText(nombre);
 
                     if (onLine) {

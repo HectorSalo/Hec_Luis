@@ -103,7 +103,16 @@ public class AdapterConversacionesChat extends RecyclerView.Adapter<AdapterConve
             holder.onLine.setBackgroundColor(ContextCompat.getColor(mContext, R.color.md_blue_grey_500_75));
         }
 
-        Glide.with(mContext).load(listConversaciones.get(position).getImagen()).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+        if (listConversaciones.get(position).getImagen() != null) {
+            if (!listConversaciones.get(position).getImagen().isEmpty()) {
+                Glide.with(mContext).load(listConversaciones.get(position).getImagen()).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+            } else {
+                Glide.with(mContext).load(R.mipmap.ic_usuario_sin_imagen).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+            }
+        } else {
+            Glide.with(mContext).load(R.mipmap.ic_usuario_sin_imagen).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+        }
+
 
     }
 

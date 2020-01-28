@@ -143,16 +143,14 @@ public class AddArticuloActivity extends AppCompatActivity {
         nombre = etNombre.getText().toString();
         descripcion = etDescripcion.getText().toString();
         String precio = etPrecio.getText().toString();
-        precioD = Double.valueOf(precio);
         String cantidad = etCantidad.getText().toString();
-        cantidadD = Double.parseDouble(cantidad);
+
 
         if (!nombre.isEmpty()) {
             if (!descripcion.isEmpty()) {
                 if (!precio.isEmpty()) {
                      if (!cantidad.isEmpty()) {
                          if (spinner.getSelectedItemPosition() > 0) {
-                             unidad = spinner.getSelectedItem().toString();
                              if (rbProducto.isChecked() || rbServicio.isChecked()) {
                                  if (rbProducto.isChecked()) {
                                      categoria = "Producto";
@@ -166,6 +164,9 @@ public class AddArticuloActivity extends AppCompatActivity {
                                          estado = "Usado";
                                      }
                                      if (imageSelected != null) {
+                                         cantidadD = Double.parseDouble(cantidad);
+                                         precioD = Double.valueOf(precio);
+                                         unidad = spinner.getSelectedItem().toString();
                                          guardarImagen();
                                      } else {
                                          Toast.makeText(this, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show();

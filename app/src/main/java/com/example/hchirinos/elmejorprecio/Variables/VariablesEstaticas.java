@@ -26,6 +26,7 @@ public class VariablesEstaticas {
     public static final String BD_IMAGEN_VENDEDOR = "ImagenVendedor";
     public static final String BD_UBICACION_PREFERIDA = "UbicacionPreferida";
     public static final String BD_LATITUD_LONGITUD = "LatLong";
+    public static final String BD_PRODUCTOS_ASOCIADOS = "ProductosAsociados";
 
     public static final int VERSION_SQLITE = 3;
 

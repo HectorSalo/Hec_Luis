@@ -50,7 +50,17 @@ public class MyUsuariosChatRecyclerViewAdapter extends RecyclerView.Adapter<MyUs
         holder.nombreUsuario.setText(listUsuarios.get(position).getNombreReceptor());
         holder.emailUsuario.setText(listUsuarios.get(position).getEmail());
 
-        Glide.with(mContext).load(listUsuarios.get(position).getImagen()).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+        if (listUsuarios.get(position).getImagen() != null) {
+            if (!listUsuarios.get(position).getImagen().isEmpty()){
+                Glide.with(mContext).load(listUsuarios.get(position).getImagen()).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+            } else {
+                Glide.with(mContext).load(R.mipmap.ic_usuario_sin_imagen).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+            }
+        } else {
+            Glide.with(mContext).load(R.mipmap.ic_usuario_sin_imagen).apply(RequestOptions.circleCropTransform()).into(holder.imagenUsuario);
+        }
+
+
 
 
     }

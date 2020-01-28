@@ -185,7 +185,7 @@ public class VentasActivity extends AppCompatActivity
                     }
 
                     if (listProductsVentas.isEmpty()) {
-                        Snackbar.make(constraintLayout, "No tiene artículos para vender", Snackbar.LENGTH_INDEFINITE).show();
+                        Snackbar.make(constraintLayout, "No tiene artículos para vender", Snackbar.LENGTH_LONG).show();
                     }
 
                     adapterVentas.updateList(listProductsVentas);
