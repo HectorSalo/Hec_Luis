@@ -41,6 +41,18 @@
 
     <PreferenceCategory app:title="@string/personal_title">
 
+        <PreferenceScreen
+            app:title="@string/perfil_title"
+            android:summary="@string/summary_perfil"
+            android:icon="@drawable/ic_conf_perfil"
+            >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.example.hchirinos.elmejorprecio"
+                android:targetClass="com.example.hchirinos.elmejorprecio.ConfPerfilActivity"
+                />
+        </PreferenceScreen>
+
         <ListPreference
             android:key="tema"
             android:title="@string/tema_title"
@@ -50,6 +62,7 @@
             android:entryValues="@array/escoger_tema"
             android:defaultValue="0"
             />
+
 
     </PreferenceCategory>
 

@@ -59,6 +59,8 @@
 
     <!-- Personal Preferences -->
     <string name="personal_title">Personal</string>
+    <string name="perfil_title">Perfil de Usuario</string>
+    <string name="summary_perfil">Configure los datos de su perfil</string>
     <string name="tema_title">Temas</string>
     <string name="summary_tema">Escoja el tema de su preferencia</string>
 
@@ -109,6 +111,7 @@
     <string name="hint_text_precio_articulo">Precio:</string>
     <string name="hint_text_cantidad_articulo">Cantidad:</string>
     <string name="title_activity_add_articulo">Agregar Artículo</string>
+    <string name="title_activity_conf_perfil">ConfPerfilActivity</string>
 
 
 </resources>

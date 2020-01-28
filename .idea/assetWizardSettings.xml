@@ -69,7 +69,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_ini_sesion" />
+                                      <entry key="outputName" value="ic_conf_perfil" />
                                       <entry key="theme" value="HOLO_DARK" />
                                       <entry key="themeColor" value="ffc947" />
                                     </map>
@@ -148,7 +148,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_usuario_sin_imagen" />
+                                      <entry key="outputName" value="ic_conf_perfil" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -195,7 +195,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

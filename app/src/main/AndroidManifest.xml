@@ -22,6 +22,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ConfPerfilActivity"
+            android:label="@string/title_activity_conf_perfil"
+            android:parentActivityName=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.hchirinos.elmejorprecio.SettingsActivity" />
+        </activity>
+        <activity
             android:name=".AddArticuloActivity"
             android:label="@string/title_activity_add_articulo"
             android:parentActivityName=".VentasActivity"
