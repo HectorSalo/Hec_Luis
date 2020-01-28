@@ -25,7 +25,7 @@
             android:name=".ConfPerfilActivity"
             android:label="@string/title_activity_conf_perfil"
             android:parentActivityName=".SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeDiaNoche">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.hchirinos.elmejorprecio.SettingsActivity" />

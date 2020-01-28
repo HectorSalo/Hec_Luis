@@ -6,12 +6,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.SearchView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +24,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,6 +34,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.PolyUtil;
 
@@ -35,15 +43,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private SearchView searchView;
     private Boolean actualPosition = true;
     private Double latUbicacion, lngUbicacion, latDestino, lngDestino;
     private String latUbicacionS, lngUbicacionS, latDestinoS, lngDestinoS;
+    private Location locationActual;
+    private FusedLocationProviderClient fusedLocationProviderClient;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
 
@@ -56,8 +67,33 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_encontrar);
         mapFragment.getMapAsync(this);
 
-        latDestino = VariablesGenerales.latlongInfoVendedor.getLatitude();
-        lngDestino = VariablesGenerales.latlongInfoVendedor.getLongitude();
+        searchView = findViewById(R.id.search_map);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (VariablesGenerales.verSearchMap) {
+            searchView.setVisibility(View.VISIBLE);
+        } else {
+            searchView.setVisibility(View.GONE);
+            latDestino = VariablesGenerales.latlongInfoVendedor.getLatitude();
+            lngDestino = VariablesGenerales.latlongInfoVendedor.getLongitude();
+        }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                if (s != null && !s.isEmpty()) {
+                    buscarDireccion(s);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
     }
 
 
@@ -83,9 +119,14 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
 
         mMap.setMyLocationEnabled(true);
 
-        LatLng miPosicion = new LatLng(latDestino, lngDestino);
-        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+        if (VariablesGenerales.verSearchMap) {
+            obtenerUbicacion();
+        } else {
+            LatLng miPosicion = new LatLng(latDestino, lngDestino);
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+        }
+
 
     }
 
@@ -98,9 +139,14 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    LatLng miPosicion = new LatLng(latDestino, lngDestino);
-                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+                    if (VariablesGenerales.verSearchMap) {
+                        obtenerUbicacion();
+                    } else {
+                        LatLng miPosicion = new LatLng(latDestino, lngDestino);
+                        mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher_foreground)).position(miPosicion).title("Lugar de Entrega"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miPosicion, 15));
+                    }
+
                     mMap.setMyLocationEnabled(true);
 
                     // permission was granted, yay! Do the
@@ -117,6 +163,39 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+
+    private void obtenerUbicacion() {
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    locationActual = location;
+                    LatLng latLng = new LatLng(locationActual.getLatitude(), locationActual.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Mi ubicación"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                }
+            }
+        });
+    }
+
+
+    private void buscarDireccion(String location) {
+        Geocoder geocoder = new Geocoder(this);
+        List<Address> addressList = null;
+
+        try {
+            addressList = geocoder.getFromLocationName(location, 100);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Address address = addressList.get(0);
+        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
     }
 
 

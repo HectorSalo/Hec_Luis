@@ -45,6 +45,7 @@
             app:title="@string/perfil_title"
             android:summary="@string/summary_perfil"
             android:icon="@drawable/ic_conf_perfil"
+            app:key="perfil_usuario"
             >
             <intent
                 android:action="android.intent.action.VIEW"
