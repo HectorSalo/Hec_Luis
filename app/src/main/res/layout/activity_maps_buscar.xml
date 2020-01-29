@@ -10,19 +10,22 @@
     >
 
     <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/fondo_searchview_map">
+        android:layout_marginTop="0dp"
+        android:background="@drawable/fondo_searchview_map"
+        >
 
         <fragment
             android:id="@+id/autocomplete_fragment"
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <fragment
@@ -31,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/linear"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"/>
 
