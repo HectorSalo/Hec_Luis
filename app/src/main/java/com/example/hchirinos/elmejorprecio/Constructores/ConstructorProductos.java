@@ -13,7 +13,7 @@ public class ConstructorProductos {
     private String descripcionProducto;
     private double precioProducto;
     private String imagenProducto;
-    private int cantidadProducto;
+    private double cantidadProducto;
     private String vendedor;
     private String unidadProducto;
     private Date fechaIngreso;
@@ -25,7 +25,7 @@ public class ConstructorProductos {
 
     public ConstructorProductos() {}
 
-    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, int cantidadProducto,
+    public ConstructorProductos(String idProducto, String descripcionProducto, double precioProducto, String imagenProducto, double cantidadProducto,
                                 String vendedor, String unidadProducto, Date fechaIngreso, String nombreProducto, ArrayList<String> listUsuariosFavoritos, boolean productoActivo, boolean oferta) {
         this.idProducto = idProducto;
         this.descripcionProducto = descripcionProducto;
@@ -90,7 +90,7 @@ public class ConstructorProductos {
         return imagenProducto;
     }
 
-    public int getCantidadProducto() {
+    public double getCantidadProducto() {
         return cantidadProducto;
     }
 
@@ -126,7 +126,7 @@ public class ConstructorProductos {
         this.imagenProducto = imagenProducto;
     }
 
-    public void setCantidadProducto(int cantidadProducto) {
+    public void setCantidadProducto(double cantidadProducto) {
         this.cantidadProducto = cantidadProducto;
     }
 

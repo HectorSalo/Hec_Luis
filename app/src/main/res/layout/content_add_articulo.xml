@@ -83,7 +83,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hint_text_cantidad_articulo"
-            android:inputType="number" />
+            android:inputType="numberDecimal" />
 
         <Spinner
             android:id="@+id/spinnerAddUnidadArticulo"

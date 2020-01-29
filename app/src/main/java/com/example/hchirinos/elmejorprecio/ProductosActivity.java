@@ -22,6 +22,7 @@ import android.text.style.TextAppearanceSpan;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterProductos;
+import com.example.hchirinos.elmejorprecio.Clases.GuardarDatosUsuario;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorProductos;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
@@ -311,10 +312,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -361,10 +359,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -412,10 +407,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -462,10 +454,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -512,10 +501,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -562,10 +548,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -612,10 +595,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -662,10 +642,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -714,10 +691,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -766,10 +740,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -816,10 +787,7 @@ public class ProductosActivity extends AppCompatActivity
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listProductos.add(productos);
 
@@ -997,6 +965,14 @@ public class ProductosActivity extends AppCompatActivity
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userID = user.getUid();
+                String userEmail = user.getEmail();
+                String userNombre = user.getDisplayName();
+
+                GuardarDatosUsuario guardarDatosUsuario = new GuardarDatosUsuario();
+                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail);
 
                 switch (acceso) {
                     case 1:

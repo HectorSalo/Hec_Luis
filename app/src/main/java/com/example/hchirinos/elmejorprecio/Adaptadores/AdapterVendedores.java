@@ -51,8 +51,11 @@ public class AdapterVendedores extends RecyclerView.Adapter<AdapterVendedores.Vi
         if (listVendedores.get(i).getImagen()!= null) {
             if (!listVendedores.get(i).getImagen().isEmpty()) {
                 Glide.with(mContext).load(listVendedores.get(i).getImagen()).into(viewHolderTiendas.imageViewImagenVendedor);
+            } else {
+                viewHolderTiendas.imageViewImagenVendedor.setImageResource(R.mipmap.ic_usuario_sin_imagen);
             }
-
+        } else {
+            viewHolderTiendas.imageViewImagenVendedor.setImageResource(R.mipmap.ic_usuario_sin_imagen);
         }
 
 

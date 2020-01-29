@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
+import com.example.hchirinos.elmejorprecio.Clases.GuardarDatosUsuario;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
@@ -147,11 +148,15 @@ public class InfoProductoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 user = mAuth.getCurrentUser();
                 if (user != null) {
-                    VariablesGenerales.idChatVendedor = idReceptorChat;
-                    VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;
-                    VariablesGenerales.correoChatVendedor = VariablesGenerales.correoInfoVendedor;
-                    VariablesGenerales.imagenChatVendedor = VariablesGenerales.imagenInfoVendedor;
-                    startActivity(new Intent(InfoProductoActivity.this, MessengerActivity.class));
+                    if (!user.getUid().equals(idReceptorChat)) {
+                        VariablesGenerales.idChatVendedor = idReceptorChat;
+                        VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;
+                        VariablesGenerales.correoChatVendedor = VariablesGenerales.correoInfoVendedor;
+                        VariablesGenerales.imagenChatVendedor = VariablesGenerales.imagenInfoVendedor;
+                        startActivity(new Intent(InfoProductoActivity.this, MessengerActivity.class));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No puede iniciar Chat con usted mismo", Toast.LENGTH_SHORT).show();
+                    }
 
                     bottomSheetDialog.dismiss();
                 } else {
@@ -212,6 +217,12 @@ public class InfoProductoActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userID = user.getUid();
+                String userEmail = user.getEmail();
+                String userNombre = user.getDisplayName();
+
+                GuardarDatosUsuario guardarDatosUsuario = new GuardarDatosUsuario();
+                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail);
 
                 VariablesGenerales.idChatVendedor = idReceptorChat;
                 VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;

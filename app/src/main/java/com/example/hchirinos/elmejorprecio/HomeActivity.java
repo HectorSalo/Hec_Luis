@@ -203,10 +203,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listCambioPrecio.add(productos);
 
@@ -246,10 +243,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listOferta.add(productos);
 
@@ -289,10 +283,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         productos.setUnidadProducto(doc.getString(VariablesEstaticas.BD_UNIDAD_PRODUCTO));
                         productos.setEstadoProducto(doc.getString(VariablesEstaticas.BD_ESTADO_PRODUCTO));
                         productos.setListUsuariosFavoritos((ArrayList<String>) doc.get(VariablesEstaticas.BD_USUARIOS_FAVORITOS));
-
-                        double cantidadD = doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO);
-                        int cantidadInt = (int) cantidadD;
-                        productos.setCantidadProducto(cantidadInt);
+                        productos.setCantidadProducto(doc.getDouble(VariablesEstaticas.BD_CANTIDAD_PRODUCTO));
 
                         listRecientes.add(productos);
 

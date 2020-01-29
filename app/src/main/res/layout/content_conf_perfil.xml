@@ -66,6 +66,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextNombrePerfil" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -83,7 +84,8 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="@string/ubicacion_preferida"/>
+            android:hint="@string/ubicacion_preferida"
+            android:textSize="18sp" />
 
         <ImageButton
             android:id="@+id/imageButtonEditUbicacion"
@@ -103,5 +105,56 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switch_pass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Cambiar contraseña"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/linear_pass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_pass">
+
+        <EditText
+            android:id="@+id/editTextPassViejo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese Contraseña Anterior"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editTextPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese Contraseña Nueva:"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/editTextPassRepeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Repita Contraseña:"
+            android:inputType="textPassword" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

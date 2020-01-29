@@ -19,8 +19,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,10 +44,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +60,7 @@ public class ConfPerfilActivity extends AppCompatActivity {
 
     private ImageView imageView;
     private ImageButton editarImagen, editarUbicacion;
-    private EditText etNombre, etTelefono;
+    private EditText etNombre, etTelefono, etPass, etPassRepetir, etPassViejo;
     private TextView tvUbicacion;
     private FirebaseUser user;
     private ProgressBar progressBar;
@@ -62,6 +69,8 @@ public class ConfPerfilActivity extends AppCompatActivity {
     private boolean imagenCambiada = false;
     private Uri imageSelected;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private LinearLayout linearLayoutPass;
+    private Switch switchPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +88,11 @@ public class ConfPerfilActivity extends AppCompatActivity {
         tvUbicacion = findViewById(R.id.editTextUbicacion);
         progressBar = findViewById(R.id.progressBarPerfil);
         ConstraintLayout constraintLayout = findViewById(R.id.constraintPerfil);
+        linearLayoutPass = findViewById(R.id.linear_pass);
+        etPassViejo = findViewById(R.id.editTextPassViejo);
+        etPass = findViewById(R.id.editTextPass);
+        etPassRepetir = findViewById(R.id.editTextPassRepeat);
+        switchPass = findViewById(R.id.switch_pass);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -125,6 +139,17 @@ public class ConfPerfilActivity extends AppCompatActivity {
             public void onClick(View view) {
                 VariablesGenerales.verSearchMap = true;
                 startActivity(new Intent(getApplicationContext(), MapsInfoVendedor.class));
+            }
+        });
+
+        switchPass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    linearLayoutPass.setVisibility(View.VISIBLE);
+                } else {
+                    linearLayoutPass.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -191,10 +216,40 @@ public class ConfPerfilActivity extends AppCompatActivity {
         String nombre = etNombre.getText().toString();
 
         if (!nombre.isEmpty()) {
-            if (imagenCambiada) {
-                subirImagen();
+            if (switchPass.isChecked()) {
+                String passViejo = etPassViejo.getText().toString();
+                if (!passViejo.isEmpty()) {
+                    String pass = etPass.getText().toString();
+                    if (pass.length() >= 6) {
+                        String passRepetir = etPassRepetir.getText().toString();
+                        if (pass.equals(passRepetir)) {
+                            if (imagenCambiada) {
+                                subirImagen();
+                                updatePerfilUser();
+                                cambiarPass(pass, passViejo);
+                            } else {
+                                updatePerfilUser();
+                                actualizarPerfilVendedor();
+                                cambiarPass(pass, passViejo);
+                            }
+                        } else {
+                            etPassRepetir.setError("Las contraseñas deben coincidir");
+                        }
+                    } else {
+                        etPass.setError("Debe ingresar al menos 6 caracteres");
+                    }
+                } else {
+                    etPassViejo.setError("Debe ingresar contraseña anterior");
+                }
+
             } else {
-                actualizarPerfilVendedor();
+                if (imagenCambiada) {
+                    subirImagen();
+                    updatePerfilUser();
+                } else {
+                    updatePerfilUser();
+                    actualizarPerfilVendedor();
+                }
             }
         } else {
             etNombre.setError("Debe ingresar un nombre");
@@ -301,7 +356,7 @@ public class ConfPerfilActivity extends AppCompatActivity {
 
 
     private void subirImagen() {
-        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child(VariablesEstaticas.BD_VENDEDORES);
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference().child(VariablesEstaticas.BD_USUARIOS);
         StorageReference imageRef = mStorageRef.child(imageSelected.getLastPathSegment());
 
 
@@ -340,6 +395,63 @@ public class ConfPerfilActivity extends AppCompatActivity {
                 progressBar.setProgress(progresInt);
             }
         });
+    }
+
+    private void updatePerfilUser(){
+        String nombre = etNombre.getText().toString();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(nombre)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Profile", "User profile updated.");
+                        }
+                    }
+                });
+    }
+
+
+    private void cambiarPass(String newPassword, String passViejo) {
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(user.getEmail(), passViejo);
+
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d("Auth", "User re-authenticated.");
+
+                        user.updatePassword(newPassword)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d("PassWord", "User password updated.");
+                                            Toast.makeText(getApplicationContext(), "Contraseña modificada exitosamente", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Contraseña no fue cambiada. Intente nuevamente", Toast.LENGTH_SHORT).show();
+                                Log.e("PassWord", "" + e);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Contraseña no fue cambiada. Intente nuevamente", Toast.LENGTH_SHORT).show();
+                                Log.e("PassWord", "" + e);
+                            }
+                        });
+
+                    }
+                });
+
+
     }
 
 }

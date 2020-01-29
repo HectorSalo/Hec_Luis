@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterVendedores;
+import com.example.hchirinos.elmejorprecio.Clases.GuardarDatosUsuario;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorVendedores;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
@@ -417,7 +418,14 @@ public class VendedoresActivity extends AppCompatActivity
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userID = user.getUid();
+                String userEmail = user.getEmail();
+                String userNombre = user.getDisplayName();
+
+                GuardarDatosUsuario guardarDatosUsuario = new GuardarDatosUsuario();
+                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail);
 
                 switch (acceso) {
                     case 1:

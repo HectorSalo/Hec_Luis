@@ -314,7 +314,7 @@ public class MessengerActivity extends AppCompatActivity {
                         if (!imagen.isEmpty()) {
                             Glide.with(getApplicationContext()).load(imagen).apply(RequestOptions.circleCropTransform()).into(imagenUsuario);
                         } else {
-                            Glide.with(getApplicationContext()).load(R.mipmap.ic_usuario_sin_imagen).apply(RequestOptions.circleCropTransform()).into(imagenUsuario);
+                            imagenUsuario.setImageResource(R.mipmap.ic_usuario_sin_imagen);
                         }
                     }
 
