@@ -1,5 +1,6 @@
 package com.example.hchirinos.elmejorprecio.Variables;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
 
 public class VariablesGenerales {
@@ -33,5 +34,7 @@ public class VariablesGenerales {
 
     public static String idProductoEditar = null;
 
-    public static  boolean verSearchMap = false;
+    public static  boolean escogerUbiPreferida = false;
+    public static String ubicacionUsuarioString = null;
+    public static GeoPoint  ubicacionUsuarioGeoPoint = null;
 }

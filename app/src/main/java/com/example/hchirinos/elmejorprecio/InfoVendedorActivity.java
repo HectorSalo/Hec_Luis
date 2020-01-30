@@ -87,7 +87,7 @@ public class InfoVendedorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!VariablesGenerales.ubicacionInfoVendedor.isEmpty()) {
-                    VariablesGenerales.verSearchMap = false;
+                    VariablesGenerales.escogerUbiPreferida = false;
                     startActivity(new Intent(InfoVendedorActivity.this, MapsInfoVendedor.class));
                 } else {
                     Snackbar.make(view, "Este vendedor no tiene un lugar específico para la entrega", Snackbar.LENGTH_LONG)

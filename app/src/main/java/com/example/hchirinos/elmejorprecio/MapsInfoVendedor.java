@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,6 +43,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
@@ -55,14 +57,13 @@ import java.util.List;
 public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private SearchView searchView;
     private Boolean actualPosition = true;
     private Double latUbicacion, lngUbicacion, latDestino, lngDestino;
     private String latUbicacionS, lngUbicacionS, latDestinoS, lngDestinoS;
     private Location locationActual;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    RequestQueue request;
-    JsonObjectRequest jsonObjectRequest;
+    private RequestQueue request;
+    private JsonObjectRequest jsonObjectRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,46 +86,37 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
+
                 Log.e("Place", "Place: " + place.getName() + ", " + place.getId());
                 LatLng buscar = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
-                mMap.addMarker(new MarkerOptions().position(buscar).title("Lugar de Entrega"));
+                mMap.addMarker(new MarkerOptions().position(buscar).title(place.getName()));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(buscar, 15));
+
+                Toast.makeText(getApplicationContext(), "Usted escogió: " + place.getName(), Toast.LENGTH_SHORT).show();
+
+                if (VariablesGenerales.escogerUbiPreferida) {
+                    GeoPoint geoPoint = new GeoPoint(place.getLatLng().latitude, place.getLatLng().longitude);
+                    VariablesGenerales.ubicacionUsuarioString = place.getName();
+                    VariablesGenerales.ubicacionUsuarioGeoPoint = geoPoint;
+                }
+
             }
 
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
+
                 Log.e("Place", "An error occurred: " + status);
             }
         });
 
-        searchView = findViewById(R.id.search_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        if (VariablesGenerales.verSearchMap) {
-            searchView.setVisibility(View.VISIBLE);
-        } else {
-            searchView.setVisibility(View.GONE);
+        if (!VariablesGenerales.escogerUbiPreferida) {
             latDestino = VariablesGenerales.latlongInfoVendedor.getLatitude();
             lngDestino = VariablesGenerales.latlongInfoVendedor.getLongitude();
         }
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                if (s != null && !s.isEmpty()) {
-                    buscarDireccion(s);
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
 
     }
 
@@ -151,7 +143,7 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
 
         mMap.setMyLocationEnabled(true);
 
-        if (VariablesGenerales.verSearchMap) {
+        if (VariablesGenerales.escogerUbiPreferida) {
             obtenerUbicacion();
         } else {
             LatLng miPosicion = new LatLng(latDestino, lngDestino);
@@ -171,7 +163,7 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    if (VariablesGenerales.verSearchMap) {
+                    if (VariablesGenerales.escogerUbiPreferida) {
                         obtenerUbicacion();
                     } else {
                         LatLng miPosicion = new LatLng(latDestino, lngDestino);
@@ -213,22 +205,6 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
         });
     }
 
-
-    private void buscarDireccion(String location) {
-        Geocoder geocoder = new Geocoder(this);
-        List<Address> addressList = null;
-
-        try {
-            addressList = geocoder.getFromLocationName(location, 100);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Address address = addressList.get(0);
-        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-    }
 
 
     public void establecerOrigenDestino() {

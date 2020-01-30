@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -43,7 +45,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -137,8 +141,7 @@ public class ConfPerfilActivity extends AppCompatActivity {
         editarUbicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VariablesGenerales.verSearchMap = true;
-                startActivity(new Intent(getApplicationContext(), MapsInfoVendedor.class));
+                opcionUbicacion();
             }
         });
 
@@ -163,6 +166,37 @@ public class ConfPerfilActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void opcionUbicacion() {
+        View viewBottomSheet = LayoutInflater.from(getApplicationContext()).inflate(R.layout.bottom_sheet_ubicacion, null);
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(viewBottomSheet);
+        bottomSheetDialog.show();
+
+
+        Button butonNuevaUbicacion = viewBottomSheet.findViewById(R.id.button_nueva_ubicacion);
+        Button buttonQuitarUbicacion = viewBottomSheet.findViewById(R.id.button_quitar_ubicacion);
+
+        butonNuevaUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                VariablesGenerales.escogerUbiPreferida = true;
+                startActivity(new Intent(getApplicationContext(), MapsInfoVendedor.class));
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        buttonQuitarUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GeoPoint geoPoint = new GeoPoint(0, 0);
+                VariablesGenerales.ubicacionUsuarioString = "";
+                VariablesGenerales.ubicacionUsuarioGeoPoint = geoPoint;
+                tvUbicacion.setText("Sin lugar de entregas");
+                bottomSheetDialog.dismiss();
+            }
+        });
     }
 
     private void cargarPerfil() {
@@ -193,12 +227,14 @@ public class ConfPerfilActivity extends AppCompatActivity {
                             }
                         }
 
-                        String ubicacion = document.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA);
-                        if (ubicacion != null) {
-                            if (!ubicacion.isEmpty()) {
-                                tvUbicacion.setText(ubicacion);
+                        VariablesGenerales.ubicacionUsuarioString = document.getString(VariablesEstaticas.BD_UBICACION_PREFERIDA);
+                        if (VariablesGenerales.ubicacionUsuarioString != null) {
+                            if (!VariablesGenerales.ubicacionUsuarioString.isEmpty()) {
+                                tvUbicacion.setText(VariablesGenerales.ubicacionUsuarioString);
                             }
                         }
+
+                        VariablesGenerales.ubicacionUsuarioGeoPoint = document.getGeoPoint(VariablesEstaticas.BD_LATITUD_LONGITUD);
                     } else {
                         Log.d("Perfil", "No such document");
                     }
@@ -269,7 +305,8 @@ public class ConfPerfilActivity extends AppCompatActivity {
         HashMap<String, Object> updates = new HashMap<>();
         updates.put(VariablesEstaticas.BD_NOMBRE_VENDEDOR, nombre);
         updates.put(VariablesEstaticas.BD_TELEFONO_VENDEDOR, telefono);
-        //updates.put(VariablesEstaticas.BD_UBICACION_PREFERIDA, ubicacion);
+        updates.put(VariablesEstaticas.BD_UBICACION_PREFERIDA, VariablesGenerales.ubicacionUsuarioString);
+        updates.put(VariablesEstaticas.BD_LATITUD_LONGITUD, VariablesGenerales.ubicacionUsuarioGeoPoint);
 
         db.collection(VariablesEstaticas.BD_VENDEDORES).document(idPerfil).update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -292,7 +329,8 @@ public class ConfPerfilActivity extends AppCompatActivity {
         HashMap<String, Object> updates = new HashMap<>();
         updates.put(VariablesEstaticas.BD_NOMBRE_VENDEDOR, nombre);
         updates.put(VariablesEstaticas.BD_TELEFONO_VENDEDOR, telefono);
-        //updates.put(VariablesEstaticas.BD_UBICACION_PREFERIDA, ubicacion);
+        updates.put(VariablesEstaticas.BD_UBICACION_PREFERIDA, VariablesGenerales.ubicacionUsuarioString);
+        updates.put(VariablesEstaticas.BD_LATITUD_LONGITUD, VariablesGenerales.ubicacionUsuarioGeoPoint);
         updates.put(VariablesEstaticas.BD_IMAGEN_VENDEDOR, imagenNueva);
 
         db.collection(VariablesEstaticas.BD_VENDEDORES).document(idPerfil).update(updates).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -454,4 +492,9 @@ public class ConfPerfilActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tvUbicacion.setText(VariablesGenerales.ubicacionUsuarioString);
+    }
 }

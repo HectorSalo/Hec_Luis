@@ -11,22 +11,18 @@ public class ConstructorVendedores {
     private String correoVendedor;
     private String imagen;
     private String ubicacionPreferida;
-    private double latitud;
-    private double longitud;
     private GeoPoint latlong;
 
 
 
    public ConstructorVendedores() {}
 
-    public ConstructorVendedores(String idVendedor, String nombreVendedor, String telefonoVendedor, String correoVendedor, String imagen, double latitud, double longitud) {
+    public ConstructorVendedores(String idVendedor, String nombreVendedor, String telefonoVendedor, String correoVendedor, String imagen) {
         this.idVendedor = idVendedor;
         this.nombreVendedor = nombreVendedor;
         this.telefonoVendedor = telefonoVendedor;
         this.correoVendedor = correoVendedor;
         this.imagen = imagen;
-        this.latitud = latitud;
-        this.longitud = longitud;
     }
 
     public String getIdVendedor() {
@@ -47,14 +43,6 @@ public class ConstructorVendedores {
 
     public String getImagen() {
         return imagen;
-    }
-
-    public double getLatitud() {
-        return latitud;
-    }
-
-    public double getLongitud() {
-        return longitud;
     }
 
     public String getUbicacionPreferida() {
@@ -83,14 +71,6 @@ public class ConstructorVendedores {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
-    }
-
-    public void setLatitud(double latitud) {
-        this.latitud = latitud;
-    }
-
-    public void setLongitud(double longitud) {
-        this.longitud = longitud;
     }
 
     public void setUbicacionPreferida(String ubicacionPreferida) {

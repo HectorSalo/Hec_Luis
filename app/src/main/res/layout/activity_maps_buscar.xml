@@ -36,15 +36,6 @@
 
     </LinearLayout>
 
-    <SearchView
-        android:id="@+id/search_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:queryHint="Buscar ubicación"
-        android:background="@drawable/fondo_searchview_map"/>
-
 </RelativeLayout>
 
 
