@@ -80,13 +80,16 @@ public class MapsInfoVendedor extends FragmentActivity implements OnMapReadyCall
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.e("Place", "Place: " + place.getName() + ", " + place.getId());
+                LatLng buscar = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+                mMap.addMarker(new MarkerOptions().position(buscar).title("Lugar de Entrega"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(buscar, 15));
             }
 
             @Override
