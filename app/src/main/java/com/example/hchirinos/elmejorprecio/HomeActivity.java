@@ -491,7 +491,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 String userNombre = user.getDisplayName();
 
                 GuardarDatosUsuario guardarDatosUsuario = new GuardarDatosUsuario();
-                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail);
+                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail, this);
 
                 switch (acceso) {
                     case 1:

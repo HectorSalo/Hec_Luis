@@ -78,7 +78,6 @@ public class MessengerActivity extends AppCompatActivity {
     private UsuarioEnLinea usuarioEnLinea;
     private ImageView imagenUsuario;
     private TextView nombreUsuario, statusUsuario;
-    private MediaPlayer mediaPlayer;
     private APIServices apiServices;
     private boolean notify = false;
 
@@ -116,7 +115,6 @@ public class MessengerActivity extends AppCompatActivity {
         apiServices = Client.getClient("https://fcm.googleapis.com").create(APIServices.class);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
-        mediaPlayer = new MediaPlayer();
 
         db = FirebaseFirestore.getInstance();
 
@@ -235,7 +233,6 @@ public class MessengerActivity extends AppCompatActivity {
 
                                     if((constructorMessenger.getEmisor().equals(emisor) && constructorMessenger.getReceptor().equals(receptor)) || (constructorMessenger.getEmisor().equals(receptor) && constructorMessenger.getReceptor().equals(emisor))) {
                                         listMsg.add(constructorMessenger);
-                                        sonarAlarma();
                                     }
                                     Log.d("Msg", "New mensaje: " + dc.getDocument().getData());
                                     break;
@@ -351,8 +348,4 @@ public class MessengerActivity extends AppCompatActivity {
         usuarioEnLinea.modificarStatus(false, date, emisor);
     }
 
-    public void sonarAlarma(){
-        mediaPlayer = MediaPlayer.create(this, R.raw.msgrecibido);
-        mediaPlayer.start();
-    }
 }

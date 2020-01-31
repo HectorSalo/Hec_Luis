@@ -222,7 +222,7 @@ public class InfoProductoActivity extends AppCompatActivity {
                 String userNombre = user.getDisplayName();
 
                 GuardarDatosUsuario guardarDatosUsuario = new GuardarDatosUsuario();
-                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail);
+                guardarDatosUsuario.almacenarDatos(userID, userNombre, userEmail, this);
 
                 VariablesGenerales.idChatVendedor = idReceptorChat;
                 VariablesGenerales.nombreChatVendedor = VariablesGenerales.nombreInfoVendedor;

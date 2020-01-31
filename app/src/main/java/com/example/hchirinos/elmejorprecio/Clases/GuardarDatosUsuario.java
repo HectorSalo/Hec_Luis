@@ -1,8 +1,11 @@
 package com.example.hchirinos.elmejorprecio.Clases;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,9 +24,10 @@ public class GuardarDatosUsuario {
     public GuardarDatosUsuario() {
     }
 
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public void almacenarDatos(String id, String nombre, String email){
+    public void almacenarDatos(String id, String nombre, String email, Context context){
 
         db.collection(VariablesEstaticas.BD_VENDEDORES).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -32,9 +36,10 @@ public class GuardarDatosUsuario {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("InicSesion", "DocumentSnapshot data: " + document.getData());
+                        actualizarToken(id, context);
                     } else {
                         generarDatosVendedores(id, nombre, email);
-                        generarDatosUsuariChat(id, nombre, email);
+                        generarDatosUsuariChat(id, nombre, email, context);
                         Log.d("InicSesion", "No such document");
                     }
                 } else {
@@ -49,6 +54,7 @@ public class GuardarDatosUsuario {
 
 
     private void generarDatosVendedores(String id, String nombre, String email) {
+
         GeoPoint ubicacion = new GeoPoint(0, 0);
 
         HashMap<String, Object> info = new HashMap<>();
@@ -66,14 +72,27 @@ public class GuardarDatosUsuario {
 
     }
 
-    private void generarDatosUsuariChat(String id, String nombre, String email) {
+    private void generarDatosUsuariChat(String id, String nombre, String email, Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String token = sharedPreferences.getString("token", "");
+
+
         HashMap<String, Object> info = new HashMap<>();
         info.put(VariablesEstaticas.BD_NOMBRE_USUARIO, nombre);
         info.put(VariablesEstaticas.BD_EMAIL_USUARIO, email);
         info.put(VariablesEstaticas.BD_IMAGEN_USUARIO, "");
         info.put(VariablesEstaticas.BD_ID_USUARIO, id);
+        info.put("token", token);
 
         db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(id).set(info);
 
+    }
+
+    private void actualizarToken(String id, Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String token = sharedPreferences.getString("token", "");
+
+
+        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(id).update("token", token);
     }
 }

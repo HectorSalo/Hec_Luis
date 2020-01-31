@@ -28,10 +28,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+
+        Log.e("Cualquiera", "Message Notification Body: " + remoteMessage.getNotification().getBody());
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         String sented = remoteMessage.getData().get("sented");
@@ -219,28 +223,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d("Token", "Refreshed token: " + token);
 
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("token", token);
+        editor.commit();
+
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             // Add a new document with a generated id.
 
-            Token token1 = new Token(token);
-
-            db.collection("Tokens")
-                    .add(token1)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d("Token", "DocumentSnapshot written with ID: " + documentReference.getId());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("Token", "Error adding document", e);
-                        }
-                    });
+            db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(firebaseUser.getUid()).update("token", token);
         }
 
         // If you want to send messages to this application instance or
