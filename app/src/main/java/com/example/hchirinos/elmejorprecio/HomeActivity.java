@@ -21,6 +21,8 @@ import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -66,6 +68,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser user;
     private boolean temaClaro;
     private int acceso;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +189,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         recyclerCambioPrecio.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerCambioPrecio.setAdapter(adapterCambioPrecio);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereEqualTo(VariablesEstaticas.BD_CAMBIO_PRECIO, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -226,7 +228,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         recyclerOfertas.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerOfertas.setAdapter(adapterOferta);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).whereEqualTo(VariablesEstaticas.BD_OFERTA_SEMANA, true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -266,7 +267,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         recyclerRecientes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerRecientes.setAdapter(adapterRecientes);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection(VariablesEstaticas.BD_ALMACEN).whereEqualTo(VariablesEstaticas.BD_PRODUCTO_ACTIVO, true).orderBy(VariablesEstaticas.BD_FECHA_INGRESO, Query.Direction.DESCENDING).limit(6).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -525,9 +525,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FirebaseAuth.getInstance().signOut();
-                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+                        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(user.getUid()).update(VariablesEstaticas.BD_TOKEN, "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                FirebaseAuth.getInstance().signOut();
+                                Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error al cerrar sesión. Intente nuevamente", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }
                 }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override

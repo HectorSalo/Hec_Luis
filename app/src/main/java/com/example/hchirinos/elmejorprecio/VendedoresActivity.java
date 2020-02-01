@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,6 +32,8 @@ import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
@@ -455,9 +458,20 @@ public class VendedoresActivity extends AppCompatActivity
                 .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FirebaseAuth.getInstance().signOut();
-                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), VendedoresActivity.class));
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(user.getUid()).update(VariablesEstaticas.BD_TOKEN, "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                FirebaseAuth.getInstance().signOut();
+                                Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error al cerrar sesión. Intente nuevamente", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override

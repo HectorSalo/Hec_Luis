@@ -1,52 +1,47 @@
 const functions = require('firebase-functions');
 
-// // Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
-
-//exports.helloWorld = functions.https.onRequest((request, response) => {
-//response.send("Hello from Firebase!");
-//});
-
 const admin = require('firebase-admin');
 admin.initializeApp();
 
+exports.notifyNewMessage = functions.firestore.document('Chats/{chats}/{messageID}/{message}')
+	.onCreate((snap, context) => {
+		const message = snap.data();
+		const receptor = message['receptor'];
+		const mensaje = message['mensaje'];
+		const estado = message['estadoMensaje'];
+		const emisor = message['emisor'];
 
-exports.notifyNewMessage = functions.firestore
-    .document('Chats/{chats}/{messageCollection}/{messageID}')
-    .onCreate((snap, context) => {
-      
-      const message = snap.data();
-      
-      const recepientID = message['receptor'];
-      const content = message['mensaje'];
+		if (estado === "Recibiendo") {	
+			return admin.firestore().doc('UsuariosChat/' + receptor).get().then(userToken => {
+			const token = userToken.get('token');
 
-      return admin.firestore().doc('UsuariosChat/' + recepientID).get().then(userToken => {
-      	const token = userToken.get('token')
+			if (token !== ""){
 
-      	const payload = {
-      	notification: {
-      		title: "sent you a message", 
-      		body: content,
-      		clickAction: "HomeActivity"	
-      	  }
-        };
+			const payload = {
+				notification: {
+					title: "Tienes un mensaje nuevo",
+					body: mensaje
+				}, 
+				data: {
+					receptor: receptor,
+					emisor: emisor
+				}
+			}
 
-        return admin.messaging().sendtoDevice(token, payload).then(response => {
-
-        	response.results.forEach((result, index) => {
-        		const error = result.error;
-        		if (error){
-        			console.log("Error", error);
-        		} else {
-        			console.log("Envio exitoso", response);
-        		}
-        	})
-
-        	return response;
-        	
-        })
-      })   
-    
-  })
-      
-   
+				return admin.messaging().sendToDevice(token, payload).then(reponse => {
+					reponse.results.forEach((result, index) => {
+						const error = result.error;
+						if (error) {
+							console.error("Error", error);
+						} else {
+							console.log("Exito", result);
+						}
+					})
+					return result;
+				})
+			}
+			return token;
+		})
+		}
+		
+	})

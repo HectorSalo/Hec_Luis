@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
+import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.InterfaceRecyclerViewConversaciones;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.UsuariosChatFragment;
 import com.example.hchirinos.elmejorprecio.ui.FragmentChat.dummy.DummyContent;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -34,6 +37,7 @@ import android.widget.Toast;
 import com.example.hchirinos.elmejorprecio.Adaptadores.SectionsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -165,15 +169,28 @@ public class ChatActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void cerrarSesion() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         AlertDialog.Builder dialog = new AlertDialog.Builder(ChatActivity.this);
         dialog.setTitle("¡Aviso!")
                 .setMessage("¿Desea cerrar sesión?")
                 .setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        FirebaseAuth.getInstance().signOut();
-                        Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+                        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(user.getUid()).update(VariablesEstaticas.BD_TOKEN, "").addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                FirebaseAuth.getInstance().signOut();
+                                Toast.makeText(getApplicationContext(), "Sesión Cerrada", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error al cerrar sesión. Intente nuevamente", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override

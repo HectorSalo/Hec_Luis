@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.emoji.bundled.BundledEmojiCompatConfig;
 import androidx.emoji.text.EmojiCompat;
-import androidx.emoji.text.FontRequestEmojiCompatConfig;
 import androidx.emoji.widget.EmojiEditText;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,14 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.provider.FontRequest;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,27 +27,19 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterMessenger;
 import com.example.hchirinos.elmejorprecio.Clases.UsuarioEnLinea;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
-import com.example.hchirinos.elmejorprecio.NotificacionesChat.APIServices;
-import com.example.hchirinos.elmejorprecio.NotificacionesChat.Client;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
-import com.example.hchirinos.elmejorprecio.ui.FragmentChat.ConversacionesChatFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.errorprone.annotations.Var;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -61,7 +48,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -78,8 +64,6 @@ public class MessengerActivity extends AppCompatActivity {
     private UsuarioEnLinea usuarioEnLinea;
     private ImageView imagenUsuario;
     private TextView nombreUsuario, statusUsuario;
-    private APIServices apiServices;
-    private boolean notify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +87,6 @@ public class MessengerActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         emisor = user.getUid();
-        receptor = VariablesGenerales.idChatVendedor;
         calendario = Calendar.getInstance();
         recyclerView = findViewById(R.id.recycler_view_Chat);
         recyclerView.setHasFixedSize(true);
@@ -112,9 +95,15 @@ public class MessengerActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         usuarioEnLinea = new UsuarioEnLinea();
 
-        apiServices = Client.getClient("https://fcm.googleapis.com").create(APIServices.class);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
+
+        if (VariablesGenerales.idChatVendedor == null || VariablesGenerales.idChatVendedor.isEmpty()) {
+            Intent intent = new Intent();
+            receptor = intent.getStringExtra(VariablesEstaticas.BD_ID_EMISOR);
+        } else {
+            receptor = VariablesGenerales.idChatVendedor;
+        }
 
         db = FirebaseFirestore.getInstance();
 
@@ -158,19 +147,19 @@ public class MessengerActivity extends AppCompatActivity {
     }
 
     private void enviarMsg() {
-        notify = true;
         String mensaje = editTextMsg.getText().toString();
         calendario = Calendar.getInstance();
         Date date = calendario.getTime();
 
-        Map<String, Object> data = new HashMap<>();
-        data.put(VariablesEstaticas.BD_ID_EMISOR, emisor);
-        data.put(VariablesEstaticas.BD_ID_RECEPTOR, receptor);
-        data.put(VariablesEstaticas.BD_MENSAJE_CHAT, mensaje);
-        data.put(VariablesEstaticas.BD_FECHA_MENSAJE, date);
+        Map<String, Object> dataEmisor = new HashMap<>();
+        dataEmisor.put(VariablesEstaticas.BD_ID_EMISOR, emisor);
+        dataEmisor.put(VariablesEstaticas.BD_ID_RECEPTOR, receptor);
+        dataEmisor.put(VariablesEstaticas.BD_MENSAJE_CHAT, mensaje);
+        dataEmisor.put(VariablesEstaticas.BD_FECHA_MENSAJE, date);
+        dataEmisor.put(VariablesEstaticas.BD_STATUS_MENSAJE, "Enviando");
 
         if (!mensaje.isEmpty()) {
-            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(emisor).add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(emisor).add(dataEmisor).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     editTextMsg.setText("");
@@ -184,8 +173,16 @@ public class MessengerActivity extends AppCompatActivity {
             });
         }
 
+
+        Map<String, Object> dataReceptor = new HashMap<>();
+        dataReceptor.put(VariablesEstaticas.BD_ID_EMISOR, emisor);
+        dataReceptor.put(VariablesEstaticas.BD_ID_RECEPTOR, receptor);
+        dataReceptor.put(VariablesEstaticas.BD_MENSAJE_CHAT, mensaje);
+        dataReceptor.put(VariablesEstaticas.BD_FECHA_MENSAJE, date);
+        dataReceptor.put(VariablesEstaticas.BD_STATUS_MENSAJE, "Recibiendo");
+
         if (!mensaje.isEmpty()) {
-            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(receptor).add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            db.collection(VariablesEstaticas.BD_CHATS).document(VariablesEstaticas.BD_CONVERSACIONES_CHAT).collection(receptor).add(dataReceptor).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     editTextMsg.setText("");
@@ -291,7 +288,7 @@ public class MessengerActivity extends AppCompatActivity {
 
 
     private void cargarPerfilUsuario() {
-        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(VariablesGenerales.idChatVendedor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        db.collection(VariablesEstaticas.BD_USUARIOS_CHAT).document(receptor).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {

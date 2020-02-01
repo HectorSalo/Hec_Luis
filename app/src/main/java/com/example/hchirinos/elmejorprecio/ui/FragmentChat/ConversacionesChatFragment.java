@@ -11,9 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,27 +25,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.hchirinos.elmejorprecio.Adaptadores.AdapterConversacionesChat;
 import com.example.hchirinos.elmejorprecio.Constructores.ConstructorMessenger;
 import com.example.hchirinos.elmejorprecio.MessengerActivity;
-import com.example.hchirinos.elmejorprecio.NotificacionesChat.Token;
 import com.example.hchirinos.elmejorprecio.R;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesEstaticas;
 import com.example.hchirinos.elmejorprecio.Variables.VariablesGenerales;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -134,7 +125,6 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
 
         cargarConversaciones();
         selecUsuarioChat();
-        updateToken(FirebaseInstanceId.getInstance().getToken());
 
         return root;
     }
@@ -506,25 +496,4 @@ public class ConversacionesChatFragment extends Fragment implements InterfaceRec
         borrarConversaciones();
     }
 
-    private void updateToken(String token) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Add a new document with a generated id.
-
-        Token token1 = new Token(token);
-
-        db.collection("Tokens")
-                .add(token1)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("Token", "DocumentSnapshot written with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Token", "Error adding document", e);
-                    }
-                });
-    }
 }

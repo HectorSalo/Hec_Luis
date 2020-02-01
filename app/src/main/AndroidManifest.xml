@@ -50,7 +50,13 @@
         </activity>
         <activity
             android:name=".MessengerActivity"
-            android:theme="@style/AppThemeDiaNoche" />
+            android:theme="@style/AppThemeDiaNoche">
+
+            <intent-filter>
+                <action android:name="MessengerActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"
