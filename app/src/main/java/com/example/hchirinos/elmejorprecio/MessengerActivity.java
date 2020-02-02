@@ -99,8 +99,8 @@ public class MessengerActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
         if (VariablesGenerales.idChatVendedor == null || VariablesGenerales.idChatVendedor.isEmpty()) {
-            Intent intent = new Intent();
-            receptor = intent.getStringExtra(VariablesEstaticas.BD_ID_EMISOR);
+            Bundle bundle = this.getIntent().getExtras();
+            receptor = bundle.getString(VariablesEstaticas.BD_ID_EMISOR);
         } else {
             receptor = VariablesGenerales.idChatVendedor;
         }

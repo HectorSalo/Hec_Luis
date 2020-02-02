@@ -177,6 +177,7 @@ public class FavoritosActivity extends AppCompatActivity
                         Snackbar.make(constraintLayout, "No tiene Favoritos", Snackbar.LENGTH_INDEFINITE).setAction("Agregar", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                VariablesGenerales.verResultadosBuscar = false;
                                 startActivity(new Intent(getApplicationContext(), ProductosActivity.class));
                             }
                         }).show();

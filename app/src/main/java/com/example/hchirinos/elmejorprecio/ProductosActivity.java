@@ -170,6 +170,7 @@ public class ProductosActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             startActivity(new Intent(this, HomeActivity.class));
+            VariablesGenerales.verResultadosBuscar = false;
         }
     }
 
@@ -1028,3 +1029,6 @@ public class ProductosActivity extends AppCompatActivity
         }).show();
     }
 }
+
+
+
