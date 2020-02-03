@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hchirinos.elmejorprecio">
+    package="com.skysam.hchirinos.elmejorprecio">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -28,7 +28,7 @@
             android:theme="@style/AppThemeDiaNoche">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.hchirinos.elmejorprecio.SettingsActivity" />
+                android:value="com.skysam.hchirinos.elmejorprecio.SettingsActivity" />
         </activity>
         <activity
             android:name=".AddArticuloActivity"
@@ -37,7 +37,7 @@
             android:theme="@style/AppThemeDiaNoche">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.hchirinos.elmejorprecio.VentasActivity" />
+                android:value="com.skysam.hchirinos.elmejorprecio.VentasActivity" />
         </activity>
         <activity
             android:name=".EditarArticuloActivity"
@@ -46,7 +46,7 @@
             android:theme="@style/AppThemeDiaNoche">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.hchirinos.elmejorprecio.VentasActivity" />
+                android:value="com.skysam.hchirinos.elmejorprecio.VentasActivity" />
         </activity>
         <activity
             android:name=".MessengerActivity"

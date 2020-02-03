@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:824025813595:android:177711931b999a9c7ea57e",
         "android_client_info": {
-          "package_name": "com.example.hchirinos.elmejorprecio"
+          "package_name": "com.skysam.hchirinos.elmejorprecio"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "824025813595-rdbn0e25u20fei9p0ceieifhqdv37ug5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.hchirinos.elmejorprecio",
+            "package_name": "com.skysam.hchirinos.elmejorprecio",
             "certificate_hash": "d827183ffa2847f9b61136ed17fedfabdf0dfd96"
           }
         },

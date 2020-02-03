@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "com.example.hchirinos.elmejorprecio"
+        applicationId 'com.skysam.hchirinos.elmejorprecio'
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -38,7 +38,7 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:0.6.2'
     implementation 'androidx.preference:preference:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -49,7 +49,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
-    implementation 'com.google.firebase:firebase-firestore:21.3.1'
+    implementation 'com.google.firebase:firebase-firestore:21.4.0'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
